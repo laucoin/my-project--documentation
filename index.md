@@ -5,10 +5,10 @@ layout: home
 hero:
   name: "My Project"
   text: "Allow management of group care for minors project management."
-  tagline: Management your project with ease and efficiency.
+  tagline: Manage you project with ease and efficiency.
   actions:
     - theme: brand
-      text: Get Started
+      text: Check-out the project
       link: https://registry.sgdf.fr
 
 features:
