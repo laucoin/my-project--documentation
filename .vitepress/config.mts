@@ -139,6 +139,18 @@ export default defineConfig({
 								{ text: '006 – Nuxt Layers', link: '/technical/adr/006-nuxt-layers' },
 							],
 						},
+						{
+							text     : 'Coding Guidelines',
+							link     : '/technical/guidelines/',
+							collapsed: true,
+							items    : [
+								{ text: 'Database', link: '/technical/guidelines/database' },
+								{ text: 'Spring & Kotlin', link: '/technical/guidelines/spring' },
+								{ text: 'Security', link: '/technical/guidelines/security' },
+								{ text: 'Frontend', link: '/technical/guidelines/frontend' },
+								{ text: 'Coding Style', link: '/technical/guidelines/coding-style' },
+							],
+						},
 					],
 				},
 			],

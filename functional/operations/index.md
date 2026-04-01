@@ -1,6 +1,7 @@
 # Operations
 
-The Operations section covers everything related to tracking the movement of people at the project site, and the management of alerts when groups are outside.
+The Operations section covers everything related to tracking the movement of people at the project site, and the
+management of alerts when groups are outside.
 
 ## Contents
 

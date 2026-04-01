@@ -80,7 +80,8 @@ When writing a message in this thread, the user selects a sender:
 Classic communication requires both **ACTIVITY** and **COMMUNICATION** to be enabled on the project.
 :::
 
-For a more structured form of communication with a dedicated status and topic, see [Alert](/functional/operations/alert).
+For a more structured form of communication with a dedicated status and topic,
+see [Alert](/functional/operations/alert).
 
 ## Key attributes
 
