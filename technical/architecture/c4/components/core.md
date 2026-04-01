@@ -1,6 +1,8 @@
 # Components – Core Module
 
-The Core module manages the central domain entities: organisations, projects, users, participants, groups, activities, and vehicles. It follows a hexagonal architecture — the BFF calls it through an inbound service interface, and persistence is abstracted behind outbound repository interfaces.
+The Core module manages the central domain entities: organisations, projects, users, participants, groups, activities,
+and vehicles. It follows a hexagonal architecture — the BFF calls it through an inbound service interface, and
+persistence is abstracted behind outbound repository interfaces.
 
 ```mermaid
 C4Component
@@ -40,14 +42,14 @@ C4Component
 
 ## Components
 
-| Component | Technology | Role |
-|-----------|-----------|------|
-| Core Service Interface | Kotlin Interface | Inbound port — exposes all domain operations to the BFF |
-| Organisation Service | Kotlin / Domain | Organisation management and options configuration |
-| Project Service | Kotlin / Domain | Project management and options configuration |
-| User Service | Kotlin / Domain | User and project profile management |
-| Participant Service | Kotlin / Domain | Participant, group, and attendance date management |
-| Activity Service | Kotlin / Domain | Activity creation and scheduling |
-| Vehicle Service | Kotlin / Domain | Vehicle management and scheduling |
-| Repository Interfaces | Kotlin Interface | Outbound port — persistence contracts defined by the domain |
-| Repositories | jOOQ / R2DBC | Outbound adapter — implements repository interfaces against the `core` schema |
+| Component              | Technology       | Role                                                                          |
+|------------------------|------------------|-------------------------------------------------------------------------------|
+| Core Service Interface | Kotlin Interface | Inbound port — exposes all domain operations to the BFF                       |
+| Organisation Service   | Kotlin / Domain  | Organisation management and options configuration                             |
+| Project Service        | Kotlin / Domain  | Project management and options configuration                                  |
+| User Service           | Kotlin / Domain  | User and project profile management                                           |
+| Participant Service    | Kotlin / Domain  | Participant, group, and attendance date management                            |
+| Activity Service       | Kotlin / Domain  | Activity creation and scheduling                                              |
+| Vehicle Service        | Kotlin / Domain  | Vehicle management and scheduling                                             |
+| Repository Interfaces  | Kotlin Interface | Outbound port — persistence contracts defined by the domain                   |
+| Repositories           | jOOQ / R2DBC     | Outbound adapter — implements repository interfaces against the `core` schema |
