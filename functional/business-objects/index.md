@@ -1,55 +1,69 @@
+---
+outline: deep
+---
+
 # Business Objects
 
-This section describes the core entities managed by the application and their relationships.
+Business objects are split into three categories:
 
-## Entity hierarchy
+- [Core](/functional/business-objects/core) objects, which are the fundamental entities of the application and are not tied to any specific feature;
+- [Document](/functional/business-objects/document), which only concern document management and do not contain any business rules
+- [Operations](/functional/business-objects/operations) objects, which are linked to specific features and may be unavailable if the corresponding option is disabled on the project.
+- [Registration](/functional/business-objects/registration) objects, which are linked to the registration feature and may be unavailable if the
+  `REGISTRATION` option is disabled on the project.
 
-All objects are scoped to a **Project**, which itself belongs to an **Organisation**. Objects are never shared between
-projects.
+## Main attributes
 
+All objects have a “Main attributes” section. This section covers functionally relevant fields but is not an exhaustive list. For the full attribute list, refer to the [technical documentation](/technical).
+
+## Dates range
+
+The specified dates range is in reality a zoned datetime range. However, for simplicity, only the date part is displayed in the documentation. A date can be defined without the specified time, in that case, the time part is set:
+
+- to 00:00:00 for the start date
+- to 23:59:59 for the end date.
+
+> Note: the zoned of the time is the project's one.
+
+### Reading
+
+Many objects have a date range defined by a start and end date. This range indicates when the object is active, available, or relevant.
+This date range is read as follows:
+
+```mermaid
+flowchart TD
+    DR[Object with date range related to his attendance, presence, availability, etc.] --> BDS{Does both dates are specified?}
+    BDS -->|Yes| BDR[The element is available during the specified date range]
+    BDS -->|No| DHP{"Does the object have parents with specified dates?"}
+    DHP -->|Yes| BDN[Replace his null dates by his parent dates]
+    DHP --> WDM{"Which date is specified?"}
+    WDM -->|None| NDS[The element is a permanent one]
+    WDM -->|First one| LDM[The element is available at the specified first date at stay available permanently after]
+    WDM -->|Second one| FDM[The element is available until the specified second date]
 ```
-Organisation
-└── Project
-    ├── Group
-    │   └── Participant (member of, dates fallback)
-    ├── Participant
-    ├── Activity
-    └── Vehicle
-```
 
-## Entities
+### Usage
 
-| Entity                                                    | Description                                                              |
-|-----------------------------------------------------------|--------------------------------------------------------------------------|
-| [Organisation](/functional/business-objects/organisation) | Top-level structure that owns one or more projects                       |
-| [Project](/functional/business-objects/project)           | The central object — a group care facility for minors                    |
-| [Options](/functional/business-objects/options)           | Feature flags that control which capabilities are available on a project |
-| [Group](/functional/business-objects/group)               | A named collection of participants within a project                      |
-| [Participant](/functional/business-objects/participant)   | A person (minor or major) registered in a project                        |
-| [Activity](/functional/business-objects/activity)         | A recurring event that can be attached to a movement                     |
-| [Vehicle](/functional/business-objects/vehicle)           | A vehicle used during movements                                          |
+The following module is dedicated to configuration and management of the business objects:
 
-## Dates and attendance
+- [Core](/functional/business-objects/core) for the main entities (organizations, projects, groups, participants, etc.)
+- [Registration](/functional/business-objects/registration) for the registration process and management
+- [Document](/functional/business-objects/document) for documents and their management
 
-All objects have optional dates. When no dates are specified, the object is considered active for the full duration of
-its parent (or perpetually if the project itself has no dates).
+Dates ranges are visible and can be configured but has not impact on the previous modules.
 
-### Attendance fallback for participants
+The real impact of dates ranges is on the [Operations](/functional/business-objects/operations) module, which contains entities related to movements, alerts, and communications.
+The possibility to include these entities in a movement is determined by their date ranges and the rules described above.
 
-When a participant has no attendance dates of their own, the application resolves them in this order:
+E.g. if an activity is defined with a date range from 01/01/2024 to 31/01/2024, it can only be included in movements that occur between these dates. If a movement is created on 15/01/2024, the activity will be available for selection. However, if a movement is created on 01/02/2024, the activity will not be available for selection.
 
-| Priority | Source                                                       |
-|----------|--------------------------------------------------------------|
-| 1        | The participant's own dates *(if set)*                       |
-| 2        | Their group's dates *(if set, and the participant has none)* |
-| 3        | The project's dates *(final fallback)*                       |
-
-::: info
-A participant's dates must stay within the **project** dates. They can extend beyond their group's dates if needed —
-group dates serve only as a fallback, not as a hard constraint.
+::: warning Profile exception
+Profile is a bit different as it is not an entity but a set of permissions. However, it defines the access period.
+A user with a profile that has an end date in the past is considered expired and cannot consult or interact with the project concerned by the expired profile.
 :::
 
-### Activities and vehicles
+## Statuses
 
-Activity and vehicle availability is bounded **directly by the project's dates**, independently of any group or
-participant.
+Some entities have a status field defined as a priority list. The first status that matches the object's state is applied.
+
+Example: if a participant matches the conditions at both line 1 and line 3 of the status table, their displayed status is the one at line 1.

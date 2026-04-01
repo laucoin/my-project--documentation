@@ -4,14 +4,17 @@ layout: home
 
 hero:
   name: "My Project"
-  text: "Allow management of group care for minors project management."
-  tagline: Manage you project with ease and efficiency.
+  text: "Group care management for minors."
+  tagline: Plan activities, track movements, and manage registrations.
   actions:
     - theme: brand
-      text: Check-out the project
+      text: Check out the project
       link: https://registry.sgdf.fr
 
 features:
+  - title: Glossary
+    details: Familiarize yourself with the key terms and concepts used in our project management tool to ensure a common understanding across your team.
+    link: /glossary
   - title: Functional documentation
     details: Learn how to use the features of our project management tool to streamline your workflow and enhance collaboration.
     link: /functional
