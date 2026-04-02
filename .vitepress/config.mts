@@ -42,11 +42,12 @@ export default defineConfig({
 							items    : [
 								{ text: 'Organisation', link: '/functional/business-objects/organisation' },
 								{ text: 'Project', link: '/functional/business-objects/project' },
+								{ text: 'Options', link: '/functional/business-objects/options' },
+								{ text: 'User', link: '/functional/business-objects/user' },
 								{ text: 'Group', link: '/functional/business-objects/group' },
 								{ text: 'Participant', link: '/functional/business-objects/participant' },
 								{ text: 'Activity', link: '/functional/business-objects/activity' },
 								{ text: 'Vehicle', link: '/functional/business-objects/vehicle' },
-								{ text: 'Options', link: '/functional/business-objects/options' },
 							],
 						},
 						{

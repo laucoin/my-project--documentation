@@ -24,6 +24,7 @@ Organisation
 | [Organisation](/functional/business-objects/organisation) | Top-level structure that owns one or more projects                       |
 | [Project](/functional/business-objects/project)           | The central object — a group care facility for minors                    |
 | [Options](/functional/business-objects/options)           | Feature flags that control which capabilities are available on a project |
+| [User](/functional/business-objects/user)                 | An application account — the identity that logs in and operates the app  |
 | [Group](/functional/business-objects/group)               | A named collection of participants within a project                      |
 | [Participant](/functional/business-objects/participant)   | A person (minor or major) registered in a project                        |
 | [Activity](/functional/business-objects/activity)         | A recurring event that can be attached to a movement                     |
