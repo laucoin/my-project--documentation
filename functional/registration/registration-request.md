@@ -7,6 +7,12 @@ outline: deep
 A **Registration Request** is submitted by a logged-in user who wishes to join a project. The user can browse all
 projects with an active registration period and submit requests for one or more.
 
+## Registration form
+
+When submitting a request, the user is presented with the custom form attached to the registration period and must
+fill in all required fields before the request can be submitted. See
+[Registration Form](/functional/registration/registration-form).
+
 ## Individual vs. group request
 
 The type of request depends on what the project's registration period allows.

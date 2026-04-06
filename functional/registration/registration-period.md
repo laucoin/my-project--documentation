@@ -74,3 +74,8 @@ presence cannot be determined.
 
 The day variable pricing uses each participant's actual presence dates, which are collected during the
 `NEED_SPECIFICATION` step of a group registration and may be more restrictive than the coverage period.
+
+## Registration form
+
+A registration period can define a set of custom questions that users must answer when submitting a request. See
+[Registration Form](/functional/registration/registration-form).

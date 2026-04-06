@@ -517,3 +517,172 @@ stored explicitly to support future sharding by project without requiring a join
 
 **`communications` is exclusive.** A row links to a movement thread (`movement_id` set, `alert_id` null) or an alert
 thread (`alert_id` set, `movement_id` null). This exclusivity is enforced at the application level.
+
+---
+
+## Registration schema
+
+The `registration` schema holds all entities related to the registration module: registration periods, their dynamic
+form definitions, and the requests submitted by users.
+
+### Entity-relationship diagram
+
+```mermaid
+erDiagram
+    registration_period {
+        UUID id PK "NOT NULL"
+        UUID project_id "NOT NULL; Logical Link to core.projects"
+        TIMESTAMPTZ opening
+        TIMESTAMPTZ closing
+        TIMESTAMPTZ commitment_begin
+        TIMESTAMPTZ commitment_end
+        TIMESTAMPTZ created_at "NOT NULL"
+        UUID created_by "Logical Link to core.users"
+        TIMESTAMPTZ updated_at "NOT NULL"
+        UUID updated_by "Logical Link to core.users"
+        TIMESTAMPTZ deleted_at
+    }
+
+    form_field {
+        UUID id PK "NOT NULL"
+        UUID registration_period_id FK "NOT NULL; fk_registration_period_id"
+        TEXT label "NOT NULL"
+        VARCHAR(50) type "NOT NULL"
+        TEXT placeholder
+        TEXT helper
+        display_order INTEGER "NOT NULL"
+        required BOOLEAN
+        TIMESTAMPTZ created_at "NOT NULL"
+        UUID created_by "Logical Link to core.users"
+        TIMESTAMPTZ updated_at "NOT NULL"
+        UUID updated_by "Logical Link to core.users"
+        TIMESTAMPTZ deleted_at
+    }
+
+    registration_request {
+        UUID id PK "NOT NULL"
+        UUID registration_period_id FK "NOT NULL; fk_registration_period_id"
+        VARCHAR(50) status "NOT NULL"
+        TEXT internal_note
+        TEXT external_note
+        TIMESTAMPTZ created_at "NOT NULL"
+        UUID created_by "Logical Link to core.users"
+        TIMESTAMPTZ updated_at "NOT NULL"
+        UUID updated_by "Logical Link to core.users"
+        TIMESTAMPTZ deleted_at
+    }
+
+    request_value {
+        UUID id PK "NOT NULL"
+        UUID registration_request_id FK "NOT NULL; fk_registration_request_id"
+        UUID form_field_id FK "NOT NULL; fk_form_field_id"
+        TEXT value
+        TIMESTAMPTZ created_at "NOT NULL"
+        UUID created_by "Logical Link to core.users"
+        TIMESTAMPTZ updated_at "NOT NULL"
+        UUID updated_by "Logical Link to core.users"
+        TIMESTAMPTZ deleted_at
+    }
+
+    %% Internal Schema Relations (These remain because they are in the same DB)
+    registration_period ||--|{ form_field : "asks"
+    registration_period ||--o{ registration_request : "registers"
+    registration_request ||--o{ request_value : "informs"
+    form_field ||--o{ request_value : "types"
+```
+
+### Table reference
+
+#### `registration_period`
+
+Defines when and how a project accepts registration requests. A project without a registration period does not appear
+in the list of open projects and cannot receive requests.
+
+Carries two independent sets of dates: the **registration window** (`opening` / `closing`) controls when users may
+submit requests; the **project coverage** (`commitment_begin` / `commitment_end`) defines the portion of the project
+a registrant is expected to attend.
+
+| Column                   | Type          | Description                                                                           |
+|--------------------------|---------------|---------------------------------------------------------------------------------------|
+| `id`                     | `UUID`        | Primary key                                                                           |
+| `project_id`             | `UUID`        | Logical link → `core.projects.id`                                                     |
+| `opening`                | `TIMESTAMPTZ` | From when registrations are open *(open immediately if null)*                         |
+| `closing`                | `TIMESTAMPTZ` | Until when registrations are open *(open-ended if null)*                              |
+| `commitment_begin`       | `TIMESTAMPTZ` | Coverage start within the project *(defaults to project start date if null)*          |
+| `commitment_end`         | `TIMESTAMPTZ` | Coverage end within the project *(defaults to project end date if null)*              |
+| `created_at`             | `TIMESTAMPTZ` | Creation timestamp                                                                    |
+| `created_by`             | `UUID`        | Logical link → `core.users.id`                                                        |
+| `updated_at`             | `TIMESTAMPTZ` | Last modification timestamp                                                           |
+| `updated_by`             | `UUID`        | Logical link → `core.users.id`                                                        |
+| `deleted_at`             | `TIMESTAMPTZ` | Soft-delete timestamp                                                                 |
+
+#### `form_field`
+
+A single field in the dynamic registration form attached to a period. Fields are presented to users in `display_order`
+sequence when they fill in a request.
+
+| Column                   | Type          | Description                                                                        |
+|--------------------------|---------------|------------------------------------------------------------------------------------|
+| `id`                     | `UUID`        | Primary key                                                                        |
+| `registration_period_id` | `UUID`        | FK → `registration_period.id`                                                      |
+| `label`                  | `TEXT`        | Field label shown to the user                                                      |
+| `type`                   | `VARCHAR(50)` | Input type (e.g. `TEXT`, `NUMBER`, `DATE`, `CHECKBOX`) — drives front-end rendering |
+| `placeholder`            | `TEXT`        | Hint text displayed inside the input *(optional)*                                  |
+| `helper`                 | `TEXT`        | Explanatory text shown below the field *(optional)*                                |
+| `display_order`          | `INTEGER`     | Sort position within the form — lower values appear first                          |
+| `required`               | `BOOLEAN`     | Whether the field must be filled before the request can be submitted               |
+| `created_at`             | `TIMESTAMPTZ` | Creation timestamp                                                                 |
+| `created_by`             | `UUID`        | Logical link → `core.users.id`                                                     |
+| `updated_at`             | `TIMESTAMPTZ` | Last modification timestamp                                                        |
+| `updated_by`             | `UUID`        | Logical link → `core.users.id`                                                     |
+| `deleted_at`             | `TIMESTAMPTZ` | Soft-delete timestamp                                                              |
+
+#### `registration_request`
+
+A request submitted by a user for a given registration period. Carries the current lifecycle status and optional notes
+from both the admin (`internal_note`, not visible to the requester) and the requester (`external_note`).
+
+| Column                   | Type          | Description                                                                          |
+|--------------------------|---------------|--------------------------------------------------------------------------------------|
+| `id`                     | `UUID`        | Primary key                                                                          |
+| `registration_period_id` | `UUID`        | FK → `registration_period.id`                                                        |
+| `status`                 | `VARCHAR(50)` | Lifecycle state: `PENDING`, `NEED_SPECIFICATION`, `CONFIRMATION`, `ACCEPTED`, `REJECTED`, `CANCELLED` |
+| `internal_note`          | `TEXT`        | Admin-only note — never exposed to the requester *(optional)*                        |
+| `external_note`          | `TEXT`        | Note visible to the requester — used to communicate decisions or requests *(optional)* |
+| `created_at`             | `TIMESTAMPTZ` | Creation timestamp — also identifies the submitting user via `created_by`            |
+| `created_by`             | `UUID`        | Logical link → `core.users.id` — the user who submitted the request                 |
+| `updated_at`             | `TIMESTAMPTZ` | Last modification timestamp                                                          |
+| `updated_by`             | `UUID`        | Logical link → `core.users.id`                                                       |
+| `deleted_at`             | `TIMESTAMPTZ` | Soft-delete timestamp                                                                |
+
+#### `request_value`
+
+One row per form field answer within a request. Together, all `request_value` rows for a request represent the user's
+complete form submission. The `value` column is always stored as plain text regardless of the source field type — type
+interpretation is handled at the application level.
+
+| Column                    | Type          | Description                                                              |
+|---------------------------|---------------|--------------------------------------------------------------------------|
+| `id`                      | `UUID`        | Primary key                                                              |
+| `registration_request_id` | `UUID`        | FK → `registration_request.id`                                           |
+| `form_field_id`           | `UUID`        | FK → `form_field.id` — the field this value answers                      |
+| `value`                   | `TEXT`        | User-supplied answer serialised as text *(null if not answered)*         |
+| `created_at`              | `TIMESTAMPTZ` | Creation timestamp                                                       |
+| `created_by`              | `UUID`        | Logical link → `core.users.id`                                           |
+| `updated_at`              | `TIMESTAMPTZ` | Last modification timestamp                                              |
+| `updated_by`              | `UUID`        | Logical link → `core.users.id`                                           |
+| `deleted_at`              | `TIMESTAMPTZ` | Soft-delete timestamp                                                    |
+
+### Schema notes
+
+**Cross-schema references are logical only.** `project_id` and all `created_by` / `updated_by` columns reference
+entities in the `core` schema. Per the [isolation rules](#isolation-rules), no database-level foreign key constraints
+cross schema boundaries — referential integrity at this boundary is enforced by the application layer.
+
+**`request_value.value` is always text.** The field type stored in `form_field.type` is a rendering and validation
+hint for the front end and application layer. The database stores all answers as `TEXT`, leaving type coercion to the
+consumer.
+
+**`registration_request.created_by` identifies the requester.** There is no separate `requester_id` column — the
+submitting user is captured by the standard `created_by` audit column, consistent with the audit pattern used across
+all schemas.
