@@ -1,7 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { useData } from 'vitepress'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps<{ code: string }>()
+
+const { isDark } = useData()
 
 const MIN_ZOOM = 0.5
 const INITIAL_ZOOM = 1.2
@@ -11,16 +14,24 @@ const ZOOM_STEP = 0.2
 const diagramHtml = ref('')
 const zoomLevel = ref(INITIAL_ZOOM)
 const dialogEl = ref<HTMLDialogElement>()
+let renderRequestId = 0
 
 const clampZoom = (value: number): number => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value))
 
 const renderDiagram = async (): Promise<void> => {
+  const currentRequestId = ++renderRequestId
   const { default: mermaid } = await import('mermaid')
-  mermaid.initialize({ startOnLoad: false, theme: 'default' })
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark.value ? 'dark' : 'default',
+  })
 
   const id = `mermaid-${Math.random().toString(36).slice(2)}`
   const decoded = atob(props.code)
   const { svg } = await mermaid.render(id, decoded)
+  if (currentRequestId !== renderRequestId) {
+    return
+  }
   diagramHtml.value = svg
 }
 
@@ -63,6 +74,10 @@ const onDialogWheel = (event: WheelEvent): void => {
 
 onMounted(async () => {
   await renderDiagram()
+})
+
+watch(isDark, () => {
+  void renderDiagram()
 })
 </script>
 
