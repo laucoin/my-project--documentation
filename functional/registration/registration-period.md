@@ -8,6 +8,14 @@ project `ADMIN`.
 Without a registration period, a project does not appear in the list of projects open for registration and cannot
 receive new requests.
 
+A project can have **multiple active registration periods simultaneously**. Each period is independent and can target
+a different audience, date range, or pricing configuration.
+
+## Deletion constraint
+
+A registration period **cannot be soft-deleted** while it has at least one registration request that is not
+`CANCELLED`. All non-cancelled requests must be cancelled or resolved before the period can be removed.
+
 ## Two distinct date concepts
 
 A registration period carries two independent sets of dates, serving different purposes.
@@ -59,11 +67,17 @@ The three pricing types can be combined. The total cost of a registration is the
 | **Variable**     | Rate × number of participants                                              |
 | **Day variable** | Rate × number of participants × number of days of presence per participant |
 
-::: tip Example
-For a camp with a day variable price of 10 € per participant per day:
+### Day counting rule
 
-- A participant present for 5 days contributes 50 €
-- A participant present for 3 days contributes 30 €
+The number of days of presence is calculated as the **number of intervals** between the first and last day of the
+presence range. By default, J1 to J3 counts as **2 days** (J1→J2 and J2→J3). This default can be overridden in
+the registration period form if a different counting convention is required.
+
+::: tip Example
+For a camp with a day variable price of 10 € per participant per day (default counting):
+
+- A participant present from J1 to J6 (5 intervals) contributes 50 €
+- A participant present from J1 to J4 (3 intervals) contributes 30 €
   :::
 
 ::: warning Day variable price requires dates

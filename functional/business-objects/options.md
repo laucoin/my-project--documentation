@@ -42,6 +42,19 @@ Disabling an option that another option depends on is not permitted while the de
 example, `ACTIVITY` cannot be disabled while `COMMUNICATION` is enabled.
 :::
 
+### Effect on existing data when an option is disabled
+
+Disabling an option on a project **does not delete** any data already created under that option. Existing records
+(vehicles, activities, movements linked to activities, registration periods, etc.) are **masked** — hidden from the
+UI and excluded from all application operations — but are preserved in the database.
+
+If the option is re-enabled later, the previously masked data becomes visible and usable again.
+
+::: info
+Masking is driven entirely by whether the option is currently active on the project. No data migration or purge is
+triggered by toggling an option.
+:::
+
 ## Summary of features per option
 
 ### VEHICLE

@@ -65,6 +65,7 @@ export default defineConfig({
 							collapsed: true,
 							items    : [
 								{ text: 'Registration period', link: '/functional/registration/registration-period' },
+								{ text: 'Registration form', link: '/functional/registration/registration-form' },
 								{ text: 'Registration request', link: '/functional/registration/registration-request' },
 							],
 						},
@@ -124,6 +125,7 @@ export default defineConfig({
 						},
 						{ text: 'Security', link: '/technical/security' },
 						{ text: 'Database', link: '/technical/database' },
+						{ text: 'Real-Time Push', link: '/technical/real-time' },
 						{
 							text     : 'Decision Records',
 							link     : '/technical/adr/',
@@ -138,6 +140,10 @@ export default defineConfig({
 									link: '/technical/adr/005-keycloak-organizations',
 								},
 								{ text: '006 – Nuxt Layers', link: '/technical/adr/006-nuxt-layers' },
+								{ text  : '007 – Real-Time Push: SSE vs WebSocket',
+									link: '/technical/adr/007-sse-vs-websocket',
+								},
+								{ text: '008 – Testing Strategy', link: '/technical/adr/008-testing-strategy' },
 							],
 						},
 						{
@@ -150,6 +156,7 @@ export default defineConfig({
 								{ text: 'Security', link: '/technical/guidelines/security' },
 								{ text: 'Frontend', link: '/technical/guidelines/frontend' },
 								{ text: 'Coding Style', link: '/technical/guidelines/coding-style' },
+								{ text: 'Infrastructure', link: '/technical/guidelines/infrastructure' },
 							],
 						},
 						{

@@ -43,6 +43,27 @@ project.
 
 See [Roles → Profiles](/functional/roles#profiles) for the full lifecycle.
 
+## Light user
+
+A **light user** is a partial user record created automatically when a `PROJECT_ADMIN` invites an email address that
+does not yet correspond to any account in the organisation.
+
+A light user has:
+- A valid `email` — the only populated identity field
+- A `null` `oidc_id`, `first_name`, and `last_name`
+- A pending profile invitation on the project that triggered the creation
+
+When the person logs in for the first time, Keycloak authenticates them and the application matches the authenticated
+email against the light user record. The OIDC identity is linked, the name fields are populated from the token, and
+the user immediately sees their pending invitation.
+
+::: info
+A light user is indistinguishable from a full user at the database level — they share the same `users` table. The
+only indicator is the absence of `oidc_id`.
+:::
+
+---
+
 ## Key attributes
 
 | Attribute         | Description                                                                                   |

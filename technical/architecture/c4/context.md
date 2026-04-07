@@ -14,14 +14,11 @@ C4Context
 
     System_Ext(keycloak, "Keycloak", "Identity broker — handles multi-organisation authentication and routing")
     System_Ext(idp, "Organisation IdP", "External identity provider configured per organisation (optional)")
-    System_Ext(weblate, "Weblate", "Translation management — manages application UI translations")
-
     Rel(staff, app, "Uses", "HTTPS")
     Rel(youth, app, "Uses", "HTTPS")
     Rel(superadmin, app, "Administers", "HTTPS")
     Rel(app, keycloak, "Delegates authentication to", "OIDC")
     Rel(keycloak, idp, "Federates identity from", "OIDC / SAML")
-    Rel(app, weblate, "Pulls translations from", "HTTPS")
 ```
 
 ## Elements
@@ -34,4 +31,3 @@ C4Context
 | Group Care Management | System          | This application                                                                                                            |
 | Keycloak              | External system | Identity broker — issues JWTs, routes users to the correct IdP based on their organisation slug                             |
 | Organisation IdP      | External system | An optional external identity provider (e.g. Microsoft Entra, Google Workspace) configured per organisation                 |
-| Weblate               | External system | Translation management platform — stores and serves UI translation strings                                                  |

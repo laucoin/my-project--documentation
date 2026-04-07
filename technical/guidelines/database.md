@@ -174,7 +174,6 @@ dslContext.fetch("SELECT * FROM core.projects WHERE organisation_id = '$organisa
 - Run jOOQ code generation after every migration before committing
 - Never hardcode schema names as strings — use the generated constants
 - Keep jOOQ DSL calls in the `infrastructure/` layer only — never in domain or inbound port code
-- For coroutine integration use: `asFlow()`, `awaitSingle()`, `awaitFirstOrNull()`, `awaitSingleOrNull()`
 
 ---
 

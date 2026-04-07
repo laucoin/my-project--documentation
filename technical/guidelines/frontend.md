@@ -211,7 +211,7 @@ sharing is needed.
 
 ## i18n
 
-**Convention: flat namespaced keys in snake_case, translations managed via Weblate.**
+**Convention: flat namespaced keys in snake_case, translations maintained in local JSON files in the repository.**
 
 ```ts
 // ✅ correct
@@ -229,7 +229,7 @@ t('Prénom')                         // hardcoded string, not a key
 - Each layer owns its translation keys under its namespace (e.g. `participant.*`, `operation.*`)
 - Shared keys live under `common.*` in the APP layer
 - Never hardcode user-facing strings — always go through `t()`
-- Translations are pulled from Weblate, never edited directly in the repo JSON files
+- Translation JSON files live in the repository and are edited directly alongside the code
 
 ---
 
@@ -241,7 +241,7 @@ t('Prénom')                         // hardcoded string, not a key
 | Cross-layer component imports                 | Breaks domain boundaries                  | Move shared component to APP layer |
 | Inline `$fetch` in component `<script setup>` | Mixes UI and data concerns                | Composable + API module            |
 | `any` type                                    | Defeats TypeScript safety                 | Proper interface or type           |
-| Hardcoded user-facing strings                 | Not translatable                          | `t()` with Weblate key             |
+| Hardcoded user-facing strings                 | Not translatable                          | `t()` with i18n key                |
 | Pinia store for every entity                  | Unnecessary global state, memory overhead | Composable first                   |
 | `console.log` in committed code               | Not structured, leaks in production       | Remove before commit               |
 | Unversioned API paths (`/api/participants`)   | Breaks when BFF introduces a v2           | Always use `/api/v1/…`             |

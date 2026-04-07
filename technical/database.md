@@ -536,6 +536,11 @@ erDiagram
         TIMESTAMPTZ closing
         TIMESTAMPTZ commitment_begin
         TIMESTAMPTZ commitment_end
+        VARCHAR(50) audience "NOT NULL"
+        INTEGER max_registrations
+        DECIMAL fixed_price
+        DECIMAL variable_price
+        DECIMAL day_variable_price
         TIMESTAMPTZ created_at "NOT NULL"
         UUID created_by "Logical Link to core.users"
         TIMESTAMPTZ updated_at "NOT NULL"
@@ -610,6 +615,11 @@ a registrant is expected to attend.
 | `closing`                | `TIMESTAMPTZ` | Until when registrations are open *(open-ended if null)*                              |
 | `commitment_begin`       | `TIMESTAMPTZ` | Coverage start within the project *(defaults to project start date if null)*          |
 | `commitment_end`         | `TIMESTAMPTZ` | Coverage end within the project *(defaults to project end date if null)*              |
+| `audience`               | `VARCHAR(50)` | Who can register: `INDIVIDUAL`, `GROUP`, or `BOTH`                                    |
+| `max_registrations`      | `INTEGER`     | Maximum number of accepted registrations *(null = unlimited)*                         |
+| `fixed_price`            | `DECIMAL`     | Flat fee charged once per registration *(null = not applicable)*                      |
+| `variable_price`         | `DECIMAL`     | Per-person fee multiplied by participant count *(null = not applicable)*              |
+| `day_variable_price`     | `DECIMAL`     | Per-person per-day fee multiplied by participant count × days of presence *(null = not applicable)* |
 | `created_at`             | `TIMESTAMPTZ` | Creation timestamp                                                                    |
 | `created_by`             | `UUID`        | Logical link → `core.users.id`                                                        |
 | `updated_at`             | `TIMESTAMPTZ` | Last modification timestamp                                                           |

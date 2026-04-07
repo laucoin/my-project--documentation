@@ -11,8 +11,6 @@ C4Container
 
     System_Ext(keycloak, "Keycloak", "Identity broker")
     System_Ext(idp, "Organisation IdP", "External IdP — optional per organisation")
-    System_Ext(weblate, "Weblate", "Translation management")
-
     Container(nuxt, "Web Application", "Nuxt / Vue", "User interface structured in layers mirroring backend modules")
 
     System_Boundary(monolith, "Spring Boot Modular Monolith") {
@@ -27,7 +25,6 @@ C4Container
     Rel(youth, nuxt, "Uses", "HTTPS")
     Rel(keycloak, idp, "Federates identity from", "OIDC / SAML")
     Rel(nuxt, bff, "API calls + auth initiation", "REST / HTTPS")
-    Rel(nuxt, weblate, "Pulls translations", "HTTPS")
     Rel(bff, keycloak, "Handles OIDC flow", "HTTPS")
     Rel(bff, core, "Calls", "Service interface")
     Rel(bff, operation, "Calls", "Service interface")

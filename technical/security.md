@@ -92,5 +92,5 @@ A project profile can be created in three ways:
 1. **Manual assignment** — a `PROJECT_ADMIN` explicitly invites a user to the project with a role.
 2. **Direct assignment** — `SUPER_ADMIN` only, creates a temporary one-hour `PROJECT_ADMIN` profile automatically
    accepted.
-3. **Project creation** — When a user create a project, he obtains a permanent `PROJECT_ADMIN` profile automatically for
+3. **Project creation** — When a user creates a project, they obtain a permanent `PROJECT_ADMIN` profile automatically for
    the project.

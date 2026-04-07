@@ -235,7 +235,7 @@ dslContext
 	.select(PROJECTS.ID, PROJECTS.NAME)
 	.from(PROJECTS)
 	.where(PROJECTS.ORGANISATION_ID.eq(organisationId))
-	.asFlow()
+	.map { it.into(ProjectModel::class.java) }
 
 // ❌ avoid — raw SQL, no compile-time safety
 dslContext.fetch("SELECT id, name FROM core.projects WHERE organisation_id = $organisationId")
@@ -245,33 +245,7 @@ Rules:
 
 - jOOQ classes are generated from the schema — run code generation after every migration
 - Never hardcode schema names in jOOQ queries — generated types already embed the schema
-- `asFlow()` / `awaitFirst()` / `awaitSingle()` are the Kotlin coroutine extensions to use with jOOQ R2DBC
 - Keep queries in the `infrastructure/` layer — never call jOOQ DSL from the domain or inbound port layer
-
----
-
-## Coroutines vs Reactor
-
-**Convention: prefer Kotlin coroutines (`suspend`) at the BFF handler layer. Reactor types (`Mono`/`Flux`) at the
-service interface layer.**
-
-```kotlin
-// ✅ BFF handler — with WebFlux
-@GetMapping("/projects/{id}")
-suspend fun getProject(@PathVariable id: UUID): Mono<ProjectResponse> =
-	coreService.findProject(id).awaitSingle().toResponse()
-
-// ✅ Service interface — Reactor types for extraction-readiness
-interface CoreService {
-	fun findProject(id: UUID): Mono<Project>
-	fun findAllProjects(orgId: UUID): Flux<Project>
-}
-
-// ❌ avoid mixing — blocking calls inside a reactive pipeline
-coreService.findProject(id).map { project ->
-	anotherService.findSomething().block()  // ← blocks the event loop
-}
-```
 
 ---
 
@@ -340,7 +314,7 @@ Rules:
 |-----------------------------------------------|-----------------------------------|------------------------------------|
 | Cross-module repository calls                 | Breaks domain isolation (ADR 001) | Call the module's inbound port     |
 | BFF importing module implementation classes   | Couples BFF to internals          | Import inbound port interface only |
-| `block()` in reactive code                    | Blocks the event loop             | `awaitSingle()` / `flatMap`        |
+| `block()` in reactive code                    | Blocks the event loop             | Compose with `flatMap` / `zip`     |
 | `@Primary` on datasource beans                | Conflicts in multi-module context | `@Qualifier` explicitly            |
 | Raw SQL strings in jOOQ queries               | No compile-time safety, fragile   | jOOQ generated types               |
 | Spring annotations leaking into inbound ports | Couples port to framework         | Plain Kotlin interface             |

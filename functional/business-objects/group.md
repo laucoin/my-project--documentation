@@ -35,6 +35,16 @@ dates — not by their group's dates. A participant may therefore have a wider a
 | `updated_by` | FK → `users.id` — user who last modified the record                   |
 | `deleted_at` | Soft-delete timestamp — `NULL` means active                           |
 
+## Soft-delete effect
+
+When a group is soft-deleted, all `group_membership` records linking participants to that group are **no longer
+considered active**. Participants who belonged to the group lose that membership for all purposes (attendance date
+fallback, collective movement operations, display grouping).
+
+The participant records themselves are not affected — only the group association is dropped.
+
+---
+
 ## Relationships
 
 | Related object | Relationship                               |

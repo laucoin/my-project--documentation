@@ -134,11 +134,11 @@ A user can only use a profile while today falls within its active date range **a
 
 ### Creating a profile
 
-| Method            | Initiated by       | Result                                                                                        |
-|-------------------|--------------------|-----------------------------------------------------------------------------------------------|
-| Project creation  | Any `USER`         | Immediate permanent `PROJECT_ADMIN` profile, status `ACCEPTED`, no invitation required        |
-| Invitation        | A `PROJECT_ADMIN`  | Invitation sent to a user within the same organisation *(see lifecycle below)*                |
-| Direct assignment | `SUPER_ADMIN` only | Temporary `PROJECT_ADMIN` profile lasting one hour, status `ACCEPTED`, automatically approved |
+| Method            | Initiated by       | Result                                                                                                              |
+|-------------------|--------------------|---------------------------------------------------------------------------------------------------------------------|
+| Project creation  | Any `USER`         | Immediate permanent `PROJECT_ADMIN` profile, status `ACCEPTED`, no invitation required                             |
+| Invitation        | A `PROJECT_ADMIN`  | Invitation sent to a user within the same organisation *(see lifecycle below)*                                      |
+| Direct assignment | `SUPER_ADMIN` only | Temporary `PROJECT_ADMIN` profile with `end_access` set to **now + 1 hour**, status `ACCEPTED`, no invitation required |
 
 ### Invitation lifecycle
 
@@ -150,6 +150,26 @@ INVITED ──► ACCEPTED
 ```
 
 The invited user accepts or rejects the invitation from their profile view. Upon acceptance, the profile becomes active.
+
+### Inviting a user who does not yet have an account
+
+If the invited email address does not match any existing user in the organisation, the application **automatically
+creates a light user** — a minimal record in the `users` table containing only the email address. The `oidc_id`,
+`first_name`, and `last_name` fields are left null.
+
+When that person logs in for the first time via Keycloak, the application matches their authenticated email against
+the existing light user record and links the OIDC identity to it. The pending invitation is then immediately visible
+to them in the application.
+
+::: info
+There is currently no email notification for invitations. The invited user discovers the invitation on their first
+login or during a subsequent visit to the application.
+:::
+
+### Self-edit restriction
+
+A user **cannot edit their own profile**. Profile modifications (role change, date range update, blocking) must be
+performed by another `PROJECT_ADMIN` or a `SUPER_ADMIN`.
 
 ### Mandatory permanent admin
 

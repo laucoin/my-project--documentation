@@ -19,6 +19,11 @@ to application permissions.
 
 The database schema structure, module ownership rules, and the migration strategy.
 
+### [Real-Time Push](/technical/real-time)
+
+The SSE event format, reconnection contract, and client-side state management strategy for real-time push
+(see [ADR 007](/technical/adr/007-sse-vs-websocket)).
+
 ### [Decision Records](/technical/adr/)
 
 A log of the key architectural decisions made during the design of the system, with context and rationale.

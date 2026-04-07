@@ -8,6 +8,16 @@ a company, an association, or a scouting body — that owns and manages one or m
 - Every project belongs to exactly one Organisation.
 - An Organisation provides the administrative context for all the projects it contains.
 
+## Soft-delete effect
+
+When an organisation is soft-deleted, it is treated as **blocked**: all users belonging to that organisation are
+prevented from logging in. Their Keycloak authentication will succeed, but the application will reject the session
+because no active organisation can be resolved for the slug.
+
+Existing data (projects, participants, movements, etc.) is preserved and remains accessible to `SUPER_ADMIN`s.
+
+---
+
 ## Key attributes
 
 | Attribute    | Description                                                                         |

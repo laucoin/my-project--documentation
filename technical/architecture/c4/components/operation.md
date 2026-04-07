@@ -14,7 +14,7 @@ C4Component
         Component(inbound, "Operation Service Interface", "Kotlin Interface / Inbound Port", "Entry point for BFF calls — exposes all domain operations")
         Component(movementService, "Movement Service", "Kotlin / Domain", "Records and manages participant movements (departures and returns)")
         Component(alertService, "Alert Service", "Kotlin / Domain", "Creates and manages alerts")
-        Component(communicationService, "Communication Service", "Kotlin / Domain", "Manages communication threads attached to alerts")
+        Component(communicationService, "Communication Service", "Kotlin / Domain", "Manages communication threads — each thread is attached to a movement; a thread can also be linked to an alert to allow outside groups to comment on it")
         Component(repoPort, "Repository Interfaces", "Kotlin Interface / Outbound Port", "Persistence contracts defined by the domain")
         Component(repos, "Repositories", "jOOQ / R2DBC / Outbound Adapter", "Implements repository interfaces against the operation schema")
     }
@@ -37,6 +37,6 @@ C4Component
 | Operation Service Interface | Kotlin Interface | Inbound port — exposes all domain operations to the BFF                            |
 | Movement Service            | Kotlin / Domain  | Records departures and returns for participants                                    |
 | Alert Service               | Kotlin / Domain  | Creates and manages alerts, independent of movement state                          |
-| Communication Service       | Kotlin / Domain  | Manages communication threads attached to alerts                                   |
+| Communication Service       | Kotlin / Domain  | Manages communication threads — each thread is attached to a movement; a thread can optionally be linked to an alert so that outside groups can comment on it |
 | Repository Interfaces       | Kotlin Interface | Outbound port — persistence contracts defined by the domain                        |
 | Repositories                | jOOQ / R2DBC     | Outbound adapter — implements repository interfaces against the `operation` schema |

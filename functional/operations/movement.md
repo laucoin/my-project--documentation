@@ -7,6 +7,19 @@ outline: deep
 A **Movement** is a timestamped record of any entry into or exit from the project site. It is the core operational log
 of the application.
 
+## Immutability
+
+A movement **cannot be edited** after it has been recorded. If a correction is needed, the movement must be
+soft-deleted and a new movement created in its place. When recreating a movement, a custom `datetime` can be supplied
+to reflect the actual time of the event.
+
+::: warning
+A movement cannot be created with a datetime **in the future**. All recorded movements must have a datetime less than
+or equal to the current time.
+:::
+
+---
+
 ## Direction
 
 Every movement has a direction:
@@ -89,6 +102,33 @@ Classic communication requires both **ACTIVITY** and **COMMUNICATION** to be ena
 
 For a more structured form of communication with a dedicated status and topic,
 see [Alert](/functional/operations/alert).
+
+## Participant presence status
+
+Each participant's current presence status is derived at runtime from their movement history and their resolved
+departure date (see [Attendance fallback](/functional/business-objects/#dates-and-attendance)).
+
+| Status           | Condition                                                                                       |
+|------------------|-------------------------------------------------------------------------------------------------|
+| `NOT_ARRIVED_YET`| No movement has been recorded for this participant yet                                          |
+| `IN`             | The participant's last recorded movement is an `IN`                                             |
+| `OUT`            | The participant's last recorded movement is an `OUT`                                            |
+| `LEFT`           | The participant's resolved departure date is in the past (regardless of their last movement)    |
+
+`LEFT` takes precedence over `IN` or `OUT`: once the departure date is passed, the participant is considered to have
+left the project.
+
+---
+
+## Soft-deleted referenced elements
+
+When an activity or a participant referenced by a movement is later soft-deleted, **the movement record is not
+affected** — it continues to display the name of the deleted element. A visual label is shown in the UI to indicate
+that the element no longer exists.
+
+Soft-deleted activities and participants **cannot be selected** when creating new movements.
+
+---
 
 ## Key attributes
 

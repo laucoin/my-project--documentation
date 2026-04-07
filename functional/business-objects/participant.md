@@ -20,8 +20,8 @@ separate participant records in each one. This ensures strict data isolation bet
 
 ## Minor or major
 
-A participant is classified as a minor or major based solely on their **birthdate**. This classification is independent
-of the project's dates or any other context.
+A participant is classified as a minor or major based solely on their **birthdate**, compared against **today's date**.
+This classification is re-evaluated dynamically — a participant can become a major during the course of a project.
 
 ## Attendance dates
 
@@ -68,11 +68,26 @@ group dates are a fallback only, not a binding constraint.
 | Movement       | A participant can be included in one or more movements         |
 | User           | A participant can optionally be linked to one application user |
 
+## Movement fault tolerance
+
+In theory a participant should not have more than one `OUT` movement active at the same time (or more than one `IN` in a row). However, **the application does not block** if such a situation occurs — it accepts the movement and records it. The participant's current status is always derived from their **last recorded movement direction**, regardless of any prior inconsistency.
+
+---
+
 ## Guest
 
 A **Guest** (`type = GUEST`) is a lightweight variant of a participant. Unlike a registered participant
 (`type = REGISTERED`), a guest is not pre-registered in the project — they are created at the time of a movement.
 Guests share the same table as registered participants but are distinguished by their type and carry no project history
 outside of the movement they were created for.
+
+### Guest lifecycle
+
+A guest's lifecycle is strictly limited to **two movements**:
+
+1. An `IN` movement — the guest enters the site.
+2. An `OUT` movement — the guest leaves the site.
+
+No further movements can be recorded for a guest after they have gone out.
 
 See [Movement](/functional/operations/movement) for details on how guests appear in movements.

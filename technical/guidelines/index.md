@@ -25,6 +25,10 @@ Authorization boundary, JWT handling, role extraction, session cookie, forbidden
 
 Nuxt layer structure, component naming, composables, API calls, TypeScript, i18n
 
+### [Infrastructure Conventions](/technical/guidelines/infrastructure)
+
+CORS configuration, session timeout and JWT expiry handling at the BFF, R2DBC connection pool sizing
+
 ### [Coding Style](/technical/guidelines/coding-style)
 
 Naming, method size, package structure, error handling, logging, forbidden patterns

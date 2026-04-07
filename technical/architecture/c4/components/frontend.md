@@ -9,7 +9,6 @@ C4Component
     title Component Diagram — Web Application (Nuxt)
 
     Container_Ext(bff, "BFF", "Kotlin / Spring Boot WebFlux", "")
-    System_Ext(weblate, "Weblate", "Translation management")
 
     Container_Boundary(nuxt, "Web Application") {
         Component(app, "APP Layer", "Nuxt", "Application entry point — routing, authentication guard, global layout and navigation")
@@ -19,7 +18,6 @@ C4Component
     }
 
     Rel(app, bff, "Auth initiation", "REST / HTTPS")
-    Rel(app, weblate, "Pulls translations", "HTTPS")
     Rel(app, coreLayer, "Composes")
     Rel(app, operationLayer, "Composes")
     Rel(app, registrationLayer, "Composes")
