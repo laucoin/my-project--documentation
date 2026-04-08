@@ -28,6 +28,10 @@ The SSE event format, reconnection contract, and client-side state management st
 
 A log of the key architectural decisions made during the design of the system, with context and rationale.
 
+### [API Contract](/technical/api-contract/)
+
+Pagination strategy, filtering and sorting parameters per endpoint, and size constraints enforced by the API.
+
 ### [Coding guidelines](/technical/guidelines/)
 
 Conventions and standards adopted across all modules — covering database schema, Spring & Kotlin patterns, security boundaries, frontend structure, and coding style.

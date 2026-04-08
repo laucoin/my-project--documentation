@@ -127,6 +127,16 @@ export default defineConfig({
 						{ text: 'Database', link: '/technical/database' },
 						{ text: 'Real-Time Push', link: '/technical/real-time' },
 						{
+							text     : 'API Contract',
+							link     : '/technical/api-contract/',
+							collapsed: false,
+							items    : [
+								{ text: 'Pagination', link: '/technical/api-contract/pagination' },
+								{ text: 'Filtering & Sorting', link: '/technical/api-contract/filtering-sorting' },
+								{ text: 'Size Constraints', link: '/technical/api-contract/size-constraints' },
+							],
+						},
+						{
 							text     : 'Decision Records',
 							link     : '/technical/adr/',
 							collapsed: true,
