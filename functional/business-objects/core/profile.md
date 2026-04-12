@@ -10,14 +10,19 @@ last_update: 2026-04-12
 
 ## Definition
 
-A **profile** is the link between a user and a project. In other words, a profile allow user to interact with a project
-depending is profile role.
+A **profile** is the link between a user and a project. It carries the project role, the period during which access is
+active, and the invitation status.
 
 ```
 Organization
 └── Project
     └── Profile
 ```
+
+::: info Usage
+A user concerned by the profile can only use it while today falls within its active date range **and** the invitation
+status is `ACCEPTED`.
+:::
 
 ## Main attributes
 
@@ -51,6 +56,22 @@ Possible values:
 - `INVITED`
 - `ACCEPTED`
 - `REJECTED`
+
+::: info
+There is currently no email notification for invitations. The invited user discovers the invitation on their first
+login or during a subsequent visit to the application.
+:::
+
+#### Invitation lifecycle
+
+When a `PROJECT_ADMIN` invites a user, the invitation goes through the following lifecycle:
+
+```
+INVITED ──► ACCEPTED
+        └─► REJECTED
+```
+
+The invited user accepts or rejects the invitation from their profile view. Upon acceptance, the profile becomes active.
 
 ### Usage status
 
@@ -129,6 +150,8 @@ This profile can only be created automatically on the project creation for the c
 - Constraints (differences with creation):
 	- Type cannot be changed
 	- Invitation status cannot be changed
+	- A user **cannot edit their own profile**. Profile modifications (role change, date range update, blocking) must be
+	  performed by another `PROJECT_ADMIN`.
 
 ### Answer invitation
 

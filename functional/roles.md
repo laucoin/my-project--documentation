@@ -9,173 +9,68 @@ The application has two levels of roles:
 Moreover the 2 levels an organization can give in special case **global roles** that apply to the platform as a whole.
 :::
 
----
+## Organization
 
-## Global roles
+| Role                 | Description                |
+|----------------------|----------------------------|
+| `ORGANIZATION_ADMIN` | Organization administrator |
+| `ORGANIZATION_USER`  | Standard user              |
 
-Every user has exactly one global role. The default role assigned to every account is `USER`.
-
-| Role          | Description                                                         |
-|---------------|---------------------------------------------------------------------|
-| `USER`        | Standard user — default role for every account                      |
-| `SUPER_ADMIN` | Platform administrator — full visibility across the entire platform |
-
-### USER
-
-A `USER` can:
-
-- Log in and out
-- Create a project *(automatically receives a permanent `PROJECT_ADMIN` profile on it)*
-- View and manage their own profiles *(accept or reject pending invitations)*
-- Access a project using an active profile *(while today falls within the profile's date range)*
-- Browse projects open for registration *(those with an active registration period today)*
-- Submit registration requests for those projects
-
-### SUPER_ADMIN
-
-A `SUPER_ADMIN` inherits all `USER` permissions, and can additionally:
-
-- View all users, and block, unlock, or delete them
-- View all projects, whether or not they are open for registration
-- Create a temporary profile on any project *(one hour, automatically approved — no invitation required)*
-
-::: info
-A super admin cannot perform actions on a project's data without a profile. Creating a temporary profile is their only
-way to interact with a project.
+:::info Admin scope
+The administrator hasn’t access to whole organization’s projects. Indeed, he can see them but cannot see their content.
+As it’s stipulated in [profiles](/functional/business-objects/core/profile#support-profile), he can create a support profile to access a project (for tracking access).
 :::
 
----
-
-## Project roles
-
-A project role is granted through a **profile**, which links a user to a specific project. Three project roles exist:
-
-| Role                  | Description                                                                     |
-|-----------------------|---------------------------------------------------------------------------------|
-| `PROJECT_ADMIN`       | Full control over the project and its configuration                             |
-| `PROJECT_COORDINATOR` | Operational access — manages day-to-day content but not administrative settings |
-| `PROJECT_PARTICIPANT` | Restricted operational access — limited to operation entities only              |
-
-### PROJECT_ADMIN
-
-A `PROJECT_ADMIN` can create, read, update, and delete all objects within the project scope:
-
-- The project itself and its settings
-- Groups, participants, activities, vehicles
-- Movements, alerts, communications
-- Registration periods and requests *(if the REGISTRATION option is enabled)*
-- Profiles linked to the project *(inviting users, assigning roles, blocking, unblocking, revoking access)*
-
-### PROJECT_COORDINATOR
-
-A `PROJECT_COORDINATOR` has broad operational access but cannot touch administrative settings or profiles:
-
-| Permission                              | PROJECT_COORDINATOR |
-|-----------------------------------------|---------------------|
-| Create objects                          | ✓                   |
-| Read objects                            | ✓                   |
-| Update objects                          | ✓                   |
-| Disable objects                         | ✓                   |
-| Re-enable objects                       | ✗                   |
-| Delete objects                          | ✗                   |
-| Update the project itself               | ✗                   |
-| Invite users to the project             | ✗                   |
-| Edit, block, unblock or delete profiles | ✗                   |
-| Access registration features            | ✗                   |
-
-::: info
-The `PROJECT_COORDINATOR` role is intended for operational staff. A coordinator can record movements and manage alerts,
-but has no access to project configuration, user management, or registration.
+:::warning Role scope
+The organization role is only scoped to an organization. it means, when you got a `ORGANIZATION_ADMIN` it's limited to
+a specific organization (not all ones). Excepted for `SUPER_ADMIN`.
 :::
 
-### PROJECT_PARTICIPANT
+### Auto attribution
 
-A `PROJECT_PARTICIPANT` has the most restricted access — limited to operation entities only:
+As a user is logged in with his organization OIDC provider. The organization role can automatically be defined.
+If the OIDC provider give a `MY_PROJECT-ORGANIZATION_ADMIN` or `MY_PROJECT-ORGANIZATION_USER` the user is automatically
 
-| Permission                                        | PROJECT_PARTICIPANT |
-|---------------------------------------------------|---------------------|
-| Record movements                                  | ✓                   |
-| Create and view alerts                            | ✓                   |
-| Participate in communications                     | ✓                   |
-| Access project configuration                      | ✗                   |
-| Manage groups, participants, activities, vehicles | ✗                   |
-| Access profiles                                   | ✗                   |
-| Access registration features                      | ✗                   |
-
-::: info
-The `PROJECT_PARTICIPANT` role is intended for youth participants who need to interact with operational features only.
+:::warning
+If an organization "is strict auth", the user cannot access the application except the OIDC provider return one of the previous roles.
 :::
 
----
+### Special case
 
-## Profiles
+As you can see in [organization](/functional/business-objects/core/organization#main-attributes), there is a field "Is main".
+When there is a main organization, all these user obtains `SUPER_ADMIN` role.
 
-A **profile** is the link between a user and a project. It carries the project role, the period during which access is
-active, and the invitation status.
-
-### Profile attributes
-
-| Attribute         | Description                                                                    |
-|-------------------|--------------------------------------------------------------------------------|
-| `id`              | Primary key — UUID generated by the application                                |
-| `organization_id` | FK → `organizations.id` — part of composite FKs to user and project            |
-| `project_id`      | FK → `projects.id` — the project this profile grants access to                 |
-| `user_id`         | FK → `users.id` — the user this profile belongs to                             |
-| `role`            | Project role: `PROJECT_ADMIN`, `PROJECT_COORDINATOR`, or `PROJECT_PARTICIPANT` |
-| `status`          | Invitation status: `INVITED`, `ACCEPTED`, or `REJECTED`                        |
-| `start_access`    | From when the profile is active *(nullable — no start date means immediately)* |
-| `end_access`      | Until when the profile is active *(nullable — no end date means permanent)*    |
-| `created_at`      | Creation timestamp — managed by Spring Auditing                                |
-| `created_by`      | FK → `users.id` — user who created the record                                  |
-| `updated_at`      | Last modification timestamp — managed by Spring Auditing                       |
-| `updated_by`      | FK → `users.id` — user who last modified the record                            |
-| `deleted_at`      | Soft-delete timestamp — `NULL` means active                                    |
-
-A user can only use a profile while today falls within its active date range **and** the invitation status is
-`ACCEPTED`.
-
-### Creating a profile
-
-| Method            | Initiated by       | Result                                                                                                                 |
-|-------------------|--------------------|------------------------------------------------------------------------------------------------------------------------|
-| Project creation  | Any `USER`         | Immediate permanent `PROJECT_ADMIN` profile, status `ACCEPTED`, no invitation required                                 |
-| Invitation        | A `PROJECT_ADMIN`  | Invitation sent to a user within the same organization *(see lifecycle below)*                                         |
-| Direct assignment | `SUPER_ADMIN` only | Temporary `PROJECT_ADMIN` profile with `end_access` set to **now + 1 hour**, status `ACCEPTED`, no invitation required |
-
-### Invitation lifecycle
-
-When a `PROJECT_ADMIN` invites a user, the invitation goes through the following lifecycle:
-
-```
-INVITED ──► ACCEPTED
-        └─► REJECTED
-```
-
-The invited user accepts or rejects the invitation from their profile view. Upon acceptance, the profile becomes active.
-
-### Inviting a user who does not yet have an account
-
-If the invited email address does not match any existing user in the organization, the application **automatically
-creates a light user** — a minimal record in the `users` table containing only the email address. The `oidc_id`,
-`first_name`, and `last_name` fields are left null.
-
-When that person logs in for the first time via Keycloak, the application matches their authenticated email against
-the existing light user record and links the OIDC identity to it. The pending invitation is then immediately visible
-to them in the application.
-
-::: info
-There is currently no email notification for invitations. The invited user discovers the invitation on their first
-login or during a subsequent visit to the application.
+:::info Role attribution
+This role is not directly linked to a user, that mean, all user in the organization obtain this role. But if the organization is not main anymore, all organization’s user lose their
+`SUPER_ADMIN` role.
 :::
 
-### Self-edit restriction
+A `SUPER_ADMIN`:
 
-A user **cannot edit their own profile**. Profile modifications (role change, date range update, blocking) must be
-performed by another `PROJECT_ADMIN` or a `SUPER_ADMIN`.
+- Manage organizations
+- Can do the same things as an `ORGANIZATION_ADMIN` of all organization.
 
-### Mandatory permanent admin
+## Project
 
-::: warning
-Every project must always have at least one `PROJECT_ADMIN` profile with no end date. A project can never be left
-without a permanent administrator.
+| Role              | Description           |
+|-------------------|-----------------------|
+| `PROJECT_ADMIN`   | Project administrator |
+| `PROJECT_MANAGER` | Project manager       |
+| `PROJECT_USER`    | Project user          |
+
+Main idea about the 3 roles (check objects’ actions for details):
+
+- Project admin has full access on the project
+- Project manager has:
+	- Limited access to core module scope (Read, create, update, soft-delete)
+	- Full access to operations module scope
+	- Limited access to registration module scope (Read, but can only answer te registration request)
+- Project user has:
+	- Limited access to core module scope (Read, except for guest creation through movement)
+	- Limited access to operations module scope (Read, create, update, soft-delete)
+	- No access to registration module scope
+
+:::warning Role scope
+The project role is only scoped to a project (with a profile). it means, when you got a `PROJECT_ADMIN` it's limited to
+a specific project (not all ones).
 :::

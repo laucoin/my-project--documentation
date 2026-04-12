@@ -28,6 +28,8 @@ User accounts are backed by **Keycloak**. The `oidc_id` field stores the Keycloa
 application record to the IdP identity. First name, last name, and email are synchronized from the Keycloak token on
 first login and user information are updated on each login.
 
+For role attributions and application access check [here](/functional/roles#auto-attribution)
+
 ## Main attributes
 
 | Attribute | Description                                                                      |
@@ -35,7 +37,6 @@ first login and user information are updated on each login.
 | Firstname | Populated from the Keycloak token on first login                                 |
 | Lastname  | Populated from the Keycloak token on first login                                 |
 | Email     | Populated from the Keycloak token on first login, unique within the organization |
-| Role      | Application scope role (check full role list [here](/functional/roles#global))   |
 
 ### Status
 

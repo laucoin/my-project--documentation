@@ -26,12 +26,13 @@ first login and is updated on each login.
 
 ## Main attributes
 
-| Attribute | Description                                                                                                     |
-|-----------|-----------------------------------------------------------------------------------------------------------------|
-| Slug      | Organization identifier used                                                                                    |
-| Name      | The official name of the organization                                                                           |
-| Options   | List of available options                                                                                       |
-| Is main   | Has a main role (cross organization), check impact of main organization [here](/functional/roles#organization)) |
+| Attribute      | Description                                                                                                     |
+|----------------|-----------------------------------------------------------------------------------------------------------------|
+| Slug           | Organization identifier used                                                                                    |
+| Name           | The official name of the organization                                                                           |
+| Options        | List of available options                                                                                       |
+| Is strict auth | Check impact of stict auth organization [here](/functional/roles#auto-attribution))                             |
+| Is main        | Has a main role (cross organization), check impact of main organization [here](/functional/roles#organization)) |
 
 ### Options
 
@@ -47,6 +48,27 @@ A organization does not have an explicit status field. Its state is derived from
 | Have not been soft deleted | Active        |
 
 ## Action
+
+### Creation
+
+- Name: Creation
+- Allowed roles:
+	- `SUPER_ADMIN`
+- Constraints:
+	- Name is required
+	- Slug is required
+	- Options are optional (no option given mean no option active)
+	- Is strict auth is required
+	- Is main is required
+
+### Edition
+
+- Name: Edition
+- Allowed roles:
+	- `SUPER_ADMIN`
+	- `ORGANIZATION_ADMIN`
+- Constraints (differences with creation):
+	- `ORGANIZATION_ADMIN`s cannot edit slug or is main field.
 
 ### Soft-delete
 
