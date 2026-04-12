@@ -12,3 +12,4 @@ rationale behind them.
 | 005 | [Keycloak Organizations](/technical/adr/005-keycloak-organizations) | Accepted |
 | 006 | [Nuxt Layers](/technical/adr/006-nuxt-layers)                       | Accepted |
 | 007 | [Real-Time Push: SSE vs WebSocket](/technical/adr/007-sse-vs-websocket) | Accepted |
+| 008 | [Testing Strategy](/technical/adr/008-testing-strategy)             | Accepted |

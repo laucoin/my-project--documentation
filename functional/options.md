@@ -5,25 +5,25 @@ outline: deep
 # Options
 
 Options are a mechanism for enabling or disabling specific features at the project level. They are pre-allowed at the
-organisation level and selectively activated per project.
+organization level and selectively activated per project.
 
 ## How options work
 
-1. An **Organisation** selects which options are available across its projects.
+1. An **Organization** selects which options are available across its projects.
 2. Each **Project** can then activate zero or more of those available options.
 
-This allows organisations to tailor the feature set of each project without exposing features that are irrelevant or not
+This allows organizations to tailor the feature set of each project without exposing features that are irrelevant or not
 authorised.
 
 ## Available options
 
-| Option          | Feature unlocked                                                                                      | Dependency               |
-|-----------------|-------------------------------------------------------------------------------------------------------|--------------------------|
-| `VEHICLE`       | Vehicles can be created and attached to movements                                                     | None                     |
-| `ACTIVITY`      | Activities can be created and attached to movements                                                   | None                     |
-| `COMMUNICATION` | Outgoing movements linked to an activity can have a communication thread                              | Requires `ACTIVITY`      |
-| `ALERT`         | Alerts can be created with a status, topic, and communication thread referencing any outside activity | Requires `COMMUNICATION` |
-| `REGISTRATION`  | A registration period can be created, allowing external users to submit registration requests         | None                     |
+| Option                                                                    | Feature unlocked                                                                                      | Dependency               |
+|---------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------|
+| [`VEHICLE`](/functional/business-objects/core/vehicle)                    | Vehicles can be created and attached to movements                                                     | None                     |
+| [`ACTIVITY`](/functional/business-objects/core/activity)                  | Activities can be created and attached to movements                                                   | None                     |
+| [`COMMUNICATION`](/functional/business-objects/operations/communication)  | Outgoing movements linked to an activity can have a communication thread                              | Requires `ACTIVITY`      |
+| [`ALERT`](/functional/business-objects/business-objects/operations/alert) | Alerts can be created with a status, topic, and communication thread referencing any outside activity | Requires `COMMUNICATION` |
+| [`REGISTRATION`](/functional/business-objects/registration/registration)  | A registration period can be created, allowing external users to submit registration requests         | None                     |
 
 ## Option dependencies
 
@@ -63,20 +63,28 @@ triggered by toggling an option.
 - A vehicle can be attached to any movement.
 - The driver must be identified in the movement.
 
+→ See [Vehicle](/functional/business-objects/core/vehicle) for the full vehicle reference.
+
 ### ACTIVITY
 
 - A project can define recurring activities with a name, duration, min/max participants, and availability dates.
 - An activity can be attached to any movement to provide context.
+
+→ See [Activity](/functional/business-objects/core/activity) for the full activity reference.
 
 ### COMMUNICATION
 
 - An outgoing movement linked to an activity gains a **communication thread**.
 - In this thread, messages can be sent on behalf of the user or the movement's activity.
 
+→ See [Movement](/functional/business-objects/operations/movement) for details on communication threads in movements.
+
 ### ALERT
 
-- Alerts can be created at any time with a title and a status (`IN_PROGRESS`, `RESOLVED`, `CANCELLED`).
+- Alerts can be created at any time with a title and a status (`IN_PROGRESS`, `RESOLVED`, `CANCELED`).
 - Each alert contains a communication thread where any currently outside activity can be selected as sender.
+
+→ See [Alert](/functional/business-objects/operations/alert) for the full alert reference.
 
 ### REGISTRATION
 
@@ -84,6 +92,8 @@ triggered by toggling an option.
   registrations).
 - External users can browse the project in the list of open projects and submit registration requests (individual or
   group).
+
+→ See [Registration Period](/functional/business-objects/registration/period) and [Registration Request](/functional/business-objects/registration/request) for the full reference.
 
 ::: info
 Special note regarding this option: If the organization does not allow REGISTRATION, an external user cannot view

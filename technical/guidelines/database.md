@@ -120,7 +120,7 @@ Keeping logic in the application layer makes the codebase more portable and test
 -- ✅ correct
 first_name          TEXT        NOT NULL,
 is_active           BOOLEAN     NOT NULL DEFAULT TRUE,
-organisation_id     UUID        NOT NULL,
+organization_id     UUID        NOT NULL,
 
 -- ❌ avoid
 firstName           TEXT,       -- camelCase in SQL
@@ -139,7 +139,7 @@ org_id              UUID,       -- abbreviation
 | Primary Key | `pk_`  | `pk_projects`                    |
 | Unique      | `uq_`  | `uq_projects_slug`               |
 | Foreign Key | `fk_`  | `fk_group_members_project_id`    |
-| Index       | `idx_` | `idx_projects_organisation_id`   |
+| Index       | `idx_` | `idx_projects_organization_id`   |
 | Check       | `ck_`  | `ck_registration_periods_status` |
 
 ```sql
@@ -159,14 +159,14 @@ schema name embedding.
 
 ```kotlin
 // ✅ correct — type-safe, compile-time checked
-fun findByOrganisation(organisationId: UUID): Flow<ProjectRecord> =
+fun findByOrganization(organizationId: UUID): Flow<ProjectRecord> =
 	dslContext
 		.selectFrom(PROJECTS)
-		.where(PROJECTS.ORGANISATION_ID.eq(organisationId))
+		.where(PROJECTS.ORGANISATION_ID.eq(organizationId))
 		.asFlow()
 
 // ❌ avoid — raw SQL, no safety, schema name hardcoded
-dslContext.fetch("SELECT * FROM core.projects WHERE organisation_id = '$organisationId'")
+dslContext.fetch("SELECT * FROM core.projects WHERE organization_id = '$organizationId'")
 ```
 
 **Rules:**

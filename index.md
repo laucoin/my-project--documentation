@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "My Project"
-  text: "Allow management of group care for minors project management."
-  tagline: Manage your project with ease and efficiency.
+  text: "Group care management for minors."
+  tagline: Plan activities, track movements, and manage registrations.
   actions:
     - theme: brand
       text: Check-out the project

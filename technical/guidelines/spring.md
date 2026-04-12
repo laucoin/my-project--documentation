@@ -60,7 +60,7 @@ Rules:
 // ✅ correct — domain/port/ICorePort.kt
 interface ICorePort {
 	fun findProject(id: UUID): Mono<ProjectModel>
-	fun findAllProjects(organisationId: UUID): Flux<ProjectModel>
+	fun findAllProjects(organizationId: UUID): Flux<ProjectModel>
 	fun createProject(command: CreateProjectCommand): Mono<ProjectModel>
 }
 
@@ -220,6 +220,8 @@ data class ProjectEntity(@Id val id: UUID, ...)
 class CoreDatabaseConfig
 ```
 
+See [Database Conventions — Timestamps](/technical/guidelines/database#timestamps) for the SQL side of this pattern and the full rationale.
+
 ---
 
 ## jOOQ Query Conventions
@@ -234,18 +236,14 @@ schema rules.
 dslContext
 	.select(PROJECTS.ID, PROJECTS.NAME)
 	.from(PROJECTS)
-	.where(PROJECTS.ORGANISATION_ID.eq(organisationId))
+	.where(PROJECTS.ORGANISATION_ID.eq(organizationId))
 	.map { it.into(ProjectModel::class.java) }
 
 // ❌ avoid — raw SQL, no compile-time safety
-dslContext.fetch("SELECT id, name FROM core.projects WHERE organisation_id = $organisationId")
+dslContext.fetch("SELECT id, name FROM core.projects WHERE organization_id = $organizationId")
 ```
 
-Rules:
-
-- jOOQ classes are generated from the schema — run code generation after every migration
-- Never hardcode schema names in jOOQ queries — generated types already embed the schema
-- Keep queries in the `infrastructure/` layer — never call jOOQ DSL from the domain or inbound port layer
+See [Database Conventions — jOOQ](/technical/guidelines/database#jooq-conventions) for the full rule set (code generation, schema naming, layer placement).
 
 ---
 
@@ -282,7 +280,7 @@ never duplicated on individual routes.**
 class ProjectRouter {
 	@Bean
 	fun projectRoutes(handler: ProjectHandler) = router {
-		"/api/v1/projects".nest {
+		"/api/v2/projects".nest {
 			GET("/{id}", handler::getProject)
 			GET("", handler::listProjects)
 			POST("", handler::createProject)
@@ -291,9 +289,9 @@ class ProjectRouter {
 }
 
 // ❌ avoid — version hardcoded on each route individually
-@GetMapping("/api/v1/projects/{id}")
-@GetMapping("/api/v1/projects")
-@PostMapping("/api/v1/projects")
+@GetMapping("/api/v2/projects/{id}")
+@GetMapping("/api/v2/projects")
+@PostMapping("/api/v2/projects")
 
 // ❌ avoid — no version prefix
 @GetMapping("/projects/{id}")

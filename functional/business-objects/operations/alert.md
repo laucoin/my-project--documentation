@@ -23,7 +23,7 @@ specific movement. It provides a formal, trackable way to manage an ongoing situ
 |---------------|------------------------------------------------|
 | `IN_PROGRESS` | The alert is open and being actively monitored |
 | `RESOLVED`    | The situation has been resolved                |
-| `CANCELLED`   | The alert has been closed without resolution   |
+| `CANCELED`   | The alert has been closed without resolution   |
 
 ## Communication thread
 
@@ -36,6 +36,13 @@ The alert contains a series of messages that form its communication thread. When
 | An outside activity           | The message is sent on behalf of any group currently out on an activity *(any movement of type `OUT` with an activity attached)* |
 
 This makes it possible to simulate exchanges between on-site staff and groups in the field.
+
+::: warning Sender not yet in schema
+The `communications` table currently stores the author via `created_by` (the logged-in user) but has no dedicated
+column for an activity sender. The "send as activity" selection is a planned feature — a `sender_activity_id`
+column (logical link to `core.activities`) will need to be added to `operation.communications` before it can be
+fully implemented.
+:::
 
 ## Relationship to movements and activities
 
@@ -51,7 +58,7 @@ available as a sender.
 | `project_id` | Logical link to `core.projects` — the project this alert belongs to           |
 | `datetime`   | When the alert was created                                                    |
 | `title`      | A short description of the alert's topic                                      |
-| `status`     | Current state: `IN_PROGRESS`, `RESOLVED`, or `CANCELLED`                     |
+| `status`     | Current state: `IN_PROGRESS`, `RESOLVED`, or `CANCELED`                     |
 | `created_at` | Creation timestamp — managed by Spring Auditing                               |
 | `created_by` | Logical link to `core.users` — user who created the record                    |
 | `updated_at` | Last modification timestamp — managed by Spring Auditing                      |

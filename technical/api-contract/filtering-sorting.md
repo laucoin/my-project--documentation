@@ -62,13 +62,6 @@ When no `sort` parameter is supplied, the **default sort
 
 Sortable fields: `name`, `beginDate`, `endDate`, `createdAt`. Default: `name,asc`.
 
-::: warning Status model change
-The v2 project statuses (`AVAILABLE`, `UNAVAILABLE`, `DISABLED`) are replaced in the new domain model by a **derived
-status** computed from project dates (`UPCOMING`, `IN_PROGRESS`, `ENDED`,
-`PERPETUAL`). The filter parameter must be updated accordingly. The
-`DISABLED` status maps to the new soft-delete mechanism and is no longer a queryable state for regular consumers.
-:::
-
 ---
 
 ### Participants — `GET /api/v2/projects/{projectId}/participants`

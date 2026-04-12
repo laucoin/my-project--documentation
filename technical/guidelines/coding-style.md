@@ -120,26 +120,34 @@ class UserNotFoundException(id: UUID) : RuntimeException("User not found: $id")
 ```kotlin
 @JsonInclude(NON_NULL)
 data class ErrorDto(
-    var statusCode: Int,
-    var statusName: String,
-    var code: String,
-    var title: String,
-    var message: String,
+    var statusCode:  Int,
+    var statusName:  String,
+    var code:        String,
+    var title:       String,
+    var message:     String,
+    var violations:  List<FieldViolationDto>? = null,  // populated only for validation errors (400)
+)
+
+data class FieldViolationDto(
+    val field:         String,   // dot-notation path to the offending field (e.g. "firstName")
+    val message:       String,   // human-readable constraint description
+    val rejectedValue: Any?,     // the value that was rejected — may be null
 )
 ```
 
 Fields:
 
-| Field | Type | Description |
-|---|---|---|
-| `statusCode` | `Int` | HTTP status code (e.g., `404`) |
-| `statusName` | `String` | HTTP status reason phrase (e.g., `Not Found`) |
-| `code` | `String` | Machine-readable error code in `SCREAMING_SNAKE_CASE` (e.g., `PROJECT_NOT_FOUND`) |
-| `title` | `String` | Short human-readable title — **translated** via `Accept-Language` |
-| `message` | `String` | Detailed human-readable explanation — **translated** via `Accept-Language` |
+| Field        | Type                       | Description                                                                              |
+|--------------|----------------------------|------------------------------------------------------------------------------------------|
+| `statusCode` | `Int`                      | HTTP status code (e.g., `404`)                                                           |
+| `statusName` | `String`                   | HTTP status reason phrase (e.g., `Not Found`)                                            |
+| `code`       | `String`                   | Machine-readable error code in `SCREAMING_SNAKE_CASE` (e.g., `PROJECT_NOT_FOUND`)       |
+| `title`      | `String`                   | Short human-readable title — **translated** via `Accept-Language`                        |
+| `message`    | `String`                   | Detailed human-readable explanation — **translated** via `Accept-Language`               |
+| `violations` | `List<FieldViolationDto>?` | Nullable — populated only for `400 Bad Request` validation errors; `null` otherwise      |
 
-`@JsonInclude(NON_NULL)` allows any field to be omitted from the response when `null` — useful for partial error
-responses, but in practice all fields must be populated.
+`@JsonInclude(NON_NULL)` ensures `violations` is omitted from the JSON response when `null` (non-validation errors).
+For the full list of validated field sizes and collection limits, see [Size Constraints](/technical/api-contract/size-constraints).
 
 #### i18n: title and message
 
@@ -156,6 +164,9 @@ error.PROJECT_NOT_FOUND.message=The requested project does not exist or you do n
 error.ACCESS_DENIED.title=Access denied
 error.ACCESS_DENIED.message=You do not have permission to perform this action.
 
+error.VALIDATION_ERROR.title=Validation failed
+error.VALIDATION_ERROR.message=One or more fields did not pass validation. See the violations list for details.
+
 error.SESSION_EXPIRED.title=Session expired
 error.SESSION_EXPIRED.message=Your session has expired. Please log in again.
 
@@ -170,6 +181,9 @@ error.PROJECT_NOT_FOUND.message=Le projet demandé n'existe pas ou vous n'avez p
 
 error.ACCESS_DENIED.title=Accès refusé
 error.ACCESS_DENIED.message=Vous n'avez pas la permission d'effectuer cette action.
+
+error.VALIDATION_ERROR.title=Validation échouée
+error.VALIDATION_ERROR.message=Un ou plusieurs champs n'ont pas passé la validation. Consultez la liste des violations pour les détails.
 
 error.SESSION_EXPIRED.title=Session expirée
 error.SESSION_EXPIRED.message=Votre session a expiré. Veuillez vous reconnecter.
@@ -201,6 +215,7 @@ class GlobalExceptionHandler(
             code = code,
             title = messageSource.getMessage("error.$code.title", null, locale),
             message = messageSource.getMessage("error.$code.message", null, locale),
+            violations = ex.toViolations(),   // null for non-validation errors — omitted by @JsonInclude(NON_NULL)
         )
         val response = exchange.response
         response.statusCode = status
@@ -211,10 +226,23 @@ class GlobalExceptionHandler(
     }
 
     private fun Throwable.toStatusAndCode(): Pair<HttpStatus, String> = when (this) {
-        is ProjectNotFoundException  -> HttpStatus.NOT_FOUND  to "PROJECT_NOT_FOUND"
-        is AccessDeniedException     -> HttpStatus.FORBIDDEN   to "ACCESS_DENIED"
-        is ValidationException       -> HttpStatus.BAD_REQUEST to "VALIDATION_ERROR"
-        else                         -> HttpStatus.INTERNAL_SERVER_ERROR to "INTERNAL_ERROR"
+        is ProjectNotFoundException     -> HttpStatus.NOT_FOUND            to "PROJECT_NOT_FOUND"
+        is AccessDeniedException        -> HttpStatus.FORBIDDEN             to "ACCESS_DENIED"
+        is WebExchangeBindException     -> HttpStatus.BAD_REQUEST           to "VALIDATION_ERROR"
+        is ValidationException          -> HttpStatus.BAD_REQUEST           to "VALIDATION_ERROR"
+        else                            -> HttpStatus.INTERNAL_SERVER_ERROR to "INTERNAL_ERROR"
+    }
+
+    // Populated only for validation errors — null otherwise (@JsonInclude(NON_NULL) omits it from JSON)
+    private fun Throwable.toViolations(): List<FieldViolationDto>? = when (this) {
+        is WebExchangeBindException -> bindingResult.fieldErrors.map { fe ->
+            FieldViolationDto(
+                field         = fe.field,
+                message       = fe.defaultMessage ?: "invalid value",
+                rejectedValue = fe.rejectedValue,
+            )
+        }
+        else -> null
     }
 }
 

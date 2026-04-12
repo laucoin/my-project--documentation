@@ -110,13 +110,13 @@ export function useParticipantAndGroupAndActivity() { ... }
 // layer-core/api/participant-api.ts
 export const participantApi = {
 	findById: (id: string): Promise<Participant> =>
-		$fetch(`/api/v1/participants/${id}`),
+		$fetch(`/api/v2/participants/${id}`),
 
 	findAll: (groupId: string): Promise<Participant[]> =>
-		$fetch(`/api/v1/groups/${groupId}/participants`),
+		$fetch(`/api/v2/groups/${groupId}/participants`),
 
 	create: (payload: CreateParticipantRequest): Promise<Participant> =>
-		$fetch('/api/v1/participants', { method: 'POST', body: payload }),
+		$fetch('/api/v2/participants', { method: 'POST', body: payload }),
 }
 ```
 
@@ -183,7 +183,7 @@ function formatName(participant: any): any { ... }
 
   const emit = defineEmits<{
     saved: [ participant: Participant ]
-    cancelled: []
+    canceled: []
   }>()
 
   // ❌ avoid — untyped props
@@ -244,4 +244,4 @@ t('Prénom')                         // hardcoded string, not a key
 | Hardcoded user-facing strings                 | Not translatable                          | `t()` with i18n key                |
 | Pinia store for every entity                  | Unnecessary global state, memory overhead | Composable first                   |
 | `console.log` in committed code               | Not structured, leaks in production       | Remove before commit               |
-| Unversioned API paths (`/api/participants`)   | Breaks when BFF introduces a v2           | Always use `/api/v1/…`             |
+| Unversioned API paths (`/api/participants`)   | Breaks on any API version change          | Always use a versioned path: `/api/v{N}/…` |

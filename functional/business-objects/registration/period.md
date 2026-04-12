@@ -14,7 +14,7 @@ a different audience, date range, or pricing configuration.
 ## Deletion constraint
 
 A registration period **cannot be soft-deleted** while it has at least one registration request that is not
-`CANCELLED`. All non-cancelled requests must be cancelled or resolved before the period can be removed.
+`CANCELED`. All non-canceled requests must be canceled or resolved before the period can be removed.
 
 ## Two distinct date concepts
 
@@ -92,4 +92,4 @@ The day variable pricing uses each participant's actual presence dates, which ar
 ## Registration form
 
 A registration period can define a set of custom questions that users must answer when submitting a request. See
-[Registration Form](/functional/registration/registration-form).
+[Registration Form](/functional/business-objects/registration/field).

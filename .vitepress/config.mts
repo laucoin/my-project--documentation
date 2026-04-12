@@ -40,35 +40,59 @@ export default defineConfig({
 							link     : '/functional/business-objects/',
 							collapsed: true,
 							items    : [
-								{ text: 'Organisation', link: '/functional/business-objects/organisation' },
-								{ text: 'Project', link: '/functional/business-objects/project' },
-								{ text: 'Options', link: '/functional/business-objects/options' },
-								{ text: 'User', link: '/functional/business-objects/user' },
-								{ text: 'Group', link: '/functional/business-objects/group' },
-								{ text: 'Participant', link: '/functional/business-objects/participant' },
-								{ text: 'Activity', link: '/functional/business-objects/activity' },
-								{ text: 'Vehicle', link: '/functional/business-objects/vehicle' },
+								{
+									text     : 'Core',
+									link     : '/functional/business-objects/core',
+									collapsed: true,
+									items    : [
+										{
+											text: 'Organization',
+											link: '/functional/business-objects/core/organization',
+										},
+										{ text: 'Project', link: '/functional/business-objects/core/project' },
+										{ text: 'Profile', link: '/functional/business-objects/core/profile' },
+										{ text: 'User', link: '/functional/business-objects/core/user' },
+										{ text: 'Group', link: '/functional/business-objects/core/group' },
+										{ text: 'Participant', link: '/functional/business-objects/core/participant' },
+										{ text: 'Activity', link: '/functional/business-objects/core/activity' },
+										{ text: 'Vehicle', link: '/functional/business-objects/core/vehicle' },
+									],
+								},
+								{
+									text     : 'Operations',
+									link     : '/functional/business-objects/operations',
+									collapsed: true,
+									items    : [
+										{ text: 'Movement', link: '/functional/business-objects/operations/movement' },
+										{ text: 'Alert', link: '/functional/business-objects/operations/alert' },
+										{
+											text: 'Communication',
+											link: '/functional/business-objects/operations/communication',
+										},
+									],
+								},
+								{
+									text     : 'Registration',
+									link     : '/functional/business-objects/registration',
+									collapsed: true,
+									items    : [
+										{
+											text: 'Registration period',
+											link: '/functional/business-objects/registration/period',
+										},
+										{
+											text: 'Registration form',
+											link: '/functional/business-objects/registration/field',
+										},
+										{
+											text: 'Registration request',
+											link: '/functional/business-objects/registration/request',
+										},
+									],
+								},
 							],
 						},
-						{
-							text     : 'Operations',
-							link     : '/functional/operations/',
-							collapsed: true,
-							items    : [
-								{ text: 'Movement', link: '/functional/operations/movement' },
-								{ text: 'Alert', link: '/functional/operations/alert' },
-							],
-						},
-						{
-							text     : 'Registration',
-							link     : '/functional/registration/',
-							collapsed: true,
-							items    : [
-								{ text: 'Registration period', link: '/functional/registration/registration-period' },
-								{ text: 'Registration form', link: '/functional/registration/registration-form' },
-								{ text: 'Registration request', link: '/functional/registration/registration-request' },
-							],
-						},
+						{ text: 'Options', link: '/functional/options' },
 						{ text: 'Roles', link: '/functional/roles' },
 						{ text: 'Statistics', link: '/functional/statistics' },
 						{ text: 'Data Policy', link: '/functional/data-policy' },
@@ -150,7 +174,8 @@ export default defineConfig({
 									link: '/technical/adr/005-keycloak-organizations',
 								},
 								{ text: '006 – Nuxt Layers', link: '/technical/adr/006-nuxt-layers' },
-								{ text  : '007 – Real-Time Push: SSE vs WebSocket',
+								{
+									text: '007 – Real-Time Push: SSE vs WebSocket',
 									link: '/technical/adr/007-sse-vs-websocket',
 								},
 								{ text: '008 – Testing Strategy', link: '/technical/adr/008-testing-strategy' },
@@ -174,6 +199,7 @@ export default defineConfig({
 							link     : '/technical/how-to/',
 							collapsed: true,
 							items    : [
+								{ text: 'Run locally', link: '/technical/how-to/local-setup' },
 								{ text: 'Keycloak setup', link: '/technical/how-to/keycloak-setup' },
 							],
 						},

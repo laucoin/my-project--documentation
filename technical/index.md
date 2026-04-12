@@ -1,7 +1,7 @@
 # Technical Documentation
 
 This section covers the technical architecture of the application: how it is structured, how it handles authentication,
-how data is organised, and the key decisions that shaped the design.
+how data is organized, and the key decisions that shaped the design.
 
 ## Sections
 
@@ -12,7 +12,7 @@ of each module.
 
 ### [Security](/technical/security)
 
-Authentication and authorisation — the OAuth2 flow, Keycloak organisation routing, and how roles are mapped from tokens
+Authentication and authorisation — the OAuth2 flow, Keycloak organization routing, and how roles are mapped from tokens
 to application permissions.
 
 ### [Database](/technical/database)

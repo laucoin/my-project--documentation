@@ -41,12 +41,12 @@ recorded movement is an `IN`. Participants with status `NOT_ARRIVED_YET` or `LEF
 
 ## Movements & presence
 
-| Metric                  | Description                                                                                    |
-|-------------------------|------------------------------------------------------------------------------------------------|
-| Total movements         | Total number of IN and OUT movements recorded                                                  |
-| Average time outside    | Average duration between an OUT movement and its corresponding IN movement                     |
-| OUT reason breakdown    | Count and percentage of OUT movements grouped by reason — see [Movement reasons](/functional/operations/movement#reasons-for-a-registered-participant-going-out) |
-| Guest entries by reason | Count of guest IN movements grouped by reason — see [Guest IN reasons](/functional/operations/movement#reasons-for-a-guest-coming-in) |
+| Metric                  | Description                                                                                                                                                                       |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Total movements         | Total number of IN and OUT movements recorded                                                                                                                                     |
+| Average time outside    | Average duration between an OUT movement and its corresponding IN movement                                                                                                        |
+| OUT reason breakdown    | Count and percentage of OUT movements grouped by reason — see [Movement reasons](/functional/business-objects/operations/movement#reasons-for-a-registered-participant-going-out) |
+| Guest entries by reason | Count of guest IN movements grouped by reason — see [Guest IN reasons](/functional/business-objects/operations/movement#reasons-for-a-guest-coming-in)                            |
 
 ### Calculation details
 
@@ -109,15 +109,15 @@ inside the project) is counted as available but unused.
 
 ## Alerts *(requires ALERT option)*
 
-| Metric                  | Description                                                                       |
-|-------------------------|-----------------------------------------------------------------------------------|
-| Total alerts            | Total number of alerts created                                                    |
-| Status distribution     | Count and percentage of alerts by status (`IN_PROGRESS`, `RESOLVED`, `CANCELLED`) |
-| Average resolution time | Average time between alert creation and transition to `RESOLVED`                  |
+| Metric                  | Description                                                                      |
+|-------------------------|----------------------------------------------------------------------------------|
+| Total alerts            | Total number of alerts created                                                   |
+| Status distribution     | Count and percentage of alerts by status (`IN_PROGRESS`, `RESOLVED`, `CANCELED`) |
+| Average resolution time | Average time between alert creation and transition to `RESOLVED`                 |
 
 ### Calculation details
 
-**Average resolution time** — `CANCELLED` alerts are excluded. `IN_PROGRESS` alerts (not yet resolved) are
+**Average resolution time** — `CANCELED` alerts are excluded. `IN_PROGRESS` alerts (not yet resolved) are
 included in the average using the current query time as their provisional resolution time. This reflects the
 ongoing cost of unresolved alerts rather than ignoring them.
 
@@ -139,7 +139,7 @@ participant count declared at the `NEED_SPECIFICATION` step is used. The denomin
 defined on the registration period.
 
 **Acceptance rate** — the denominator includes only finalized requests: `ACCEPTED` and `REJECTED`. `PENDING`,
-`NEED_SPECIFICATION`, `CONFIRMATION`, and `CANCELLED` requests are excluded.
+`NEED_SPECIFICATION`, `CONFIRMATION`, and `CANCELED` requests are excluded.
 
-**Average processing time** — `CANCELLED` requests are excluded. Only requests that reached a final status
+**Average processing time** — `CANCELED` requests are excluded. Only requests that reached a final status
 (`ACCEPTED` or `REJECTED`) are included, measured from `PENDING` to that final status transition.

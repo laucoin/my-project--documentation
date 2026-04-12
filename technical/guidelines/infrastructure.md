@@ -118,8 +118,8 @@ sequenceDiagram
     participant Module
 
     Frontend ->> BFF: HTTP request + SESSION cookie
-    BFF ->> Module: Call with expired JWT
-    Module -->> BFF: — (not applicable — in-process call, no JWT forwarded)
+    BFF ->> Module: In-process call (modules never receive the JWT directly)
+    Note over BFF,Module: Access token expiry is detected by the BFF,<br/>not by the module — in-process calls have no HTTP layer.
     Note over BFF: Access token expired — attempt silent refresh
     BFF ->> Keycloak: POST /token (grant_type=refresh_token)
     alt Refresh token valid

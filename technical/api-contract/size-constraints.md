@@ -14,32 +14,24 @@ Constraints marked **[DB]** are enforced at the database column level (e.g. `VAR
 
 ## Text field limits
 
-### Organisation
+### Organization
 
-| Field    | Min | Max   | Required | Source  | Notes                                               |
-|----------|-----|-------|----------|---------|-----------------------------------------------------|
-| `name`   | 1   | 100   | Yes      | [pending] |                                                   |
+| Field    | Min | Max   | Required | Source    | Notes                                                    |
+|----------|-----|-------|----------|-----------|----------------------------------------------------------|
+| `name`   | 1   | 100   | Yes      | [pending] |                                                          |
 | `slug`   | 1   | 63    | Yes      | [pending] | Unique platform-wide; lowercase letters and hyphens only |
 
 ### Project
 
-| Field    | Min | Max | Required | Source    | Notes |
-|----------|-----|-----|----------|-----------|-------|
-| `name`   | 1   | 100 | Yes      | [pending] |       |
-
-::: warning Old contract divergence
-The v2 `ProjectWriterDto` declared `maxLength=150` for `name`. This limit is reduced to 100 to align with the rest of the domain. If existing data contains names between 101 and 150 characters it must be migrated before enforcement.
-:::
+| Field  | Min | Max | Required | Source    | Notes |
+|--------|-----|-----|----------|-----------|-------|
+| `name` | 1   | 100 | Yes      | [pending] |       |
 
 ### Group
 
-| Field    | Min | Max | Required | Source    | Notes                     |
-|----------|-----|-----|----------|-----------|---------------------------|
-| `name`   | 1   | 100 | Yes      | [pending] | Unique within the project |
-
-::: warning Old contract divergence
-The v2 `GroupWriterDto` declared `maxLength=150`. Reduced to 100.
-:::
+| Field  | Min | Max | Required | Source    | Notes                     |
+|--------|-----|-----|----------|-----------|---------------------------|
+| `name` | 1   | 100 | Yes      | [pending] | Unique within the project |
 
 ### Participant
 
@@ -48,75 +40,55 @@ The v2 `GroupWriterDto` declared `maxLength=150`. Reduced to 100.
 | `firstName` | 1   | 100 | Yes      | [pending] |       |
 | `lastName`  | 1   | 100 | Yes      | [pending] |       |
 
-::: warning Old contract gap
-The v2 `ParticipantWriterDto` declared `minLength=1` but **no `maxLength`** on `firstName` and `lastName`. This means the old API accepted arbitrarily long names. A `maxLength=100` constraint must be added.
-:::
-
 ### User
 
-| Field       | Min | Max | Required | Source   | Notes                               |
-|-------------|-----|-----|----------|----------|-------------------------------------|
-| `firstName` | 0   | 100 | No       | [pending] | Nullable — populated from OIDC token |
-| `lastName`  | 0   | 100 | No       | [pending] | Nullable — populated from OIDC token |
-| `email`     | 0   | 320 | No       | **[DB]** | RFC 5321 maximum — `VARCHAR(320)` in migration |
+| Field       | Min | Max | Required | Source    | Notes                                 |
+|-------------|-----|-----|----------|-----------|---------------------------------------|
+| `firstName` | 0   | 100 | No       | [pending] | Nullable — populated from OIDC token  |
+| `lastName`  | 0   | 100 | No       | [pending] | Nullable — populated from OIDC token  |
+| `email`     | 0   | 320 | No       | **[DB]**  | RFC 5321 maximum — `VARCHAR(320)` in migration |
 
 ### Activity
 
 | Field         | Min | Max  | Required | Source    | Notes              |
-|---------------|-----|------|----------|-----------|---------------------|
+|---------------|-----|------|----------|-----------|--------------------|
 | `name`        | 1   | 100  | Yes      | [pending] |                    |
 | `description` | 0   | 1000 | No       | [pending] | Optional free text |
 
-::: warning Old contract divergence
-The v2 `ActivityWriterDto` declared `maxLength=150` for `name` and `maxLength=2000` for `description`. Both are reduced.
-:::
-
 ### Vehicle
 
-| Field          | Min | Max | Required | Source    | Notes |
-|----------------|-----|-----|----------|-----------|-------|
-| `licensePlate` | 1   | 20  | Yes      | [pending] | The v2 value of 20 is retained — matches real plate formats |
-| `brand`        | 1   | 100 | Yes      | [pending] |       |
-| `model`        | 1   | 100 | Yes      | [pending] |       |
-
-::: warning Old contract divergence
-The v2 `VehicleWriterDto` declared `maxLength=150` for `brand` and `model`. Both are reduced to 100.
-:::
+| Field          | Min | Max | Required | Source    | Notes                              |
+|----------------|-----|-----|----------|-----------|------------------------------------|
+| `licensePlate` | 1   | 20  | Yes      | [pending] | Matches real plate formats         |
+| `brand`        | 1   | 100 | Yes      | [pending] |                                    |
+| `model`        | 1   | 100 | Yes      | [pending] |                                    |
 
 ### Alert
 
-| Field     | Min | Max | Required | Source    | Notes                                             |
-|-----------|-----|-----|----------|-----------|---------------------------------------------------|
-| `title`   | 1   | 100 | Yes      | [pending] | Used as heading in the UI                         |
-| `dateTime`| —   | —   | Yes      | —         | ISO 8601 datetime, no length constraint           |
-
-::: warning Old contract divergence
-The v2 `AlertWriterDto` declared `maxLength=50` for `title`. This is extremely restrictive for a heading field. Raised to 100. Review with the product team if titles can exceed 50 characters in practice.
-:::
+| Field      | Min | Max | Required | Source    | Notes                   |
+|------------|-----|-----|----------|-----------|-------------------------|
+| `title`    | 1   | 100 | Yes      | [pending] | Used as heading in UI   |
+| `dateTime` | —   | —   | Yes      | —         | ISO 8601 datetime       |
 
 ### Communication / message
 
-| Field     | Min | Max  | Required | Source    | Notes                                           |
-|-----------|-----|------|----------|-----------|-------------------------------------------------|
-| `message` | 0   | 500  | No       | [pending] | Attached to a movement or alert thread          |
-
-::: warning Old contract divergence
-The v2 `CommunicationWriterDto` declared `maxLength=250` for `message`. Raised to 500 to allow more expressive messages. The v2 `AlertCreationWriterDto` also had `maxLength=250` for the initial creation message — same limit applies.
-:::
+| Field     | Min | Max | Required | Source    | Notes                                  |
+|-----------|-----|-----|----------|-----------|----------------------------------------|
+| `message` | 0   | 500 | No       | [pending] | Attached to a movement or alert thread |
 
 ### Registration form fields
 
-| Field         | Min | Max  | Required | Source    | Notes                                   |
-|---------------|-----|------|----------|-----------|-----------------------------------------|
-| `label`       | 1   | 200  | Yes      | [pending] | Question shown to the user              |
-| `placeholder` | 0   | 200  | No       | [pending] | Hint text inside the input              |
-| `helper`      | 0   | 500  | No       | [pending] | Explanatory text shown below the field  |
+| Field         | Min | Max | Required | Source    | Notes                                  |
+|---------------|-----|-----|----------|-----------|----------------------------------------|
+| `label`       | 1   | 200 | Yes      | [pending] | Question shown to the user             |
+| `placeholder` | 0   | 200 | No       | [pending] | Hint text inside the input             |
+| `helper`      | 0   | 500 | No       | [pending] | Explanatory text shown below the field |
 
 ### Form field answers (registration requests)
 
-| Field   | Min | Max  | Required | Source    | Notes                                         |
-|---------|-----|------|----------|-----------|-----------------------------------------------|
-| `value` | 0   | 2000 | No       | [pending] | Applies to `TEXT` and `TEXTAREA` field types  |
+| Field   | Min | Max  | Required | Source    | Notes                                        |
+|---------|-----|------|----------|-----------|----------------------------------------------|
+| `value` | 0   | 2000 | No       | [pending] | Applies to `TEXT` and `TEXTAREA` field types |
 
 ---
 
@@ -124,62 +96,53 @@ The v2 `CommunicationWriterDto` declared `maxLength=250` for `message`. Raised t
 
 ### Participants per movement
 
-| Constraint                           | Limit | Notes                                                       |
-|--------------------------------------|-------|-------------------------------------------------------------|
+| Constraint                           | Limit | Notes                                                        |
+|--------------------------------------|-------|--------------------------------------------------------------|
 | Registered participants per movement | 200   | Combined total of individually added participants and groups |
-| Guests per movement                  | 50    | Guests added inline at movement creation time               |
-| Total people per movement            | 250   | Hard cap — sum of all registered participants and guests    |
+| Guests per movement                  | 50    | Guests added inline at movement creation time                |
+| Total people per movement            | 250   | Hard cap — sum of all registered participants and guests     |
 
 ::: warning
 Attempting to create a movement that exceeds these limits returns `400 Bad Request` with error code `MOVEMENT_PARTICIPANT_LIMIT_EXCEEDED`.
 :::
 
-::: warning Old contract gap
-The v2 `ParticipantMovementWriterDto` declared `participantIds` as an array with **no `maxItems`** constraint. This was exploitable. The limits above must be enforced with explicit `@field:Size(max=200)` annotations.
-:::
-
 ### Groups
 
-| Constraint               | Limit | Notes                                                           |
-|--------------------------|-------|-----------------------------------------------------------------|
-| Groups per project       | 500   |                                                                 |
-| Participants per group   | none  | Bounded by the total participant count of the project           |
+| Constraint             | Limit | Notes                                                 |
+|------------------------|-------|-------------------------------------------------------|
+| Groups per project     | 500   |                                                       |
+| Participants per group | none  | Bounded by the total participant count of the project |
 
 ### Profiles (invitations)
 
-| Constraint                          | Limit | Notes                                                     |
-|-------------------------------------|-------|-----------------------------------------------------------|
-| User IDs per bulk invite (`userIds`)| 50    | `ProjectProfilesWriterDto.userIds` — v2 had `minItems=1` but no `maxItems` |
-
-::: warning Old contract gap
-The v2 `ProjectProfilesWriterDto.userIds` had `minItems=1` but no `maxItems`. A bulk invite with thousands of UUIDs was accepted. Cap at 50.
-:::
+| Constraint                           | Limit | Notes                               |
+|--------------------------------------|-------|-------------------------------------|
+| User IDs per bulk invite (`userIds`) | 50    | `minItems=1`, `maxItems=50`         |
 
 ### Registration form
 
-| Constraint                  | Limit | Notes                          |
-|-----------------------------|-------|--------------------------------|
-| Fields per form             | 50    | Per registration period        |
-| Options per `SELECT` field  | 50    | Number of choices in a select  |
+| Constraint                 | Limit | Notes                         |
+|----------------------------|-------|-------------------------------|
+| Fields per form            | 50    | Per registration period       |
+| Options per `SELECT` field | 50    | Number of choices in a select |
 
 ### Pagination
 
-| Constraint              | Limit | Notes                                          |
-|-------------------------|-------|------------------------------------------------|
-| Default page size       | 30    | Applied when `size` is absent                  |
-| Maximum page size       | 100   | Requests above this are rejected with `400`    |
+See [Pagination](/technical/api-contract/pagination) for page size defaults and limits.
 
 ---
 
 ## Error response format
 
-When a constraint is violated, the API responds with `400 Bad Request`:
+When a constraint is violated, the API responds with `400 Bad Request` using the standard [`ErrorDto`](/technical/guidelines/coding-style#error-response-dto) shape, with the `violations` array populated:
 
 ```json
 {
-  "status": 400,
-  "error": "Bad Request",
-  "message": "Validation failed",
+  "statusCode": 400,
+  "statusName": "Bad Request",
+  "code": "VALIDATION_ERROR",
+  "title": "Validation failed",
+  "message": "One or more fields did not pass validation.",
   "violations": [
     {
       "field": "firstName",
@@ -191,7 +154,4 @@ When a constraint is violated, the API responds with `400 Bad Request`:
 ```
 
 Multiple violations can be returned in a single response — the client must display all of them.
-
-::: warning Old contract gap
-The v2 OpenAPI specifications **define no error response schema** for `400` or `404` responses. Every error-returning endpoint must explicitly declare its error response body in the new contract, referencing a shared `ErrorResponse` component schema.
-:::
+The `violations` field is `null` (and omitted from JSON) for all non-validation error responses.

@@ -10,12 +10,12 @@ C4Container
     Person(youth, "Youth Participant", "Participant with limited operational access")
 
     System_Ext(keycloak, "Keycloak", "Identity broker")
-    System_Ext(idp, "Organisation IdP", "External IdP — optional per organisation")
+    System_Ext(idp, "Organization IdP", "External IdP — optional per organization")
     Container(nuxt, "Web Application", "Nuxt / Vue", "User interface structured in layers mirroring backend modules")
 
     System_Boundary(monolith, "Spring Boot Modular Monolith") {
         Container(bff, "BFF", "Kotlin / Spring Boot WebFlux", "Single entry point — handles authentication and delegates to internal modules")
-        Container(core, "Core Module", "Kotlin / Spring Boot WebFlux", "Manages organisations, projects, users, participants, groups, activities, vehicles")
+        Container(core, "Core Module", "Kotlin / Spring Boot WebFlux", "Manages organizations, projects, users, participants, groups, activities, vehicles")
         Container(operation, "Operation Module", "Kotlin / Spring Boot WebFlux", "Manages movements, alerts, and communications")
         Container(registration, "Registration Module", "Kotlin / Spring Boot WebFlux", "Manages registration periods and requests")
         ContainerDb(db, "PostgreSQL", "PostgreSQL", "One database — three isolated schemas, one per domain module")
@@ -40,7 +40,7 @@ C4Container
 |---------------------|------------------------------|---------------------------------------------------------------------|
 | Web Application     | Nuxt / Vue                   | Frontend — structured in four layers (APP + one per backend module) |
 | BFF                 | Kotlin / Spring Boot WebFlux | Backend For Frontend — the only container exposed to the frontend   |
-| Core Module         | Kotlin / Spring Boot WebFlux | Domain core — organisations, projects, users, participants          |
+| Core Module         | Kotlin / Spring Boot WebFlux | Domain core — organizations, projects, users, participants          |
 | Operation Module    | Kotlin / Spring Boot WebFlux | Operations — movements, alerts, communications                      |
 | Registration Module | Kotlin / Spring Boot WebFlux | Registrations — periods and requests                                |
 | PostgreSQL          | PostgreSQL                   | Single database with three isolated schemas                         |

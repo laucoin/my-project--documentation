@@ -10,10 +10,10 @@ C4Context
     Person(youth, "Youth Participant", "Participant with a PROJECT_PARTICIPANT profile — access to operation entities only")
     Person(superadmin, "Super Admin", "Platform administrator")
 
-    System(app, "Group Care Management", "Manages group care facilities for minors across multiple organisations")
+    System(app, "Group Care Management", "Manages group care facilities for minors across multiple organizations")
 
-    System_Ext(keycloak, "Keycloak", "Identity broker — handles multi-organisation authentication and routing")
-    System_Ext(idp, "Organisation IdP", "External identity provider configured per organisation (optional)")
+    System_Ext(keycloak, "Keycloak", "Identity broker — handles multi-organization authentication and routing")
+    System_Ext(idp, "Organization IdP", "External identity provider configured per organization (optional)")
     Rel(staff, app, "Uses", "HTTPS")
     Rel(youth, app, "Uses", "HTTPS")
     Rel(superadmin, app, "Administers", "HTTPS")
@@ -29,5 +29,5 @@ C4Context
 | Youth Participant     | Person          | A participant with a `PROJECT_PARTICIPANT` profile — can record movements, manage alerts, and participate in communications |
 | Super Admin           | Person          | Platform administrator — manages users and can access any project via a temporary profile                                   |
 | Group Care Management | System          | This application                                                                                                            |
-| Keycloak              | External system | Identity broker — issues JWTs, routes users to the correct IdP based on their organisation slug                             |
-| Organisation IdP      | External system | An optional external identity provider (e.g. Microsoft Entra, Google Workspace) configured per organisation                 |
+| Keycloak              | External system | Identity broker — issues JWTs, routes users to the correct IdP based on their organization slug                             |
+| Organization IdP      | External system | An optional external identity provider (e.g. Microsoft Entra, Google Workspace) configured per organization                 |

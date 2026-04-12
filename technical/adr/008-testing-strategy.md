@@ -66,7 +66,7 @@ The following cases must be explicitly covered by tests at the appropriate level
 
 **Registration:**
 - Request submitted outside the registration window (before open or after close) → rejected
-- Deleting a registration period with at least one non-cancelled request → rejected
+- Deleting a registration period with at least one non-canceled request → rejected
 - `day_variable_price` configured but no date reference on the period or the project → clear error
 - Pricing calculation: J1 to J3 = 2 intervals (not 3 calendar days)
 - `max_registrations` reached → subsequent acceptance blocked
@@ -88,7 +88,7 @@ All records use deterministic UUIDs so test assertions can reference known ident
 
 The baseline must include:
 
-- One organisation
+- One organization
 - Projects in each derived state: perpetual, upcoming, in-progress, ended — with representative option combinations
 - Users with each global role (`USER`, `SUPER_ADMIN`)
 - Profiles in each status (`INVITED`, `ACCEPTED`, `REJECTED`) and each project role, including one profile with
@@ -99,7 +99,7 @@ The baseline must include:
   soft-deleted participants and activities
 - Registration periods in each window state (open, closed, upcoming), including one period at `max_registrations - 1`
 - Registration requests in each lifecycle status (`PENDING`, `NEED_SPECIFICATION`, `CONFIRMATION`, `ACCEPTED`,
-  `REJECTED`, `CANCELLED`)
+  `REJECTED`, `CANCELED`)
 
 ### Concurrent access
 

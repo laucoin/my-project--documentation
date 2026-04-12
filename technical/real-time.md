@@ -59,7 +59,7 @@ type ProjectEvent =
   | SseEnvelope<MovementDeletedPayload>    // type: "MOVEMENT_DELETED"
   | SseEnvelope<AlertCreatedPayload>       // type: "ALERT_CREATED"
   | SseEnvelope<AlertStatusChangedPayload> // type: "ALERT_STATUS_CHANGED"
-  | SseEnvelope<MessageAddedPayload>       // type: "ALERT_MESSAGE_ADDED" | "MOVEMENT_MESSAGE_ADDED"
+  | SseEnvelope<MessageAddedPayload>       // type: "ALERT_MESSAGE_ADDED" | "MOVEMENT_MESSAGE_ADDED" — same payload shape
 ```
 
 ---
@@ -104,37 +104,26 @@ interface AlertCreatedPayload {
 
 #### `ALERT_STATUS_CHANGED`
 
-Emitted when an alert transitions to `RESOLVED` or `CANCELLED`.
+Emitted when an alert transitions to `RESOLVED` or `CANCELED`.
 
 ```ts
 interface AlertStatusChangedPayload {
   alertId:   string
-  status:    'IN_PROGRESS' | 'RESOLVED' | 'CANCELLED'
+  status:    'IN_PROGRESS' | 'RESOLVED' | 'CANCELED'
   updatedBy: string        // UUID
 }
 ```
 
-#### `ALERT_MESSAGE_ADDED`
+#### `ALERT_MESSAGE_ADDED` / `MOVEMENT_MESSAGE_ADDED`
 
-Emitted when a message is appended to an alert's communication thread.
+Emitted when a message is appended to a communication thread — either an alert thread or a movement thread.
+Both events share the same payload shape; the event `type` field in `SseEnvelope` is the discriminant.
 
 ```ts
 interface MessageAddedPayload {
-  threadId:  string        // UUID — alert ID
+  threadId:  string        // UUID — alert ID or movement ID depending on event type
   messageId: string        // UUID
   sender:    string        // display name or activity name
-}
-```
-
-#### `MOVEMENT_MESSAGE_ADDED`
-
-Emitted when a message is appended to a movement's classic communication thread.
-
-```ts
-interface MessageAddedPayload {
-  threadId:  string        // UUID — movement ID
-  messageId: string        // UUID
-  sender:    string
 }
 ```
 
@@ -147,7 +136,7 @@ unauthenticated request returns `401` before reaching the handler.
 
 ```kotlin
 // BFF router
-"/api/v1/projects/{projectId}/events".nest {
+"/api/v2/projects/{projectId}/events".nest {
     GET("", sseHandler::stream)
 }
 ```
@@ -195,7 +184,7 @@ The `EventSource` API reconnects automatically after a connection loss. Before r
 The server uses this header as a **cursor** to replay any events that were emitted while the client was disconnected.
 
 ```
-GET /api/v1/projects/{projectId}/events
+GET /api/v2/projects/{projectId}/events
 Last-Event-ID: 2026-04-07T10:23:40.000Z
 ```
 
@@ -254,9 +243,9 @@ therefore managed in a **Pinia store** in the APP layer (see [Frontend Conventio
 ```
 app/
 ├── stores/
-│   └── useProjectEventStore.ts     # Pinia store — owns real-time state
+│   └── useProjectEventStore.ts   # Pinia store — owns real-time state
 └── composables/
-    └── useProjectEventStream.ts    # Manages EventSource lifecycle
+    └── useEventStream.ts         # Manages EventSource lifecycle
 ```
 
 The composable owns the `EventSource` instance and dispatches parsed events to the store. Components never interact
@@ -302,15 +291,15 @@ export const useProjectEventStore = defineStore('projectEvent', () => {
 ### Composable
 
 ```ts
-// app/composables/useProjectEventStream.ts
-export function useProjectEventStream(projectId: Ref<string>) {
+// app/composables/useEventStream.ts
+export function useEventStream(projectId: Ref<string>) {
   const store = useProjectEventStore()
   let source: EventSource | null = null
 
   function open() {
     if (source) source.close()
 
-    const url = `/api/v1/projects/${projectId.value}/events`
+    const url = `/api/v2/projects/${projectId.value}/events`
     source = new EventSource(url, { withCredentials: true })
     store.setStatus('connecting')
 
@@ -372,12 +361,16 @@ field (such as the `: keepalive` comment) are silently ignored.
 The `streamStatus` from the store drives a persistent UI indicator so users always know whether the real-time feed is
 live:
 
-| Status       | Indicator          | User-facing meaning                              |
-|--------------|--------------------|--------------------------------------------------|
-| `connecting` | Spinner / amber    | Establishing or re-establishing connection       |
-| `open`       | Green dot          | Live — events arrive in real time                |
-| `error`      | Red dot + toast    | Connection lost — retrying automatically         |
-| `closed`     | No indicator       | Not connected (user navigated away from project) |
+| Status       | Indicator          | User-facing meaning                                                                 |
+|--------------|--------------------|-------------------------------------------------------------------------------------|
+| `connecting` | Spinner / amber    | Establishing or re-establishing connection                                          |
+| `open`       | Green dot          | Live — events arrive in real time                                                   |
+| `error`      | Red dot + toast    | Connection lost and browser stopped retrying (e.g. server returned a non-2xx code) |
+| `closed`     | No indicator       | Not connected (user navigated away from project)                                    |
+
+::: info StreamStatus vs EventSource.readyState
+`StreamStatus` is an application-layer abstraction managed by the Pinia store — it is not the native `EventSource.readyState`. The `'connecting'` and `'open'` statuses mirror `readyState` values `0` and `1`. The `'error'` status is set only when the `EventSource` `error` handler fires while `readyState` is `CLOSED` (`2`), meaning the browser has ceased automatic retries (typically because the server responded with a non-2xx HTTP status). Under normal transient failures the browser keeps `readyState` at `CONNECTING` and the store reflects `'connecting'`, not `'error'`.
+:::
 
 The indicator lives in the project layout (APP layer) and is always visible while a project page is active.
 
@@ -387,7 +380,7 @@ The indicator lives in the project layout (APP layer) and is always visible whil
 
 | Pattern                                             | Why                                                  | Alternative                          |
 |-----------------------------------------------------|------------------------------------------------------|--------------------------------------|
-| `new EventSource(…)` inside a component             | Lifecycle not controlled, duplicates connections     | `useProjectEventStream` composable   |
+| `new EventSource(…)` inside a component             | Lifecycle not controlled, duplicates connections     | `useEventStream` composable          |
 | Listening to `onmessage` for typed events           | Fires only on unnamed frames, misses named events    | `addEventListener(type, …)`          |
 | Storing raw `MessageEvent` objects in the store     | Untyped, hard to consume                             | Parse to `ProjectEvent` before push  |
 | Not calling `close()` on unmount                    | Leaves dangling connections after navigation         | `onUnmounted(() => close())`         |

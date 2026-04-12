@@ -6,9 +6,9 @@ The application uses the **OAuth2 authorization code flow** via Keycloak 26.x. T
 Security OAuth2 Client) and manages a **server-side web session**. The frontend never communicates directly with
 Keycloak and never holds a JWT — it only carries a session cookie.
 
-### Organisation resolution
+### Organization resolution
 
-Each organisation has a unique **business slug** used to route authentication to the correct Keycloak organisation and
+Each organization has a unique **business slug** used to route authentication to the correct Keycloak organization and
 identity provider.
 
 ### Login flow
@@ -21,7 +21,7 @@ sequenceDiagram
     participant Keycloak
     Frontend ->> BFF: Any request (no session)
     BFF -->> Frontend: 401 Unauthorized
-    User ->> Frontend: Enter organisation slug
+    User ->> Frontend: Enter organization slug
     Frontend ->> BFF: GET /auth/login-url?slug={slug}
     BFF -->> Frontend: { loginUrl: "/oauth2/authorization/keycloak?organization={slug}" }
     Frontend ->> BFF: GET /oauth2/authorization/keycloak?organization={slug}
@@ -49,14 +49,14 @@ receives and forwards a session cookie.
 
 ### External IdP
 
-Organisations that federate their identity through an external IdP (OIDC or SAML) can configure an identity provider in
+Organizations that federate their identity through an external IdP (OIDC or SAML) can configure an identity provider in
 Keycloak. Role claims in the IdP token are mapped to application roles via Keycloak identity provider mappers:
 
 | IdP role claim value     | Application role       |
 |--------------------------|------------------------|
 | `MY_PROJECT_SUPER_ADMIN` | `SUPER_ADMIN` globally |
 
-The organisation is responsible for configuring and maintaining these role claims on their IdP. This is documented in
+The organization is responsible for configuring and maintaining these role claims on their IdP. This is documented in
 the onboarding process.
 
 ---
@@ -70,7 +70,7 @@ Authorization uses a two-level role model:
 | Level   | Role                  | Scope                                                                |
 |---------|-----------------------|----------------------------------------------------------------------|
 | Global  | `USER`                | Default role for all authenticated users                             |
-| Global  | `SUPER_ADMIN`         | Full access across all organisations                                 |
+| Global  | `SUPER_ADMIN`         | Full access across all organizations                                 |
 | Project | `PROJECT_ADMIN`       | Full access to a specific project                                    |
 | Project | `PROJECT_COORDINATOR` | Operational access — no admin settings, no profiles, no registration |
 | Project | `PROJECT_PARTICIPANT` | Restricted access — operation entities only                          |

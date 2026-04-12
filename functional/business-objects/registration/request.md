@@ -11,7 +11,7 @@ projects with an active registration period and submit requests for one or more.
 
 When submitting a request, the user is presented with the custom form attached to the registration period and must
 fill in all required fields before the request can be submitted. See
-[Registration Form](/functional/registration/registration-form).
+[Registration Form](/functional/business-objects/registration/field).
 
 ## Individual vs. group request
 
@@ -29,8 +29,8 @@ A group registration follows two steps:
 1. **Initial submission** — the user provides the number of participants (non-nominative). The request is submitted with
    a headcount only.
 2. **Specification** — once the admin moves the request to `NEED_SPECIFICATION`, the user provides:
-    - The full identity of each participant
-    - Optionally, more restrictive presence dates per participant *(used for day variable price calculation)*
+	- The full identity of each participant
+	- Optionally, more restrictive presence dates per participant *(used for day variable price calculation)*
 
 ## Lifecycle
 
@@ -39,7 +39,7 @@ A group registration follows two steps:
 ```
 PENDING ──► ACCEPTED
         └─► REJECTED
-        └─► CANCELLED
+        └─► CANCELED
 ```
 
 ### Group registration
@@ -47,7 +47,7 @@ PENDING ──► ACCEPTED
 ```
 PENDING ──► NEED_SPECIFICATION ──► CONFIRMATION ──► ACCEPTED
         └─► REJECTED
-        └─► CANCELLED
+        └─► CANCELED
 ```
 
 ### Status descriptions
@@ -59,7 +59,7 @@ PENDING ──► NEED_SPECIFICATION ──► CONFIRMATION ──► ACCEPTED
 | `CONFIRMATION`       | Group only | Participant details submitted; awaiting final approval |
 | `ACCEPTED`           | All        | Definitively approved                                  |
 | `REJECTED`           | All        | Denied                                                 |
-| `CANCELLED`          | All        | Cancelled                                              |
+| `CANCELED`           | All        | Canceled                                               |
 
 ### Cancellation rules
 

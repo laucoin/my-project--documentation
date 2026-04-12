@@ -19,7 +19,7 @@ designed so that each module can be extracted into an independent microservice w
 | Module       | Layer (frontend)   | Schema (database) | Responsibility                                                             |
 |--------------|--------------------|-------------------|----------------------------------------------------------------------------|
 | BFF          | APP                | —                 | API gateway, auth enforcement, aggregation                                 |
-| Core         | Project core layer | `core`            | Organisations, projects, users, participants, groups, activities, vehicles |
+| Core         | Project core layer | `core`            | Organizations, projects, users, participants, groups, activities, vehicles |
 | Operation    | Operation layer    | `operation`       | Movements, alerts, communications                                          |
 | Registration | Registration layer | `registration`    | Registration periods and requests                                          |
 

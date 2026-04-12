@@ -12,7 +12,7 @@ time. The export covers all personal data the application holds for that user ac
 
 | Data category | Content |
 |---|---|
-| Account | Name, email address, organisation slug, account creation date |
+| Account | Name, email address, organization slug, account creation date |
 | Project profiles | List of projects the user is a member of, with their role and profile creation date |
 | Participant link | Identifier and name of the participant record linked to this user account, if any |
 | Movements | All movement records in which the user appears as the registered participant (via participant link) |
@@ -31,7 +31,7 @@ to the attribute names used in the application's domain model.
   "account": {
     "name": "Jane Doe",
     "email": "jane.doe@example.com",
-    "organisationSlug": "acme",
+    "organizationSlug": "acme",
     "createdAt": "2025-01-15T08:30:00Z"
   },
   "projectProfiles": [

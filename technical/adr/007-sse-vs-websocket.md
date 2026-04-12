@@ -30,7 +30,7 @@ Use **SSE (Server-Sent Events)** as the real-time push transport for the communi
 
 The backend exposes a `GET /events` endpoint (per module) that returns a `Flux<ServerSentEvent<T>>`, leveraging the
 existing Spring WebFlux reactive stack. The Nuxt frontend subscribes via the browser-native `EventSource` API or the
-`useEventSource` composable.
+`useEventStream` composable.
 
 User actions that modify state (e.g. acknowledging an alert) continue to use standard REST calls — no real-time
 client-to-server channel is needed.

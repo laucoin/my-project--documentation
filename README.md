@@ -21,7 +21,7 @@ Install [pnpm](https://pnpm.io/installation)
 
 ### Build and run locally
 
-##### Procedure
+#### Procedure
 
 1. Clone this repository with:
     ```shell

@@ -32,29 +32,31 @@ All endpoints follow the Reference Card:
 
 ---
 
+## Authentication
+
+All requests are authenticated via a **session cookie** (`SESSION`) set by the BFF after the OIDC login flow completes. The frontend never holds or forwards a JWT — authentication is fully managed server-side by the BFF (see [Security](/technical/security) and [ADR 002](/technical/adr/002-bff)).
+
+The session cookie is `HttpOnly` and `Secure`, so the browser forwards it automatically on every same-origin request. There is no `Authorization` header to set manually.
+
+::: info How authentication works
+The BFF owns the full OIDC flow. After login, the browser receives a `Set-Cookie: SESSION=<id>` response. All subsequent requests carry this cookie transparently. The BFF resolves the session, validates the stored JWT, and maps claims to application roles before calling any module.
+:::
+
 ## Required headers
 
-Every authenticated request **must** include the following headers in addition to the
-`Authorization` (OAuth2 Bearer) header:
+Every authenticated request **must** include the following headers:
 
-| Header                | Required    | Description                                                                                                                                                      |
-|-----------------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Authorization`       | Yes         | `Bearer <access_token>` — OAuth2 token obtained via the BFF session                                                                                              |
-| `X-Organization-Slug` | Yes         | The slug of the organisation the request is scoped to (e.g. `my-org`). Used by the BFF to resolve the Keycloak organisation and enforce project-level isolation. |
-| `Content-Type`        | Yes (write) | `application/json` — required on `POST`, `PUT`, `PATCH` requests with a body                                                                                     |
-| `Accept`              | No          | Defaults to `application/json`                                                                                                                                   |
-
-::: warning X-Organization-Slug is mandatory
-A request without `X-Organization-Slug` is rejected with
-`400 Bad Request`. This header is the primary mechanism for organisation isolation — it is validated against the authenticated user's organisation before any resource access.
-:::
+| Header         | Required    | Description                                                                   |
+|----------------|-------------|-------------------------------------------------------------------------------|
+| `Cookie`       | Yes         | `SESSION=<id>` — set automatically by the browser after login via the BFF    |
+| `Content-Type` | Yes (write) | `application/json` — required on `POST`, `PUT`, `PATCH` requests with a body |
+| `Accept`       | No          | Defaults to `application/json`                                                |
 
 ### Example
 
 ```http
 GET /api/v2/projects HTTP/1.1
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9...
-X-Organization-Slug: acme-corp
+Cookie: SESSION=abc123def456...
 Accept: application/json
 ```
 
@@ -74,3 +76,5 @@ Accept: application/json
 | `403` | Forbidden — authenticated but insufficient permissions   |
 | `404` | Not found — resource does not exist                      |
 | `405` | Method not allowed — verb not supported on this resource |
+| `409` | Conflict — business rule violation (e.g. duplicate slug, constraint breach) |
+| `500` | Internal server error — unexpected failure; safe to retry with exponential back-off |

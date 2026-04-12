@@ -6,7 +6,7 @@ The application is designed to manage various aspects of group care for minors. 
 
 ### [Business Objects](/functional/business-objects/)
 
-The core entities managed by the application: organisations, projects, groups, participants, activities, vehicles, and
+The core entities managed by the application: organizations, projects, groups, participants, activities, vehicles, and
 options.
 
 ### [Operations](/functional/operations/)

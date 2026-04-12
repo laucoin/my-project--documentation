@@ -2,7 +2,7 @@
 
 The Registration module manages registration periods and requests. It follows a hexagonal architecture — the BFF calls
 it through an inbound service interface, and persistence is abstracted behind outbound repository interfaces. It is
-available only when the REGISTRATION option is enabled on both the organisation and the project.
+available only when the REGISTRATION option is enabled on both the organization and the project.
 
 ```mermaid
 C4Component
