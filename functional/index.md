@@ -9,22 +9,18 @@ The application is designed to manage various aspects of group care for minors. 
 The core entities managed by the application: organizations, projects, groups, participants, activities, vehicles, and
 options.
 
-### [Operations](/functional/operations/)
+### [Operations](/functional/business-objects/operations/)
 
 The tracking of all entries and exits at the project site, along with the management of alerts related to outdoor
 activities.
 
-### [Registration](/functional/registration/)
+### [Registration](/functional/business-objects/registration/)
 
 The process by which a person can request to join a project, and how those requests are managed.
 
 ### [Roles](/functional/roles)
 
 The different types of users and their rights within the application.
-
-### [Statistics](/functional/statistics)
-
-Project-scoped metrics on participants, movements, activities, vehicles, alerts, and registrations.
 
 ### [Data Policy](/functional/data-policy)
 

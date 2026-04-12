@@ -18,9 +18,9 @@ Organization
 
 ## Identity and authentication
 
-Organization are backed by **Keycloak**. The `slug` field stores the Keycloak organization ID, which links the
-application record to the IdP identity. Name is synchronized from the Keycloak token on
-first login and is updated on each login.
+Organizations are backed by **Keycloak**. The `slug` field stores the Keycloak organization ID, which links the
+application record to the IdP identity. The name is synchronized from the Keycloak token on
+first login and is updated on each subsequent login.
 
 > Related to Keycloak organization [feature](https://medium.com/keycloak/exploring-keycloak-26-introducing-the-organization-feature-for-multi-tenancy-fb5ebaaf8fe4)
 
@@ -28,30 +28,41 @@ first login and is updated on each login.
 
 | Attribute      | Description                                                                                                     |
 |----------------|-----------------------------------------------------------------------------------------------------------------|
-| Slug           | Organization identifier used                                                                                    |
-| Name           | The official name of the organization                                                                           |
-| Options        | List of available options                                                                                       |
-| Is strict auth | Check impact of stict auth organization [here](/functional/roles#auto-attribution))                             |
-| Is main        | Has a main role (cross organization), check impact of main organization [here](/functional/roles#organization)) |
+| Slug           | Organization identifier                                                                                             |
+| Name           | The official name of the organization                                                                               |
+| Options        | List of available options                                                                                           |
+| Is strict auth | Controls strict authentication behavior — see impact [here](/functional/roles#auto-attribution)                     |
+| Is main        | Designates a cross-organization main role — see impact [here](/functional/roles#special-case)                       |
 
 ### Options
 
-The application has some [options](/functional/options). An organization can limit available options in his projects.
+The application has some [options](/functional/options). An organization can limit which options are available for its projects.
 
 ### Status
 
-A organization does not have an explicit status field. Its state is derived from:
+An organization does not have an explicit status field. Its state is derived from:
 
 | Situation                  | Implied state |
 |----------------------------|---------------|
-| Have been soft deleted     | Disabled      |
-| Have not been soft deleted | Active        |
+| Have been soft deleted     | `BLOCKED`     |
+| Have not been soft deleted | `ACTIVE`      |
 
 ## Action
 
+### Read & Search
+
+- Allowed roles:
+	- `SUPER_ADMIN`
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Text search on name or slug
+		- Is strict auth
+		- Is main
+		- Options includes options (one or multiples)
+		- Status equal at least one given statuses
+
 ### Creation
 
-- Name: Creation
 - Allowed roles:
 	- `SUPER_ADMIN`
 - Constraints:
@@ -63,7 +74,6 @@ A organization does not have an explicit status field. Its state is derived from
 
 ### Edition
 
-- Name: Edition
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
@@ -72,7 +82,6 @@ A organization does not have an explicit status field. Its state is derived from
 
 ### Soft-delete
 
-- Name: Delete
 - Allowed roles:
 	- `SUPER_ADMIN`
 - Constraints:
@@ -81,7 +90,6 @@ A organization does not have an explicit status field. Its state is derived from
 
 ### Enable-back
 
-- Name: Enable Back
 - Allowed roles:
 	- `SUPER_ADMIN`
 - Constraints:
@@ -93,16 +101,15 @@ A organization does not have an explicit status field. Its state is derived from
 Delete is a real deletion from database which on is definitive.
 :::
 
-- Name: Permanent delete
 - Allowed roles:
 	- `SUPER_ADMIN`
 - Constraints:
 	- Should delete all operation content (project, etc.)
-	- The deletion cannot be rollback
+	- The deletion cannot be rolled back
 
 ## Relationships
 
-| Related object | Relationship                             |
-|----------------|------------------------------------------|
-| User           | A project contains zero or more users    |
-| Project        | A project contains zero or more projects |
+| Related object | Relationship                                   |
+|----------------|------------------------------------------------|
+| User           | An organization contains zero or more users    |
+| Project        | An organization contains zero or more projects |

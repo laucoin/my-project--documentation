@@ -59,6 +59,10 @@ export default defineConfig({
 									],
 								},
 								{
+									text: 'Document',
+									link: '/functional/business-objects/document',
+								},
+								{
 									text     : 'Operations',
 									link     : '/functional/business-objects/operations',
 									collapsed: true,
@@ -72,139 +76,19 @@ export default defineConfig({
 									],
 								},
 								{
-									text     : 'Registration',
-									link     : '/functional/business-objects/registration',
-									collapsed: true,
-									items    : [
-										{
-											text: 'Registration period',
-											link: '/functional/business-objects/registration/period',
-										},
-										{
-											text: 'Registration form',
-											link: '/functional/business-objects/registration/field',
-										},
-										{
-											text: 'Registration request',
-											link: '/functional/business-objects/registration/request',
-										},
-									],
+									text: 'Registration',
+									link: '/functional/business-objects/registration',
 								},
 							],
 						},
+						{ text: 'Data Policy', link: '/functional/data-policy' },
 						{ text: 'Options', link: '/functional/options' },
 						{ text: 'Roles', link: '/functional/roles' },
-						{ text: 'Statistics', link: '/functional/statistics' },
-						{ text: 'Data Policy', link: '/functional/data-policy' },
 					],
 				},
 			],
 			'/technical/' : [
-				{
-					text : 'Technical',
-					link : '/technical/',
-					items: [
-						{
-							text     : 'Architecture',
-							link     : '/technical/architecture/',
-							collapsed: false,
-							items    : [
-								{
-									text     : 'C4 Model',
-									link     : '/technical/architecture/c4/',
-									collapsed: false,
-									items    : [
-										{
-											text: 'Level 1 – System Context',
-											link: '/technical/architecture/c4/context',
-										},
-										{
-											text: 'Level 2 – Containers',
-											link: '/technical/architecture/c4/containers',
-										},
-										{
-											text     : 'Level 3 – Components',
-											link     : '/technical/architecture/c4/components/',
-											collapsed: false,
-											items    : [
-												{
-													text: 'Frontend',
-													link: '/technical/architecture/c4/components/frontend',
-												},
-												{ text: 'BFF', link: '/technical/architecture/c4/components/bff' },
-												{ text: 'Core', link: '/technical/architecture/c4/components/core' },
-												{
-													text: 'Operation',
-													link: '/technical/architecture/c4/components/operation',
-												},
-												{
-													text: 'Registration',
-													link: '/technical/architecture/c4/components/registration',
-												},
-											],
-										},
-									],
-								},
-							],
-						},
-						{ text: 'Security', link: '/technical/security' },
-						{ text: 'Database', link: '/technical/database' },
-						{ text: 'Real-Time Push', link: '/technical/real-time' },
-						{
-							text     : 'API Contract',
-							link     : '/technical/api-contract/',
-							collapsed: false,
-							items    : [
-								{ text: 'Pagination', link: '/technical/api-contract/pagination' },
-								{ text: 'Filtering & Sorting', link: '/technical/api-contract/filtering-sorting' },
-								{ text: 'Size Constraints', link: '/technical/api-contract/size-constraints' },
-							],
-						},
-						{
-							text     : 'Decision Records',
-							link     : '/technical/adr/',
-							collapsed: true,
-							items    : [
-								{ text: '001 – Modular Monolith', link: '/technical/adr/001-modular-monolith' },
-								{ text: '002 – BFF Pattern', link: '/technical/adr/002-bff' },
-								{ text: '003 – Schema per Module', link: '/technical/adr/003-schema-per-module' },
-								{ text: '004 – Reactive Stack', link: '/technical/adr/004-reactive-stack' },
-								{
-									text: '005 – Keycloak Organizations',
-									link: '/technical/adr/005-keycloak-organizations',
-								},
-								{ text: '006 – Nuxt Layers', link: '/technical/adr/006-nuxt-layers' },
-								{
-									text: '007 – Real-Time Push: SSE vs WebSocket',
-									link: '/technical/adr/007-sse-vs-websocket',
-								},
-								{ text: '008 – Testing Strategy', link: '/technical/adr/008-testing-strategy' },
-							],
-						},
-						{
-							text     : 'Coding Guidelines',
-							link     : '/technical/guidelines/',
-							collapsed: true,
-							items    : [
-								{ text: 'Database', link: '/technical/guidelines/database' },
-								{ text: 'Spring & Kotlin', link: '/technical/guidelines/spring' },
-								{ text: 'Security', link: '/technical/guidelines/security' },
-								{ text: 'Frontend', link: '/technical/guidelines/frontend' },
-								{ text: 'Coding Style', link: '/technical/guidelines/coding-style' },
-								{ text: 'Infrastructure', link: '/technical/guidelines/infrastructure' },
-							],
-						},
-						{
-							text     : 'How-To Guides',
-							link     : '/technical/how-to/',
-							collapsed: true,
-							items    : [
-								{ text: 'Run locally', link: '/technical/how-to/local-setup' },
-								{ text: 'Keycloak setup', link: '/technical/how-to/keycloak-setup' },
-							],
-						},
-					],
-				},
+				{ text: 'Technical', link: '/technical' },
 			],
 		},
 

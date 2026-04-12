@@ -22,7 +22,7 @@ Organization
 ```
 
 ::: info Participant relation to group
-A participant take part of a project and can (if GROUP option is enabled) be added in group. But groups are only a package not a parent.
+A participant is part of a project and can (if the GROUP option is enabled) be added to a group. Groups are a grouping mechanism, not a hierarchical parent.
 :::
 
 ::: warning Participant ≠ User
@@ -34,7 +34,7 @@ participant to a user is never mandatory.
 ## Main attributes
 
 | Attribute        | Description                                                                                                                                  |
-|------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Lastname         | The participant lastname                                                                                                                     |
 | Firstname        | The participant firstname                                                                                                                    |
 | Birthday         | The participant date of birth                                                                                                                |
@@ -49,7 +49,7 @@ This classification is re-evaluated dynamically — a participant can become a m
 
 ### Type
 
-There is 2 types:
+There are 2 types:
 
 - REGISTERED
 - GUEST
@@ -72,15 +72,13 @@ No further movements can be recorded for a guest after they have gone out.
 
 A participant does not have an explicit status field. Its state is derived from:
 
-| Type         | Situation                                                                         | Implied state   |
-|--------------|-----------------------------------------------------------------------------------|-----------------|
-| `REGISTERED` | Has been soft deleted                                                             | Disabled        |
-| `REGISTERED` | No dates set (nor participant, nor group) OR today is between start and end dates | Present         |
-| `REGISTERED` | Start date is in the future                                                       | Not arrived yet |
-| `REGISTERED` | End date is in the past                                                           | Left            |
-| `GUEST`      | Has been soft deleted                                                             | Disabled        |
-| `GUEST`      | No dates set (nor participant, nor group) OR today is between start and end dates | Present         |
-| `GUEST`      | End date is in the past                                                           | Left            |
+| Situation                                                                                         | Implied state     |
+| ------------------------------------------------------------------------------------------------- | ----------------- |
+| Has been soft deleted                                                                             | `DISABLED`        |
+| Arrival date is in the future                                                                     | `NOT_HERE`        |
+| End date is in the past                                                                           | `NO_MORE_HERE`    |
+| Refer to [movement](/functional/business-objects/operations/movement#participant-presence-status) |                   |
+| No dates set OR today is between start and end dates                                              | `NOT_ARRIVED_YET` |
 
 ### Attendance dates
 
@@ -109,86 +107,100 @@ A participant without attendance dates but with a group depend or the group date
 
 ## Action
 
+### Read & Search
+
+- Allowed roles:
+  - `PROJECT_ADMIN`
+  - `PROJECT_MANAGER`
+  - `PROJECT_USER`
+- Constraints:
+  - Search are allowed on following field but not required:
+    - Text search on firstname, lastname
+    - Is minor depending birthday
+    - Type equal at least one given types
+    - Available dates includes a date
+    - Status equal at least one given statuses
+
 ### Creation
 
-- Name: Creation
 - Allowed roles:
-	- `PROJECT_ADMIN`
-	- `PROJECT_MANAGER`
-	- `PROJECT_USER` -> Only for `GUEST` participant
+  - `PROJECT_ADMIN`
+  - `PROJECT_MANAGER`
+  - `PROJECT_USER` -> Only for `GUEST` participant
 - Constraints:
-	- Lastname is required
-	- Firstname is required
-	- Birthday is required
-	- Type is automatically set depending the context (except creating in movement participant are `REGISTERED`)
-	- Attendance dates are optional
-	- User is optional
+  - Lastname is required
+  - Firstname is required
+  - Birthday is required
+  - Type is automatically set depending on context (participants created outside of a movement are `REGISTERED`)
+  - Attendance dates are optional
+  - User is optional
 
 ### Edition
 
-- Name: Edition
 - Allowed roles:
-	- `PROJECT_ADMIN`
-	- `PROJECT_MANAGER`
+  - `PROJECT_ADMIN`
+  - `PROJECT_MANAGER`
 - Constraints (differences with creation):
-	- Type cannot be changed
+  - Type cannot be changed
 
 ### Soft-delete
 
-- Name: Delete
 - Allowed roles:
-	- `PROJECT_ADMIN`
-	- `PROJECT_MANAGER`
+  - `PROJECT_ADMIN`
+  - `PROJECT_MANAGER`
 - Constraints:
-	- The soft-deletion should not impact module [operations](/functional/business-objects/operations).
-	- `PROJECT_ADMIN`s still see the participant but it should be marked “disabled” (refer to [status](#status)).
+  - The soft-deletion should not impact module [operations](/functional/business-objects/operations).
+  - `PROJECT_ADMIN`s still see the participant but it should be marked “disabled” (refer to [status](#status)).
 
 ### Enable-back
 
-- Name: Enable Back
 - Allowed roles:
-	- `PROJECT_ADMIN`
+  - `PROJECT_ADMIN`
 - Constraints:
-	- Only applicable to soft-deleted participants
+  - Only applicable to soft-deleted participants
 
 ### Purge (GDPR)
 
-Condition to purge: Participant has no related action in [operations](/functional/business-objects/operations) since 1 year.
+Purge condition: The participant has had no related operation in the last year.
 
-- Name: Purge
 - Allowed roles:
-	- `PROJECT_ADMIN`
-	- Any user linked to the concerned participant
+  - `PROJECT_ADMIN`
+  - Any user linked to the concerned participant
 - Constraints:
-	- The deletion MUST impact module [operations](/functional/business-objects/operations).
-	- The deletion cannot be rollback
-
-::: danger Impact on data
-The participant is remove from all data including module [operations](/functional/business-objects/operations). That mean data became inconsistant,
-and affected data like movement, communication, etc. should be marked as inconsistent.
-
-Data must be masked as inconsistent to notify the user, the data you see is partially valid.
-:::
+  - The deletion MUST affect the [operations](/functional/business-objects/operations) module.
+  - The deletion cannot be rolled back
 
 ### Data extraction (GDPR)
 
-- Name: Data extraction
 - Allowed roles:
-	- `PROJECT_ADMIN`
-	- `PROJECT_MANAGER`
-	- Any user linked to the concerned participant
+  - `PROJECT_ADMIN`
+  - `PROJECT_MANAGER`
+  - Any user linked to the concerned participant
 - Constraints:
-	- Should not include other participant personal data
+  - Should not include other participant personal data
 
-#### Extraction content
+Refer [data policy](/functional/data-policy) to see expected format and data in the export.
 
-- Participant [information](#main-attributes)
-- Movements
+### Delete
+
+::: info Delete ≠ Soft-Delete ≠ Purge
+Delete is a permanent removal from the database and ignores the purge conditions.
+:::
+
+- Allowed roles:
+  - `PROJECT_ADMIN`
+- Constraints:
+  - A participant must not have any related [operations](/functional/business-objects/operations) to be deleted.
+  - The deletion cannot be rolled back
+
+::: tip Participant created by mistake
+If you created a participant by mistake, or they ended up not attending but were already included in a movement, you cannot delete them. Instead, you can soft-delete them or set a departure date in the past or present to indicate their absence.
+:::
 
 ## Relationships
 
 | Related object | Relationship                                                |
-|----------------|-------------------------------------------------------------|
+| -------------- | ----------------------------------------------------------- |
 | Project        | A participant belongs to one project                        |
 | Group          | A participant can belong to zero or more groups             |
 | Movement       | A participant can be included in zero or more movements     |

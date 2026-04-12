@@ -8,7 +8,7 @@ hero:
   tagline: Plan activities, track movements, and manage registrations.
   actions:
     - theme: brand
-      text: Check-out the project
+      text: Check out the project
       link: https://registry.sgdf.fr
 
 features:

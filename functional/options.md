@@ -1,7 +1,3 @@
----
-outline: deep
----
-
 # Options
 
 Options are a mechanism for enabling or disabling specific features at the project level. They are pre-allowed at the
@@ -21,9 +17,10 @@ authorised.
 |---------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------|
 | [`VEHICLE`](/functional/business-objects/core/vehicle)                    | Vehicles can be created and attached to movements                                                     | None                     |
 | [`ACTIVITY`](/functional/business-objects/core/activity)                  | Activities can be created and attached to movements                                                   | None                     |
-| [`COMMUNICATION`](/functional/business-objects/operations/communication)  | Outgoing movements linked to an activity can have a communication thread                              | Requires `ACTIVITY`      |
-| [`ALERT`](/functional/business-objects/business-objects/operations/alert) | Alerts can be created with a status, topic, and communication thread referencing any outside activity | Requires `COMMUNICATION` |
-| [`REGISTRATION`](/functional/business-objects/registration/registration)  | A registration period can be created, allowing external users to submit registration requests         | None                     |
+| [`GROUP`](/functional/business-objects/core/group)                        | Group can be created and attached to movements                                                        | None                     |
+| [`COMMUNICATION`](/functional/business-objects/operations/communication)  | Outgoing movements linked to an activity can have a communication thread                              | None                     |
+| [`ALERT`](/functional/business-objects/operations/alert)        | Alerts can be created with a status, topic, and communication thread referencing any outside activity | Requires `COMMUNICATION` |
+| [`REGISTRATION`](/functional/business-objects/registration/)   | A registration period can be created, allowing external users to submit registration requests         | None                     |
 
 ## Option dependencies
 
@@ -32,14 +29,14 @@ Some options can only be activated if their dependency is already enabled:
 ```
 VEHICLE        (independent)
 ACTIVITY       (independent)
-  └── COMMUNICATION
-          └── ALERT
+COMMUNICATION  (independent)
+  └── ALERT
 REGISTRATION   (independent)
 ```
 
 ::: warning
 Disabling an option that another option depends on is not permitted while the dependent option is still active. For
-example, `ACTIVITY` cannot be disabled while `COMMUNICATION` is enabled.
+example, `COMMUNICATION` cannot be disabled while `ALERT` is enabled.
 :::
 
 ### Effect on existing data when an option is disabled
@@ -72,10 +69,19 @@ triggered by toggling an option.
 
 → See [Activity](/functional/business-objects/core/activity) for the full activity reference.
 
+### GROUP
+
+- A project can define a group of participants with a name, attendance dates.
+- A group can be fully or partially attached to any movement to facilitate movement creation.
+- A group affects the participant attendance dates
+
+→ See [Group](/functional/business-objects/core/group) and [Participant](/functional/business-objects/core/participant) for the full group reference.
+
 ### COMMUNICATION
 
-- An outgoing movement linked to an activity gains a **communication thread**.
-- In this thread, messages can be sent on behalf of the user or the movement's activity.
+- An outgoing movement optionally gains a **communication thread**.
+- In this thread, messages can be sent on behalf of the user or the movement.
+- Moreover (if `ALERT` is enabled) an Alert can be linked to a communication to provide some context.
 
 → See [Movement](/functional/business-objects/operations/movement) for details on communication threads in movements.
 
@@ -96,6 +102,6 @@ triggered by toggling an option.
 → See [Registration Period](/functional/business-objects/registration/period) and [Registration Request](/functional/business-objects/registration/request) for the full reference.
 
 ::: info
-Special note regarding this option: If the organization does not allow REGISTRATION, an external user cannot view
-projects open for registration.
+Special note: if the organization does not allow `REGISTRATION`, external users cannot view projects open for
+registration.
 :::

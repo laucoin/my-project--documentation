@@ -2,34 +2,22 @@
 
 This section describes the registration entities managed by the application and their relationships.
 
-::: info Option required
-Registration is only available if the **REGISTRATION** option is enabled on the project.
-:::
-
-## Entity hierarchy
-
-To illustrate which **Project
-** it belongs to, the project appears in the diagram, but it is actually the one from the core module.
-
-```
-Project
-└── Period
-    ├── Request
-    └── Field
-```
-
 ## Entities
 
-| Entity                                                       | Description                                            |
-|--------------------------------------------------------------|--------------------------------------------------------|
-| [Period](/functional/business-objects/registration/period)   | How a project opens itself to registration requests    |
-| [Field](/functional/business-objects/registration/field)     | Field attached to a period and filled in by requesters |
-| [Request](/functional/business-objects/registration/request) | How a user submits a request and how it is processed   |
+To illustrate which **Project** it belongs to, the project appears in the diagram, but it is actually the one from
+the core module.
 
-## Dates and attendance
+- [Project](/functional/business-objects/core/project)
+	- [Period](/functional/business-objects/registration/period)
+		- [Field](/functional/business-objects/registration/field)
+		- [Request](/functional/business-objects/registration/request)
 
-Unlike the core module, operation entities do not have an optional date. HOWEVER, these entities cannot be created with core entities that are not available (e.g., A time period cannot be selected outside the project's date range.).
+## Statuses
 
-::: info
-For more information check each business object's documentation, which specifies how core entities impact the operations entities.
-:::
+Some entities have a status field defined as a priority list. The first status that matches the object's state is applied.
+
+Example: if a period matches the conditions at both line 1 and line 3 of the status table, its displayed status is the one at line 1.
+
+## Main attributes
+
+All objects have a “Main attributes” section. This section covers functionally relevant fields but is not an exhaustive list. For the full attribute list, refer to the [technical documentation](/technical).

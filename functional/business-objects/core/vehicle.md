@@ -9,6 +9,12 @@ last_update: 2026-04-12
 
 # Vehicle
 
+::: info Option required
+Vehicles are only available if the **VEHICLE** option is enabled on the project.
+:::
+
+## Definition
+
 A **Vehicle** is a means of transport that can be associated with a movement. Its primary purpose is to record which
 vehicle was used and who was driving it, so that the driver can be identified in the event of a traffic incident.
 
@@ -17,10 +23,6 @@ Organization
 └── Project
     └── Vehicle
 ```
-
-::: info Option required
-Vehicles are only available if the **VEHICLE** option is enabled on the project.
-:::
 
 ## Main attributes
 
@@ -35,12 +37,13 @@ Vehicles are only available if the **VEHICLE** option is enabled on the project.
 
 A vehicle does not have an explicit status field. Its state is derived from:
 
-| Situation                                            | Implied state     |
-|------------------------------------------------------|-------------------|
-| Has been soft deleted                                | Disabled          |
-| No dates set OR today is between start and end dates | Active            |
-| Start date is in the future                          | Not available yet |
-| End date is in the past                              | No more available |
+| Situation                                                                                     | Implied state  |
+|-----------------------------------------------------------------------------------------------|----------------|
+| Has been soft deleted                                                                         | `DISABLED`     |
+| Arrival date is in the future                                                                 | `NOT_HERE`     |
+| End date is in the past                                                                       | `NO_MORE_HERE` |
+| Refer to [movement](/functional/business-objects/operations/movement#vehicle-presence-status) |                |
+| No dates set OR today is between start and end dates                                          | `NOT_USED_YET` |
 
 ### Availability dates
 
@@ -48,9 +51,20 @@ A vehicle can have its own availability dates (start and end). These are optiona
 
 ## Action
 
+### Read & Search
+
+- Allowed roles:
+	- `PROJECT_ADMIN`
+	- `PROJECT_MANAGER`
+	- `PROJECT_USER`
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Text search on license plate, brand, model
+		- Available dates includes a date
+		- Status equal at least one given statuses
+
 ### Creation
 
-- Name: Creation
 - Allowed roles:
 	- `PROJECT_ADMIN`
 	- `PROJECT_MANAGER`
@@ -62,7 +76,6 @@ A vehicle can have its own availability dates (start and end). These are optiona
 
 ### Edition
 
-- Name: Edition
 - Allowed roles:
 	- `PROJECT_ADMIN`
 	- `PROJECT_MANAGER`
@@ -70,7 +83,6 @@ A vehicle can have its own availability dates (start and end). These are optiona
 
 ### Soft-delete
 
-- Name: Delete
 - Allowed roles:
 	- `PROJECT_ADMIN`
 	- `PROJECT_MANAGER`
@@ -80,7 +92,6 @@ A vehicle can have its own availability dates (start and end). These are optiona
 
 ### Enable-back
 
-- Name: Enable Back
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints:
@@ -89,15 +100,14 @@ A vehicle can have its own availability dates (start and end). These are optiona
 ### Delete
 
 ::: info Delete ≠ Soft-Delete
-Delete is a real deletion from database which on is definitive.
+Delete is a permanent removal from the database.
 :::
 
-- Name: Permanent delete
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints:
-	- The deletion should not impact module [operations](/functional/business-objects/operations).
-	- The deletion cannot be rollback
+	- The deletion must not affect the [operations](/functional/business-objects/operations) module.
+	- The deletion cannot be rolled back
 
 ## Relationships
 

@@ -14,7 +14,7 @@ A **User** is a person (or an application account) who can log in and interact w
 
 ::: info User ≠ Participant
 A user and a participant are separate concepts. The same individual can be both (e.g. a participant who also has
-an app account), but the two records remain independent. Linking them is optional and never mandatory. Moreover the participant is limited to a project scope where the user is in the organization scope.
+an app account), but the two records remain independent. Linking them is optional and never mandatory. Moreover, a participant is scoped to a project, whereas a user is scoped to an organization.
 :::
 
 ```
@@ -26,7 +26,7 @@ Organization
 
 User accounts are backed by **Keycloak**. The `oidc_id` field stores the Keycloak user UUID, which links the
 application record to the IdP identity. First name, last name, and email are synchronized from the Keycloak token on
-first login and user information are updated on each login.
+first login and user information is updated on each login.
 
 For role attributions and application access check [here](/functional/roles#auto-attribution)
 
@@ -42,27 +42,36 @@ For role attributions and application access check [here](/functional/roles#auto
 
 A user does not have an explicit status field. Its state is derived from:
 
-| Situation                                    | Implied state         |
-|----------------------------------------------|-----------------------|
-| Have been soft deleted                       | Blocked               |
-| Last login date is equal or more than 1 year | Inactif (since X)     |
-| Have not been soft deleted                   | Active (last login X) |
+| Situation                                    | Implied state |
+|----------------------------------------------|---------------|
+| Have been soft deleted                       | `BLOCKED`     |
+| Last login date is equal or more than 1 year | `INACTIVE`    |
+| Have not been soft deleted                   | `ACTIVE`      |
 
 ## Action
 
+### Read & Search
+
+- Allowed roles:
+	- `SUPER_ADMIN`
+	- `ORGANIZATION_ADMIN`
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Text search on firstname, lastname, email
+		- Status equal at least one given statuses
+
 ### Creation
 
-- Name: Creation
 - Allowed roles: **No one can create a user in app**
 - Constraints:
 	- User is automatically insert in the app on login.
-	- A user cannot register, it must be in the organization active directory.
-	- Firstname, Lastname and email must be provided.
-	- Role is automatically defined (check [here](/functional/roles#global) for more information)
+	- A user cannot self-register; they must exist in the organization's active directory.
+	- First name, last name, and email must be provided.
+	- Role is automatically assigned (check [here](/functional/roles#auto-attribution) for more information)
 
 ### Light user creation
 
-A **light user** is a partial user record created automatically when a someone invites an email address that
+A **light user** is a partial user record created automatically when someone invites an email address that
 does not yet correspond to any account in the organization.
 
 A light user has:
@@ -82,14 +91,12 @@ A light user is indistinguishable from a full user. The only indicator is the ab
 
 ### Edition
 
-- Name: Edition
 - Allowed roles: **No one can edit a user in app**
 - Constraints:
 	- User is automatically updated in the app on login.
 
 ### Soft-delete
 
-- Name: Delete
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
@@ -101,44 +108,35 @@ A light user is indistinguishable from a full user. The only indicator is the ab
 
 ### Enable-back
 
-- Name: Enable Back
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
 - Constraints:
-	- Only applicable to soft-deleted participants
+	- Only applicable to soft-deleted users
 
 ### Purge (GDPR)
 
-Condition to purge:
+Purge condition: The user has had no related action in [operations](/functional/business-objects/operations) in the last year.
 
-- Participant has no related action in [operations](/functional/business-objects/operations) since 1 year.
-
-- Name: Purge
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
-	- Any user for himself
+	- Any user for themselves
 - Constraints:
-	- The deletion MUST impact module [operations](/functional/business-objects/operations).
-	- The deletion cannot be rollback
+	- The deletion MUST affect the [operations](/functional/business-objects/operations) module.
+	- The deletion cannot be rolled back
 
 ### Data extraction (GDPR)
 
-- Name: Data extraction
 - Allowed roles:
 	- `PROJECT_ADMIN`
 	- `PROJECT_MANAGER`
-	- Any user for himself
+	- Any user for themselves
 - Constraints:
 	- Should not include other participant personal data
 	- Should not include other user personal data
 
-#### Extraction content
-
-- User [information](#main-attributes)
-- Profiles
-- Participants: Should include all linked [participant data](/functional/business-objects/core/participant#extraction-content)
+Refer [data policy](/functional/data-policy) to see expected format and data in the export.
 
 ## Relationships
 

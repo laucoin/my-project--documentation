@@ -1,13 +1,24 @@
 ---
-outline: deep
+module: operations
+scope: project
+object_name: movement
+created: 2026-04-12
+last_update: 2026-04-12
 ---
 
 # Movement
 
+## Definition
+
 A **Movement** is a timestamped record of any entry into or exit from the project site. It is the core operational log
 of the application.
 
-## Immutability
+```
+Project
+└── Movement
+```
+
+### Immutability
 
 A movement **cannot be edited** after it has been recorded. If a correction is needed, the movement must be
 soft-deleted and a new movement created in its place. When recreating a movement, a custom `datetime` can be supplied
@@ -18,9 +29,23 @@ A movement cannot be created with a datetime **in the future**. All recorded mov
 or equal to the current time.
 :::
 
----
+## Main attributes
 
-## Direction
+| Attribute | Description                                                   |
+|-----------|---------------------------------------------------------------|
+| Timestamp | The movement moment                                           |
+| Contents  | One to many content (Cf. the following table)                 |
+| Reason    | The movement reason                                           |
+| Activity  | If the movement is linked to an activity (and option active)  |
+| Direction | The movement direction with the project location as reference |
+
+| Attribute   | Description                                 |
+|-------------|---------------------------------------------|
+| Participant | Concerned participant                       |
+| Vehicle     | If the participant drive a vehicle          |
+| Pool        | If the participant is added through a group |
+
+### Direction
 
 Every movement has a direction:
 
@@ -29,25 +54,52 @@ Every movement has a direction:
 | `IN`  | A person enters the project site |
 | `OUT` | A person leaves the project site |
 
-## Participants in a movement
+### Content
+
+#### Participant
 
 A movement can include one or more people. Two kinds of people can be recorded in a movement:
 
-| Kind                       | Description                                                                                        |
-|----------------------------|----------------------------------------------------------------------------------------------------|
-| **Registered participant** | A participant pre-registered in the project                                                        |
-| **Guest**                  | A light, one-off entry with a first name, last name, and birthdate — not registered in the project |
+| Kind         | Description                                                                                        |
+|--------------|----------------------------------------------------------------------------------------------------|
+| `REGISTERED` | A participant pre-registered in the project                                                        |
+| `GUEST`      | A light, one-off entry with a first name, last name, and birthdate — not registered in the project |
 
-Registered participants can be added individually or collectively via their group.
+::: warning
+A same movement cannot contain `REGISTERED` and `GUEST`. Indeed movement reason cannot be the same for that 2 kind of
+people (refer the [reason](#reason)).
+:::
 
-### Pool
+When a participant is added to a movement, the participant's details are captured. This snapshot is taken at movement time and is preserved independently of any subsequent rename or deletion of the participant.
+
+Eligible participant status (at the movement timestamp):
+
+- `NOT_ARRIVED_YET`
+- `IN`
+- `OUT`
+
+#### Group
 
 When participants are added to a movement via a group, the group name is captured as a **pool name** — a labelled
 grouping within the movement. This snapshot is taken at movement time and is preserved independently of any subsequent
 rename or deletion of the group. It serves as a display label to identify which group a set of participants belonged to
 when the movement was recorded.
 
-## Reason
+::: info
+Adding participants through a group is just a way to save time. When you select a group of participant to add you should be able to remove participant of the group from the movement (but not the group).
+:::
+
+#### Vehicle
+
+To drive a vehicle, the participant must be major (at the movement timestamp).
+
+Eligible vehicle status (at the movement timestamp):
+
+- `NOT_USED_YET`
+- `IN`
+- `OUT`
+
+### Reason
 
 A reason is mandatory when the movement direction is considered non-natural for that type of person:
 
@@ -58,7 +110,7 @@ A reason is mandatory when the movement direction is considered non-natural for 
 | `IN`      | Guest                  | **Yes**          |
 | `OUT`     | Guest                  | No               |
 
-### Reasons for a registered participant going OUT
+#### Reasons for a `REGISTERED` participant going OUT
 
 | Reason                 | Description                                                  |
 |------------------------|--------------------------------------------------------------|
@@ -68,7 +120,7 @@ A reason is mandatory when the movement direction is considered non-natural for 
 | `DEFINITIVE_DEPARTURE` | The participant is leaving the project for good              |
 | `OTHER`                | Any other reason                                             |
 
-### Reasons for a guest coming IN
+#### Reasons for a `GUEST` coming IN
 
 | Reason              | Description                                     |
 |---------------------|-------------------------------------------------|
@@ -77,96 +129,103 @@ A reason is mandatory when the movement direction is considered non-natural for 
 | `PARTNER_ANIMATION` | The guest is an external facilitator or partner |
 | `VISIT`             | The guest is a visitor                          |
 
-## Optional elements
+### Status
 
-| Element      | Description                                                                                   |
-|--------------|-----------------------------------------------------------------------------------------------|
-| **Activity** | Indicates that the movement is related to a specific activity *(requires ACTIVITY option)*    |
-| **Vehicle**  | Indicates that a vehicle was used — the driver must be identified *(requires VEHICLE option)* |
+A movement does not have an explicit status field. Its state is derived from:
 
-## Classic communication
+| Situation                  | Implied state |
+|----------------------------|---------------|
+| Have been soft deleted     | Disabled      |
+| Have not been soft deleted | Active        |
 
-When the **COMMUNICATION** option is enabled, an outgoing movement linked to an activity can have a **communication
-thread** attached to it.
+## Impact other objects status
 
-When writing a message in this thread, the user selects a sender:
+### Participant presence status
 
-| Sender option                 | Description                                              |
-|-------------------------------|----------------------------------------------------------|
-| The user themselves (default) | The message is sent on behalf of the logged-in user      |
-| The movement's activity       | The message is sent on behalf of the group that went out |
+Each participant's current presence status is derived at runtime from their movement history.
 
-::: info Option dependencies
-Classic communication requires both **ACTIVITY** and **COMMUNICATION** to be enabled on the project.
-:::
+| Status         | Condition                                                                                            |
+|----------------|------------------------------------------------------------------------------------------------------|
+| `NO_MORE_HERE` | The `GUEST` participant's last recorded movement is an `OUT`                                         |
+| `NO_MORE_HERE` | The `REGISTERED` participant's last recorded movement is an `OUT` with reason `DEFINITIVE_DEPARTURE` |
+| `IN`           | The participant's last recorded movement is an `IN`                                                  |
+| `OUT`          | The participant's last recorded movement is an `OUT`                                                 |
 
-For a more structured form of communication with a dedicated status and topic,
-see [Alert](/functional/business-objects/operations/alert).
+### Vehicle presence status
 
-## Participant presence status
-
-Each participant's current presence status is derived at runtime from their movement history and their resolved
+Each vehicle's current presence status is derived at runtime from their movement history and their resolved
 departure date (see [Attendance fallback](/functional/business-objects/#dates-and-attendance)).
 
-| Status            | Condition                                                                                    |
-|-------------------|----------------------------------------------------------------------------------------------|
-| `NOT_ARRIVED_YET` | No movement has been recorded for this participant yet                                       |
-| `IN`              | The participant's last recorded movement is an `IN`                                          |
-| `OUT`             | The participant's last recorded movement is an `OUT`                                         |
-| `LEFT`            | The participant's resolved departure date is in the past (regardless of their last movement) |
+| Status | Condition                                        |
+|--------|--------------------------------------------------|
+| `IN`   | The vehicle's last recorded movement is an `IN`  |
+| `OUT`  | The vehicle's last recorded movement is an `OUT` |
 
-`LEFT` takes precedence over `IN` or `OUT`: once the departure date is passed, the participant is considered to have
-left the project.
+## Action
 
----
+### Read & Search
 
-## Soft-deleted referenced elements
+- Allowed roles:
+	- `PROJECT_ADMIN`
+	- `PROJECT_MANAGER`
+	- `PROJECT_USER`
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Timestamp is included in given range
+		- Direction equal at least one given directions
+		- Reason equal at least one given reasons
+		- Activity equal at least one given activities
+		- Status equal at least one given statuses
 
-When an activity or a participant referenced by a movement is later soft-deleted, **the movement record is not
-affected** — it continues to display the name of the deleted element. A visual label is shown in the UI to indicate
-that the element no longer exists.
+### Creation
 
-Soft-deleted activities and participants **cannot be selected** when creating new movements.
+- Allowed roles:
+	- `PROJECT_ADMIN`
+	- `PROJECT_MANAGER`
+	- `PROJECT_USER`
+- Constraints:
+	- Timestamp is required (defaults to current time; can be set to any past datetime)
+	- Direction is required (`IN` or `OUT`)
+	- At least one participant is required
+	- Reason is required depending on direction and participant type (see [Reason](#reason))
+	- Activity is optional (if ACTIVITY option is enabled)
+	- Vehicle is optional per participant (if VEHICLE option is enabled; driver must be a major)
 
----
+### Edition
 
-## Key attributes
+- Allowed roles:
+	- `PROJECT_ADMIN`
+	- `PROJECT_MANAGER`
+	- `PROJECT_USER`
+- Constraints (differences with creation):
 
-| Attribute     | Description                                                                                |
-|---------------|--------------------------------------------------------------------------------------------|
-| `id`          | Primary key — UUID generated by the application                                            |
-| `project_id`  | Logical link to `core.projects` — the project this movement belongs to                     |
-| `datetime`    | When the movement occurred                                                                 |
-| `type`        | `IN` or `OUT`                                                                              |
-| `reason`      | Required for non-natural movements *(nullable — see above)*                                |
-| `activity_id` | Logical link to `core.activities` — optional activity linked to this movement *(nullable)* |
-| `created_at`  | Creation timestamp — managed by Spring Auditing                                            |
-| `created_by`  | Logical link to `core.users` — user who created the record                                 |
-| `updated_at`  | Last modification timestamp — managed by Spring Auditing                                   |
-| `updated_by`  | Logical link to `core.users` — user who last modified the record                           |
-| `deleted_at`  | Soft-delete timestamp — `NULL` means active                                                |
-
-## Movement contents
-
-The participants (and optional vehicle) included in a movement are stored in a separate join table
-`operation.movement_contents`. Each row represents one person in the movement.
-
-| Attribute        | Description                                                                                                      |
-|------------------|------------------------------------------------------------------------------------------------------------------|
-| `id`             | Primary key — UUID generated by the application                                                                  |
-| `project_id`     | Denormalized FK — `core.projects` — duplicated for future sharding support                                       |
-| `movement_id`    | FK → `operation.movements`                                                                                       |
-| `participant_id` | Logical link to `core.participants` — the person included in this movement *(not a hard FK — cross-schema)*      |
-| `vehicle_id`     | Logical link to `core.vehicles` — set only on the **driver's row** when a vehicle is attached *(nullable)*       |
-| `pool_name`      | Snapshot of the group name at movement time — preserved independently of any subsequent rename or group deletion |
-
-::: info Driver identification
-When a vehicle is attached to a movement, exactly one `movement_contents` row has `vehicle_id` set — that row
-identifies the driver. All other participants in the same movement have `vehicle_id = null`.
+::: danger Not a real edit
+Editing a movement is not a true update — it creates a new movement and soft-deletes the previous one. The form is pre-filled with the original movement's data.
 :::
 
-::: info Cross-schema logical links
-`participant_id` and `vehicle_id` are logical links, not enforced foreign keys. Enforcing FK constraints across
-schemas would violate the module isolation rule (see [Database Conventions](/technical/guidelines/database#schema-ownership)).
-Referential integrity is maintained at the application layer.
-:::
+### Soft-delete
+
+- Allowed roles:
+	- `PROJECT_ADMIN`
+	- `PROJECT_MANAGER`
+	- `PROJECT_USER`
+- Constraints:
+	- `PROJECT_ADMIN`s and `PROJECT_MANAGER`s still see the movement but it should be marked “disabled”
+	  (refer to [status](#status)).
+
+### Enable-back
+
+- Allowed roles:
+	- `PROJECT_ADMIN`
+	- `PROJECT_MANAGER`
+- Constraints:
+	- Only applicable to soft-deleted movements
+
+## Relationships
+
+| Related object | Relationship                                 |
+|----------------|----------------------------------------------|
+| Participant    | A movement contains one or more participants |
+| Group          | A movement contains zero or more groups      |
+| Vehicle        | A movement contains zero or more vehicles    |
+| Activity       | A movement contains zero or one activity     |

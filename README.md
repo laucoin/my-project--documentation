@@ -71,9 +71,7 @@ pnpm preview
 
 The `main` branch contains the up to date documentation.
 
-WARNING :
-
-- Any change must be done on a separate branch.
+**Warning:** Any change must be done on a separate branch.
 
 If you have more question, please have a look
 on [contributing file](https://gitlab.com/laucoin/global-readme/-/blob/main/CONTRIBUTING.md)

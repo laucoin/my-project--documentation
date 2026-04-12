@@ -1,6 +1,8 @@
 ---
 module: core
-scope: project
+scope:
+  - project
+  - user
 object_name: profile
 created: 2026-04-11
 last_update: 2026-04-12
@@ -15,8 +17,9 @@ active, and the invitation status.
 
 ```
 Organization
-└── Project
-    └── Profile
+├── Project ──┐
+│             ├── Profile
+└── User ─────┘
 ```
 
 ::: info Usage
@@ -44,7 +47,7 @@ Possible values:
 
 ## Status
 
-A profile as 2 statuses. To be used a profile must has:
+A profile has 2 statuses. To be active, a profile must have:
 
 - `ACCEPTED` invitation status
 - Permanent or in progress usage status
@@ -79,11 +82,11 @@ Its state is derived from its dates.
 
 | Situation                            | Implied state |
 |--------------------------------------|---------------|
-| Profile has been soft deleted        | Blocked       |
-| No dates set                         | Permanent     |
-| Start date is in the future          | Upcoming      |
-| Today is between start and end dates | In progress   |
-| End date is in the past              | Ended         |
+| Profile has been soft deleted        | `BLOCKED`     |
+| No dates set                         | `PERMANENT`   |
+| Start date is in the future          | `UPCOMING`    |
+| Today is between start and end dates | `IN_PROGRESS` |
+| End date is in the past              | `EXPIRED`     |
 
 ### Access dates
 
@@ -91,9 +94,36 @@ A profile can have its own access dates (start and end). These are optional. If 
 
 ## Action
 
+### Read & Search
+
+#### In project scope
+
+- Allowed roles:
+	- `PROJECT_ADMIN`
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Text search on linked user's firstname, lastname, email
+		- Type equal at least one given types
+		- Role equal at least one given roles
+		- Access dates includes a date
+		- Invitation status equal at least one given invitation statuses
+		- Status equal at least one given statuses
+
+#### In organization scope
+
+- Allowed roles:
+	- All user about their own profiles
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Text search on linked project's name
+		- Type equal at least one given types (in the UI only `SUPER_ADMIN` see that filter)
+		- Role equal at least one given roles
+		- Access dates includes a date
+		- Invitation status equal at least one given invitation statuses
+		- Status equal at least one given statuses
+
 ### Creation
 
-- Name: Creation
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints:
@@ -105,7 +135,7 @@ A profile can have its own access dates (start and end). These are optional. If 
 	- Access dates are optional
 
 ::: info
-If a user is not found in the organization, that mean, he never login to the application. If not created, it create [light user](/functional/business-objects/core/user#light-user-creation) a link it to your invitation.
+If a user is not found in the organization, it means they have never logged in to the application. In that case, the system creates a [light user](/functional/business-objects/core/user#light-user-creation) and links it to the invitation.
 :::
 
 ### Support profile
@@ -114,7 +144,6 @@ If a user is not found in the organization, that mean, he never login to the app
 The support profile can only be created via the project himself
 :::
 
-- Name: Support profile
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
@@ -132,7 +161,6 @@ The support profile can only be created via the project himself
 This profile can only be created automatically on the project creation for the creator.
 :::
 
-- Name: Support profile
 - Allowed roles: **The project creator**
 - Constraints:
 	- User is automatically set to the creator
@@ -144,7 +172,6 @@ This profile can only be created automatically on the project creation for the c
 
 ### Edition
 
-- Name: Edition
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints (differences with creation):
@@ -155,14 +182,12 @@ This profile can only be created automatically on the project creation for the c
 
 ### Answer invitation
 
-- Name: Answer invitation
 - Allowed roles: **Must be the user concerned by the profile**
 - Constraints (differences with creation):
 	- Can only update status from `INVITED` to `ACCEPTED` or `REJECTED`
 
 ### Soft-delete
 
-- Name: Delete
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints:
@@ -173,7 +198,6 @@ This profile can only be created automatically on the project creation for the c
 
 ### Enable-back
 
-- Name: Enable Back
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints:
@@ -183,5 +207,5 @@ This profile can only be created automatically on the project creation for the c
 
 | Related object | Relationship                          |
 |----------------|---------------------------------------|
-| Project        | A profile belongs to one organization |
+| Project        | A profile belongs to one project      |
 | User           | A profile concerns one user           |

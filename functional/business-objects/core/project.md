@@ -28,7 +28,7 @@ Organization
 
 ### Options
 
-The organization has some available [options](/functional/options). The project options is limit to his organization options.
+The organization has some available [options](/functional/options). A project's options are limited to those enabled by its organization.
 
 ### Status
 
@@ -36,17 +36,28 @@ A project does not have an explicit status field. Its state is derived from:
 
 | Situation                            | Implied state |
 |--------------------------------------|---------------|
-| Project has be soft deleted          | Disabled      |
-| No dates set                         | Permanent     |
-| Start date is in the future          | Upcoming      |
-| Today is between start and end dates | In progress   |
-| End date is in the past              | Archived      |
+| Project has been soft deleted        | `BLOCKED`     |
+| No dates set                         | `PERMANENT`   |
+| Start date is in the future          | `UPCOMING`    |
+| Today is between start and end dates | `IN_PROGRESS` |
+| End date is in the past              | `ARCHIVED`    |
 
 ## Action
 
+### Read & Search
+
+- Allowed roles:
+	- `SUPER_ADMIN`
+	- `ORGANIZATION_ADMIN`
+- Constraints:
+	- Search are allowed on following field but not required:
+		- Text search on name
+		- Options includes options (one or multiples)
+		- Scheduled dates includes a date
+		- Status equal at least one given statuses
+
 ### Creation
 
-- Name: Creation
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
@@ -63,7 +74,6 @@ For more details, check the [profile adapted section](/functional/business-objec
 
 ### Edition
 
-- Name: Edition
 - Allowed roles:
 	- `PROJECT_ADMIN`
 - Constraints (differences with creation):
@@ -71,7 +81,6 @@ For more details, check the [profile adapted section](/functional/business-objec
 
 ### Soft-delete
 
-- Name: Delete
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
@@ -82,7 +91,6 @@ For more details, check the [profile adapted section](/functional/business-objec
 
 ### Enable-back
 
-- Name: Enable Back
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
@@ -95,13 +103,12 @@ For more details, check the [profile adapted section](/functional/business-objec
 Delete is a real deletion from database which on is definitive.
 :::
 
-- Name: Permanent delete
 - Allowed roles:
 	- `SUPER_ADMIN`
 	- `ORGANIZATION_ADMIN`
 - Constraints:
 	- Should delete all operation content (participants, movements, etc.)
-	- The deletion cannot be rollback
+	- The deletion cannot be rolled back
 
 ## Relationships
 
