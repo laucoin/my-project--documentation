@@ -30,13 +30,18 @@ Purge is a permanent removal. It cannot be rolled back.
 - `PROJECT_ADMIN`
 - Any user linked to the concerned participant
 
+## Trigger
+
+- Scheduler triggers purge of orphans for all projects on a regular basis (e.g., daily).
+- Manual trigger by a user with the appropriate role through the BFF.
+
 ## Purge condition
 
 The participant must have had no related operation in the last year.
 
 ## Constraints
 
-- The deletion MUST cascade to the [operations](/functional/business-objects/operations) module.
+- The deletion MUST cascade to the [operations](/functional/business-objects/operations/) module.
 - The deletion cannot be rolled back
 
 ## Workflow

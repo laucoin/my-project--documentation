@@ -106,7 +106,7 @@ triggered by toggling an option.
 - External users can browse the project in the list of open projects and submit registration requests (individual or
   group).
 
-→ See [Registration Period](/functional/business-objects/registration/period) and [Registration Request](/functional/business-objects/registration/request) for the full reference.
+→ See TODO: add reference to the registration documentation once available.
 
 ::: info
 Special note: if the organization does not allow `REGISTRATION`, external users cannot view projects open for

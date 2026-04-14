@@ -33,11 +33,12 @@ Requires the **GROUP** option to be enabled on the project.
 
 ## Constraints
 
-- The soft-deletion must not impact the [operations](/functional/business-objects/operations) module.
+- The soft-deletion must not impact the [operations](/functional/business-objects/operations/) module.
 - `PROJECT_ADMIN`s still see the group, but it is marked `DISABLED`.
 
 ::: warning Membership impact
-When a group is disabled, all group memberships are **no longer considered active**. Participants who belonged to the group lose that membership until the group is re-enabled.
+When a group is disabled, all group memberships are **no longer considered active
+**. Participants who belonged to the group lose that membership until the group is re-enabled.
 :::
 
 ## Workflow
