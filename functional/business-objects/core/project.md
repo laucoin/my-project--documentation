@@ -29,8 +29,8 @@ Organization
 | Attribute      | Description                                           |
 |----------------|-------------------------------------------------------|
 | Name           | The project name                                      |
-| Options        | List of enable options                                |
-| Schedule range | Date and time range to identify project start and end |
+| Options        | List of enabled options                               |
+| Schedule range | Date and time range defining when the project starts and ends |
 
 ### Options
 
@@ -50,15 +50,17 @@ A project does not have an explicit status field. Its state is derived from:
 
 ## Relationships
 
-| Related object | Relationship                                                              |
-|----------------|---------------------------------------------------------------------------|
-| Organization   | A project belongs to one organization                                     |
-| Profile        | A project contains one or more profiles                                   |
-| Group          | A project contains zero or more groups                                    |
-| Participant    | A project contains zero or more participants                              |
-| Movement       | A project contains zero or more movements                                 |
-| Activity       | A project contains zero or more activities *(if option enabled)*          |
-| Vehicle        | A project contains zero or more vehicles *(if option enabled)*            |
-| Communication  | A project contains zero or more communications *(if option enabled)*      |
-| Alert          | A project contains zero or more alerts *(if option enabled)*              |
-| Period         | A project contains zero or more registration period *(if option enabled)* |
+| Related object    | Relationship                                                                               |
+|-------------------|--------------------------------------------------------------------------------------------|
+| Organization      | A project belongs to one organization                                                      |
+| Profile           | A project contains one or more profiles                                                    |
+| Group             | A project contains zero or more groups                                                     |
+| Participant       | A project contains zero or more participants                                               |
+| Movement          | A project contains zero or more movements                                                  |
+| Activity          | A project contains zero or more activities                                                 |
+| Vehicle           | A project contains zero or more vehicles                                                   |
+| Communication     | A project contains zero or more communications per movement with activity or alert         |
+| Alert             | A project contains zero or more alerts                                                     |
+| Form              | A project contains zero or more registration forms                                         |
+| Preparation       | A project itself has zero or one preparation; additionally, through its groups, it can be linked to many preparations (zero or one per group) |
+| Completion Notice | A project contains notices scoped per participant (0:1 Internal + 0:1 External each)       |

@@ -37,19 +37,20 @@ Organization
 | License plate      | The vehicle’s registration number                                  |
 | Brand              | The vehicle manufacturer                                           |
 | Model              | The vehicle model                                                  |
-| Availability dates | Date and time range to identify vehicle start and end availability |
+| Availability dates | Date and time range defining when the vehicle is available         |
 
 ### Status
 
 A vehicle does not have an explicit status field. Its state is derived from:
 
-| Situation                                                                                     | Implied state  |
-|-----------------------------------------------------------------------------------------------|----------------|
-| Has been soft deleted                                                                         | `DISABLED`     |
-| Arrival date is in the future                                                                 | `NOT_HERE`     |
-| End date is in the past                                                                       | `NO_MORE_HERE` |
-| Refer to [movement](/functional/business-objects/operations/movement#vehicle-presence-status) |                |
-| No dates set OR today is between start and end dates                                          | `NOT_USED_YET` |
+| Situation                                            | Implied state       |
+|------------------------------------------------------|---------------------|
+| Has been soft deleted                                | `DISABLED`          |
+| Arrival date is in the future                        | `NOT_AVAILABLE_YET` |
+| End date is in the past                              | `NO_MORE_AVAILABLE` |
+| No dates set OR today is between start and end dates | `ACTIVE`            |
+
+For the runtime **presence** status (derived from movement history: `IN`, `OUT`), see [Movement — Vehicle presence status](/functional/business-objects/operations/movement#vehicle-presence-status). The two statuses are independent: the table above is computed from the vehicle's availability dates, while the presence status is computed from its movement history.
 
 ### Availability dates
 

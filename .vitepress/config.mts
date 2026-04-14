@@ -65,7 +65,7 @@ export default defineConfig({
 								},
 								{
 									text     : 'Operations',
-									link     : '/functional/business-objects/operations',
+									link     : '/functional/business-objects/operations/',
 									collapsed: true,
 									items    : [
 										{ text: 'Movement', link: '/functional/business-objects/operations/movement' },
@@ -74,11 +74,41 @@ export default defineConfig({
 											text: 'Communication',
 											link: '/functional/business-objects/operations/communication',
 										},
+										{ text: 'Comment', link: '/functional/business-objects/operations/comment' },
+										{
+											text: 'Completion Notice',
+											link: '/functional/business-objects/operations/completion-notice',
+										},
 									],
 								},
 								{
-									text: 'Registration',
-									link: '/functional/business-objects/registration',
+									text     : 'Preparation',
+									link     : '/functional/business-objects/preparation/',
+									collapsed: true,
+									items    : [
+										{ text: 'Location', link: '/functional/business-objects/preparation/location' },
+										{
+											text: 'Typical day',
+											link: '/functional/business-objects/preparation/typical-day',
+										},
+										{ text: 'Planning', link: '/functional/business-objects/preparation/planning' },
+										{ text: 'Pedagogy', link: '/functional/business-objects/preparation/pedagogy' },
+										{ text: 'Menu', link: '/functional/business-objects/preparation/menu' },
+										{ text: 'Budget', link: '/functional/business-objects/preparation/budget' },
+										{ text: 'Comment', link: '/functional/business-objects/preparation/comment' },
+									],
+								},
+								{
+									text     : 'Registration',
+									link     : '/functional/business-objects/registration/',
+									collapsed: true,
+									items    : [
+										{ text: 'Form', link: '/functional/business-objects/registration/form' },
+										{
+											text: 'Registration',
+											link: '/functional/business-objects/registration/registration',
+										},
+									],
 								},
 							],
 						},
@@ -253,6 +283,16 @@ export default defineConfig({
 										{ text: 'Edit', link: '/functional/features/edit-communication' },
 										{ text: 'Hide', link: '/functional/features/hide-communication' },
 										{ text: 'Restore', link: '/functional/features/restore-communication' },
+									],
+								},
+								{
+									text     : 'Document',
+									collapsed: true,
+									items    : [
+										{ text: 'List', link: '/functional/features/list-documents' },
+										{ text: 'Upload', link: '/functional/features/upload-document' },
+										{ text: 'Download', link: '/functional/features/download-document' },
+										{ text: 'Delete', link: '/functional/features/delete-document' },
 									],
 								},
 							],

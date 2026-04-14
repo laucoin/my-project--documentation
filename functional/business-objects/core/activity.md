@@ -38,7 +38,7 @@ Organization
 | Description        | The activity description                                            |
 | Capacity           | Range from the minimum required to the maximum participant          |
 | Duration           | Estimated activity duration                                         |
-| Availability dates | Date and time range to identify activity start and end availability |
+| Availability dates | Date and time range defining when the activity is available        |
 
 ### Status
 
@@ -47,7 +47,7 @@ An activity does not have an explicit status field. Its state is derived from:
 | Situation                                            | Implied state       |
 |------------------------------------------------------|---------------------|
 | Has been soft deleted                                | `DISABLED`          |
-| No dates set OR today is between start and end dates | `AVAILABLE`         |
+| No dates set OR today is between start and end dates | `ACTIVE`            |
 | Start date is in the future                          | `NOT_AVAILABLE_YET` |
 | End date is in the past                              | `NO_MORE_AVAILABLE` |
 
