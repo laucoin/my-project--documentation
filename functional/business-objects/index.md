@@ -6,15 +6,15 @@ outline: deep
 
 Business objects are split into three categories:
 
-- [Core](/functional/business-objects/core) objects, which are the fundamental entities of the application and are not tied to any specific feature;
-- [Document](/functional/business-objects/document), which only concern document management and do not contain any business rules
-- [Operations](/functional/business-objects/operations) objects, which are linked to specific features and may be unavailable if the corresponding option is disabled on the project.
-- [Registration](/functional/business-objects/registration) objects, which are linked to the registration feature and may be unavailable if the
+- [Core](/functional/business-objects/core/) objects, which are the fundamental entities of the application and are not tied to any specific feature;
+- [Document](/functional/business-objects/document/), which only concern document management and do not contain any business rules
+- [Operations](/functional/business-objects/operations/) objects, which are linked to specific features and may be unavailable if the corresponding option is disabled on the project.
+- [Registration](/functional/business-objects/registration/) objects, which are linked to the registration feature and may be unavailable if the
   `REGISTRATION` option is disabled on the project.
 
 ## Main attributes
 
-All objects have a “Main attributes” section. This section covers functionally relevant fields but is not an exhaustive list. For the full attribute list, refer to the [technical documentation](/technical).
+All objects have a “Main attributes” section. This section covers functionally relevant fields but is not an exhaustive list. For the full attribute list, refer to the [technical documentation](/technical/).
 
 ## Dates range
 
@@ -46,13 +46,13 @@ flowchart TD
 
 The following module is dedicated to configuration and management of the business objects:
 
-- [Core](/functional/business-objects/core) for the main entities (organizations, projects, groups, participants, etc.)
-- [Registration](/functional/business-objects/registration) for the registration process and management
-- [Document](/functional/business-objects/document) for documents and their management
+- [Core](/functional/business-objects/core/) for the main entities (organizations, projects, groups, participants, etc.)
+- [Registration](/functional/business-objects/registration/) for the registration process and management
+- [Document](/functional/business-objects/document/) for documents and their management
 
 Dates ranges are visible and can be configured but has not impact on the previous modules.
 
-The real impact of dates ranges is on the [Operations](/functional/business-objects/operations) module, which contains entities related to movements, alerts, and communications.
+The real impact of dates ranges is on the [Operations](/functional/business-objects/operations/) module, which contains entities related to movements, alerts, and communications.
 The possibility to include these entities in a movement is determined by their date ranges and the rules described above.
 
 E.g. if an activity is defined with a date range from 01/01/2024 to 31/01/2024, it can only be included in movements that occur between these dates. If a movement is created on 15/01/2024, the activity will be available for selection. However, if a movement is created on 01/02/2024, the activity will not be available for selection.

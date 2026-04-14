@@ -30,7 +30,7 @@ Delete is a permanent removal from the database and ignores purge conditions.
 
 ## Constraints
 
-- A participant must have no related [operations](/functional/business-objects/operations) to be deleted.
+- A participant must have no related [operations](/functional/business-objects/operations/) to be deleted.
 - The deletion cannot be rolled back
 
 ::: tip Participant created by mistake

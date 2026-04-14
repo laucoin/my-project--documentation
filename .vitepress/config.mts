@@ -61,7 +61,7 @@ export default defineConfig({
 								},
 								{
 									text: 'Document',
-									link: '/functional/business-objects/document',
+									link: '/functional/business-objects/document/',
 								},
 								{
 									text     : 'Operations',

@@ -36,7 +36,7 @@ Requires the **VEHICLE** option to be enabled on the project.
 
 ## Constraints
 
-- The deletion must not affect the [operations](/functional/business-objects/operations) module.
+- The deletion must not affect the [operations](/functional/business-objects/operations/) module.
 - The deletion cannot be rolled back
 
 ## Workflow

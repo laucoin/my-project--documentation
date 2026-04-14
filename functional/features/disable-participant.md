@@ -27,7 +27,7 @@ last_update: 2026-04-13
 
 ## Constraints
 
-- The soft-deletion must not impact the [operations](/functional/business-objects/operations) module.
+- The soft-deletion must not impact the [operations](/functional/business-objects/operations/) module.
 - `PROJECT_ADMIN`s still see the participant, but it is marked `DISABLED`.
 
 ## Workflow

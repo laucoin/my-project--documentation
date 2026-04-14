@@ -33,7 +33,7 @@ Requires the **VEHICLE** option to be enabled on the project.
 
 ## Constraints
 
-- The soft-deletion must not impact the [operations](/functional/business-objects/operations) module.
+- The soft-deletion must not impact the [operations](/functional/business-objects/operations/) module.
 - `PROJECT_ADMIN`s still see the vehicle, but it is marked `DISABLED`.
 
 ## Workflow
