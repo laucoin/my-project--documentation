@@ -42,18 +42,18 @@ Only `REGISTERED` participants can be part of a group.
 | Attribute        | Description                                                                                                               |
 |------------------|---------------------------------------------------------------------------------------------------------------------------|
 | Name             | The group name                                                                                                            |
-| Attendance dates | Date and time range to identify group start and end project participation (if not set: participate for whole the project) |
+| Attendance dates | Date and time range defining when the group attends the project (if not set: participates for the whole project)          |
 
 ### Status
 
 A group does not have an explicit status field. Its state is derived from:
 
-| Situation                                            | Implied state     |
-|------------------------------------------------------|-------------------|
-| Has been soft deleted                                | `DISABLED`        |
-| No dates set OR today is between start and end dates | `SHOULD_BE_HERE`  |
-| Start date is in the future                          | `NOT_ARRIVED_YET` |
-| End date is in the past                              | `NO_MORE_HERE`    |
+| Situation                                            | Implied state       |
+|------------------------------------------------------|---------------------|
+| Has been soft deleted                                | `DISABLED`          |
+| No dates set OR today is between start and end dates | `ACTIVE`            |
+| Start date is in the future                          | `NOT_AVAILABLE_YET` |
+| End date is in the past                              | `NO_MORE_AVAILABLE` |
 
 ### Attendance dates
 

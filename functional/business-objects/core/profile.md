@@ -30,10 +30,10 @@ Organization
 └── User ─────┘
 ```
 
-::: info Usage
+## Usage
+
 A user concerned by the profile can only use it while today falls within its active date range **and** the invitation
 status is `ACCEPTED`.
-:::
 
 ## Main attributes
 

@@ -25,7 +25,7 @@ Organization
 
 ## Identity and authentication
 
-Organizations are backed by this **OIDC provider**. The `slug` field stores the organization ID, which links the
+Each organization is backed by its own **OIDC provider**. The `slug` field stores the organization's identifier, which links the
 application record to the IdP identity. The name is synchronized from the token on first login and is updated on each
 subsequent login.
 

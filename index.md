@@ -12,14 +12,14 @@ hero:
       link: https://registry.sgdf.fr
 
 features:
-  - title: Glossary
-    details: Familiarize yourself with the key terms and concepts used in our project management tool to ensure a common understanding across your team.
-    link: /glossary
   - title: Functional documentation
     details: Learn how to use the features of our project management tool to streamline your workflow and enhance collaboration.
     link: /functional
   - title: Technical documentation
     details: Learn about the technical aspects of our project management tool, including architecture, APIs, and integration options to help you customize and extend its functionality.
     link: /technical
+  - title: Glossary
+    details: Familiarize yourself with the key terms and concepts used in our project management tool to ensure a common understanding across your team.
+    link: /glossary
 ---
 

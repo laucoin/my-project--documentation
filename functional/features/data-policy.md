@@ -1,6 +1,6 @@
 ---
 type: reference
-module:
+modules:
 scope:
 object_name:
 required_options:

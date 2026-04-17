@@ -20,9 +20,13 @@ The backend service responsible for the fundamental entities of the application:
 
 The backend service responsible for runtime tracking: movements, alerts, and communications. It is the service queried when recording or reading entries and exits at a project site.
 
+### Preparation
+
+The backend service responsible for project preparation: location, typical day, planning, pedagogy, menu, and budget. It is used before the project starts to organize all planning elements.
+
 ### Registration
 
-The backend service responsible for the registration process: registration periods, fields, and requests submitted by external users.
+The backend service responsible for the registration process: forms and registration requests submitted by external candidates.
 
 ---
 
@@ -34,7 +38,7 @@ The top-level entity. Represents a legal or operational structure (association, 
 
 ### Project
 
-A group care facility for minors in the legal sense, defined by a period and one or more locations. It is the central entity around which all operational data is organized.
+A group care facility for minors in the legal sense. It is the central entity around which all operational data is organized.
 
 ### User
 
@@ -45,12 +49,15 @@ A person who authenticates into the application. A user belongs to one organizat
 The link between a [user](#user) and a [project](#project). It carries the user's role within the project, access dates, and invitation status. A user has no access to a project's content without an active profile.
 
 ::: info Profile ≠ User ≠ Participant
-These are three distinct concepts. A **user** logs into the app. A **profile** defines their access to a specific project. A **participant** is a person tracked within a project — they may or may not be linked to a user.
+These are three distinct concepts. A **user** logs into the app. A **profile
+** defines their access to a specific project. A **participant
+** is a person tracked within a project — they may or may not be linked to a user.
 :::
 
 #### Support Profile
 
-A special profile type (`SUPPORT`) created by an `ORGANIZATION_ADMIN` or `SUPER_ADMIN` to gain temporary `PROJECT_ADMIN` access to a project for audit purposes. Its access window is fixed at 1 hour and is enforced server-side.
+A special profile type (`SUPPORT`) created by an `ORGANIZATION_ADMIN` or `SUPER_ADMIN` to gain temporary
+`PROJECT_ADMIN` access to a project for audit purposes. Its access window is fixed at 1 hour and is enforced server-side.
 
 ### Participant
 
@@ -62,23 +69,90 @@ A participant pre-registered in a project (`type = REGISTERED`). They have a ful
 
 #### Guest participant
 
-A lightweight participant created inline at movement time (`type = GUEST`). They are not pre-registered. Their lifecycle is limited to one `IN` movement and one `OUT` movement.
+A lightweight participant created inline at movement time (
+`type = GUEST`). They are not pre-registered. Their lifecycle is limited to one `IN` movement and one `OUT` movement.
 
 ### Group
 
-An optional grouping mechanism for participants within a project. Groups are not a hierarchy — a participant belongs to a project first, and may optionally be assigned to one or more groups. Requires the `GROUP` option.
+An optional grouping mechanism for participants within a project. Groups are not a hierarchy — a participant belongs to a project first, and may optionally be assigned to one or more groups. Requires the
+`GROUP` option.
 
 ### Movement
 
-A record of an entry (`IN`) or exit (`OUT`) at the project site at a given timestamp. A movement includes one or more participants and is immutable once created — editing a movement soft-deletes the original and creates a corrected replacement.
+A record of an entry (`IN`) or exit (
+`OUT`) at the project site at a given timestamp. A movement includes one or more participants and is immutable once created — editing a movement soft-deletes the original and creates a corrected replacement.
 
 ### Alert
 
-A named incident or situation tracked within a project, with a status (`IN_PROGRESS`, `RESOLVED`, `CANCELED`) and an optional communication thread. Requires the `ALERT` option.
+A named incident or situation tracked within a project, with a status (`IN_PROGRESS`, `RESOLVED`, `CANCELED`) and an optional communication thread. Alerts can be soft-deleted to the `HIDDEN` state. Requires the `ALERT` option.
 
 ### Communication
 
-A message posted in a movement thread or an alert thread. Requires the `COMMUNICATION` option.
+A timestamped message attached to an alert or a movement **that includes an activity**. Not all movements have a communication thread — only those linked to an activity. Communications are always available; the parent's own option (`ALERT` for alert threads, `MOVEMENT` for movement threads) gates their use.
+
+### Comment
+
+A message posted by a user on a specific entity. Two distinct technical entities share this name depending on their module:
+
+- **Comment on Participant
+  ** (Operations module): annotation and follow-up thread on a participant. Supports [tags](#tag).
+- **Comment on Preparation element
+  ** (Preparation module): annotation on a preparation sub-element (typical day, planning, pedagogy, menu, budget). Supports [tags](#tag).
+
+Both are distinct from [Communication](#communication) in scope and implementation. Requires the `COMMENT` option.
+
+### Tag
+
+A project-scoped label that can be attached to a [comment](#comment) to categorize it. Tags are defined per project. The count of comments sharing a given tag is tracked and can be incremented without writing a full comment.
+
+### Preparation
+
+The planning container attached to a project or a group (not both simultaneously). It groups all organizational elements to be defined before the project starts: location, typical day, planning, pedagogy, menu, and budget. Requires the
+`PREPARATION` option.
+
+### Location
+
+A physical place where the project takes place, defined within a preparation. A preparation can have multiple locations, but only one can be active at a time.
+
+### Typical day
+
+A reusable day template defining the standard time slots of a project day. It serves as the base pattern for the planning. One per preparation.
+
+### Planning
+
+The day-by-day schedule of the project, built on top of the typical day. Individual days can override the typical day pattern. Can be synchronized with Google Calendar or Outlook. Planning slots can be linked to pedagogical objectives. One per preparation.
+
+### Pedagogy
+
+The document describing and justifying the educational approach of the project. Structured as a set of priorities, each containing one or more objectives. Objectives can be linked to planning slots. One per preparation.
+
+### Menu
+
+The list of meals (breakfast, lunch, snack, dinner) for every day of the project. One per preparation.
+
+### Budget
+
+The financial frame of the project: price per participant and a set of expense categories with allocated amounts. One per preparation.
+
+### Form
+
+A registration form opened on a project, through which external candidates can submit a registration request. A form is typed (
+`INDIVIDUAL` or `GROUP`), has an opening date range, and can be scoped to a specific period of the project. Requires the
+`REGISTRATION` option.
+
+### Registration
+
+A submission made by a candidate through a form. It holds the candidate's answers and tracks the validation lifecycle (
+`PENDING`, `VALIDATED`,
+`REJECTED`). Validating a registration automatically creates the corresponding participant(s) and, for group registrations, a dedicated group. Requires the
+`REGISTRATION` option.
+
+### Completion Notice
+
+A formal document produced at the end of a project to summarize its outcome. A project can have at most one notice of each type:
+`INTERNAL` (for the organization's internal stakeholders) and
+`EXTERNAL` (for external recipients such as parents or partners). The two are independent. Requires the
+`COMPLETION_NOTICE` option.
 
 ---
 
@@ -88,11 +162,12 @@ A message posted in a movement thread or an alert thread. Requires the `COMMUNIC
 
 A reversible deactivation. The record is preserved in the database but hidden from the UI and excluded from operations. The term used varies by entity type:
 
-| Entity                              | Soft-delete state |
-|-------------------------------------|-------------------|
-| Organization, Project, Profile, User | `BLOCKED`         |
-| Group, Participant, Activity, Vehicle | `DISABLED`        |
-| Movement, Communication             | `HIDDEN`          |
+| Entity                                    | Soft-delete state |
+|-------------------------------------------|-------------------|
+| Organization, Project, Profile, User      | `BLOCKED`         |
+| Group, Participant, Activity, Vehicle     | `DISABLED`        |
+| Movement, Alert, Communication, Comment   | `HIDDEN`          |
+| Registration                              | `REJECTED`        |
 
 ### Purge
 
@@ -111,6 +186,8 @@ Any status field that is not stored explicitly but computed at read time from th
 ## Options
 
 A feature-flag mechanism that enables or disables specific capabilities at the project level. Options are pre-allowed at the organization level and selectively activated per project. Disabling an option masks existing data — it does not delete it. See [Options](/functional/features/options) for the full list.
+
+The current option set is: `ACTIVITY`, `ALERT`, `COMMENT`, `COMPLETION_NOTICE`, `GROUP`, `MOVEMENT`, `PREPARATION`, `REGISTRATION`, `VEHICLE`. All options are independent.
 
 ---
 
@@ -134,7 +211,8 @@ An organization-level setting. When enabled, a user cannot access the applicatio
 
 ### SUPER_ADMIN
 
-A cross-organization role automatically granted to all users of the organization designated as "main". Can manage all organizations and act as `ORGANIZATION_ADMIN` on any organization.
+A cross-organization role automatically granted to all users of the organization designated as "main". Can manage all organizations and act as
+`ORGANIZATION_ADMIN` on any organization.
 
 ### ORGANIZATION_ADMIN
 

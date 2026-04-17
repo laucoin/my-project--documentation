@@ -47,8 +47,8 @@ participant to a user is never mandatory.
 | Firstname        | The participant firstname                                                                                                                    |
 | Birthday         | The participant date of birth                                                                                                                |
 | Type             | Registered OR Guest (scheduled or created in a movement)                                                                                     |
-| Attendance dates | Date and time range to identify participant start and end project participation (if not set: participate for whole project or groups period) |
-| User             | Optional link a user                                                                                                                         |
+| Attendance dates | Date and time range defining when the participant attends the project (if not set: participates for the whole project or groups period)       |
+| User             | Optional link to a user                                                                                                                      |
 
 ### Minor VS Major
 
@@ -80,13 +80,14 @@ No further movements can be recorded for a guest after they have gone out.
 
 A participant does not have an explicit status field. Its state is derived from:
 
-| Situation                                                                                         | Implied state     |
-|---------------------------------------------------------------------------------------------------|-------------------|
-| Has been soft deleted                                                                             | `DISABLED`        |
-| Arrival date is in the future                                                                     | `NOT_HERE`        |
-| End date is in the past                                                                           | `NO_MORE_HERE`    |
-| Refer to [movement](/functional/business-objects/operations/movement#participant-presence-status) |                   |
-| No dates set OR today is between start and end dates                                              | `NOT_ARRIVED_YET` |
+| Situation                                            | Implied state       |
+|------------------------------------------------------|---------------------|
+| Has been soft deleted                                | `DISABLED`          |
+| Arrival date is in the future                        | `NOT_AVAILABLE_YET` |
+| End date is in the past                              | `NO_MORE_AVAILABLE` |
+| No dates set OR today is between start and end dates | `ACTIVE`            |
+
+For the runtime **presence** status (derived from movement history: `IN`, `OUT`, `NO_MORE_HERE`), see [Movement — Participant presence status](/functional/business-objects/operations/movement#participant-presence-status). The two statuses are independent: the table above is computed from the participant's attendance dates, while the presence status is computed from their movement history.
 
 ### Attendance dates
 
@@ -97,7 +98,7 @@ How to read participant presence:
 ```mermaid
 flowchart TD
     P[John DOE] --> PHD{Does John DOE have specified attendance dates?}
-    PHD -->|Yes| PD["That’s are his attendance dates"]
+    PHD -->|Yes| PD["That's are his attendance dates"]
     PHD -->|No| PHG{Does John DOE have group membership?}
     PHG -->|Yes| GWD{Does John DOE have at least 1 group without specified attendance dates?}
     GWD -->|Yes| PAT[John DOE is a permanent participant]
@@ -109,16 +110,16 @@ flowchart TD
 ```
 
 ::: warning Particular group logic
-A participant without attendance dates nor group is considered as permanent.
-VS
-A participant without attendance dates but with a group depend on the group date.
+A participant without attendance dates and without any group is considered permanent. A participant without attendance dates but with at least one group depends on the group's dates.
 :::
 
 ## Relationships
 
-| Related object | Relationship                                                |
-|----------------|-------------------------------------------------------------|
-| Project        | A participant belongs to one project                        |
-| Group          | A participant can belong to zero or more groups             |
-| Movement       | A participant can be included in zero or more movements     |
-| User           | A participant can be linked to zero or one application user |
+| Related object    | Relationship                                                                       |
+|-------------------|------------------------------------------------------------------------------------|
+| Project           | A participant belongs to one project                                               |
+| Group             | A participant can belong to zero or more groups                                    |
+| Movement          | A participant can be included in zero or more movements                            |
+| User              | A participant can be linked to zero or one application user                        |
+| Comment           | A participant can receive zero or more comments                                    |
+| Completion Notice | A participant can have zero or one Internal notice and zero or one External notice |

@@ -22,15 +22,15 @@ last_update: 2026-04-12
 
 A **User** is a person (or an application account) who can log in and interact with the platform.
 
-::: warning User ≠ Participant
-A user and a participant are separate concepts. The same individual can be both (e.g. a participant who also has
-an app account), but the two records remain independent. Linking them is optional and never mandatory. Moreover, a participant is scoped to a project, whereas a user is scoped to an organization.
-:::
-
 ```
 Organization
 └── User
 ```
+
+::: warning User ≠ Participant
+A user and a participant are separate concepts. The same individual can be both (e.g. a participant who also has
+an app account), but the two records remain independent. Linking them is optional and never mandatory. Moreover, a participant is scoped to a project, whereas a user is scoped to an organization.
+:::
 
 ## Identity and authentication
 
