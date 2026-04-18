@@ -32,14 +32,16 @@ Project
 
 ### Immutability
 
-A movement cannot be modified. If an error occurs, there are two options:
+A movement cannot be modified in any way — there is no edit feature. If an error occurs, the only options are:
 
-- Reverse the movement for the extra participants.
-- Soft-delete the movement and recreate it correctly.
+- Reverse the movement for the extra participants (create a compensating movement).
+- Soft-delete the movement with [Hide movement](/functional/features/hide-movement), then create a new correct one.
 
-If a movement has been tampered with, it becomes useless because it could have been altered by a malicious individual.
+If a movement could be edited after the fact, it would become useless as an operational log because it could have been altered by a malicious individual.
 
 > E.g. Someone who made a hasty movement withdraws from it afterward and can no longer be traced.
+
+See also the [Editability policy](/functional/business-objects/operations/#editability-of-operations-entities) for Operations entities.
 
 ::: warning
 A movement cannot be created with a datetime **in the future**. All recorded movements must have a datetime less than
@@ -94,7 +96,7 @@ When a participant is added to a movement, the participant’s details are captu
 
 Eligible participant status (at the movement timestamp):
 
-- Availability status: `ACTIVE` or `NOT_AVAILABLE_YET`
+- Availability status: `AVAILABLE` or `NOT_AVAILABLE_YET`
 - Presence status: `IN`, `OUT`, or not yet present
 
 #### Group
@@ -116,7 +118,7 @@ To drive a vehicle, the participant must be major (at the movement timestamp).
 
 Eligible vehicle status (at the movement timestamp):
 
-- Availability status: `ACTIVE` or `NOT_AVAILABLE_YET`
+- Availability status: `AVAILABLE` or `NOT_AVAILABLE_YET`
 - Presence status: `IN`, `OUT`, or not yet present
 
 ### Reason

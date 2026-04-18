@@ -25,7 +25,10 @@ last_update: 2026-04-13
 
 ## Constraints
 
-- No automatic profile creation on project edition
+Same constraints as [Create Project](/functional/features/create-project), except:
+
+- No automatic profile creation on edition.
+- `organization` is immutable — a project cannot be moved from one organization to another.
 
 ## Workflow
 

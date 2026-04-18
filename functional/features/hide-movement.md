@@ -4,7 +4,7 @@ modules:
   - operations
 objects:
   - movement
-required_options:
+required_options: MOVEMENT
 tags:
   - movement
   - soft-delete

@@ -44,14 +44,14 @@ status is `ACCEPTED`.
 | Type         | Profile type                                                                         |
 | Role         | Project scope role (check full role list [here](/functional/features/roles#project)) |
 | Status       | Invitation status                                                                    |
-| Access dates | Date and time range to identify profile access start and end                         |
+| Access dates | Date and time range defining the profile's access start and end                      |
 
 ### Type
 
 Possible values:
 
 - `DEFAULT`
-- `SUPPORT`
+- `SUPPORT` — temporary `PROJECT_ADMIN` access granted by an `ORGANIZATION_ADMIN` or `SUPER_ADMIN` for audit purposes. The access window is **fixed at 1 hour** and enforced server-side. See [Create support profile](/functional/features/create-support-profile).
 
 ## Status
 

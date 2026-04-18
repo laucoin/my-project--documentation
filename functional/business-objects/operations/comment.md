@@ -32,6 +32,10 @@ Comment on a Participant (this entity, Operations module) and Comment on a Prepa
 distinct technical entities with their own parent reference and lifecycle.
 :::
 
+::: info Editability
+A Comment can be edited in place (message and tags) via [Edit comment](/functional/features/edit-comment), and removed via [Delete comment](/functional/features/delete-comment). See the [Editability policy](/functional/business-objects/operations/#editability-of-operations-entities).
+:::
+
 ```
 Project
 └── Participant
@@ -48,16 +52,11 @@ Project
 
 ### Tags
 
-Tags are project-scoped labels that can be attached to a comment to categorize it.
-
-- Tags are created and managed at the **project** level.
-- A comment can carry zero or more tags.
-- The count of comments sharing a given tag is tracked and can be incremented without adding a full comment (quick
-  count increment).
+A comment can carry zero or more [Tags](/functional/business-objects/operations/tag). Tags are project-scoped labels created once per project and reused across every participant's comments. The full definition (attributes, count semantics, lifecycle) is documented on the [Tag](/functional/business-objects/operations/tag) business object page.
 
 ::: info Tag moderation
-Tag management (creation, definition, moderation) is handled at the project level. Access rules follow the standard
-project role model.
+Tag management (create, rename, delete) is restricted to `PROJECT_ADMIN` and
+`PROJECT_MANAGER`. Other roles can attach existing tags to their comments but cannot modify the project tag catalog. See [Manage tags](/functional/features/manage-tags).
 :::
 
 ### Status

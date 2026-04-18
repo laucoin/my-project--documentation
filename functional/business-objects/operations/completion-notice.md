@@ -57,6 +57,23 @@ can be created separately.
 | `DRAFT`     | Being written, not yet published        |
 | `PUBLISHED` | Finalized and distributed to recipients |
 
+#### Transitions
+
+```mermaid
+stateDiagram-v2
+    [*] --> DRAFT
+    DRAFT --> PUBLISHED
+```
+
+- A notice is created in `DRAFT`.
+- A notice can be edited freely while in `DRAFT`.
+- Publishing transitions it to `PUBLISHED`. **The transition is irreversible**: a published notice cannot be reverted to `DRAFT`, and its content is frozen from that point on.
+- See [Create](/functional/features/create-completion-notice), [Edit](/functional/features/edit-completion-notice), and [Publish](/functional/features/publish-completion-notice) for the feature-level constraints and roles.
+
+::: info Editability
+A Completion Notice can be edited in place only while in `DRAFT`. Once `PUBLISHED`, it becomes immutable. See the [Editability policy](/functional/business-objects/operations/#editability-of-operations-entities).
+:::
+
 ## Relationships
 
 | Related object | Relationship                                         |

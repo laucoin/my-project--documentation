@@ -37,7 +37,7 @@ last_update: 2026-04-14
 
 ## Purge condition
 
-All object without a defined project (previously deleted).
+All objects without a defined project (previously deleted).
 
 ## Constraints
 

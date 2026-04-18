@@ -30,9 +30,11 @@ Requires the **GROUP** option to be enabled on the project.
 - `PROJECT_ADMIN`
 - `PROJECT_MANAGER`
 
-## Constraints (differences with creation)
+## Constraints
 
-No additional constraints beyond creation.
+Same constraints as [Create Group](/functional/features/create-group), except:
+
+- `project` is immutable — a group cannot be moved from one project to another.
 
 ## Workflow
 

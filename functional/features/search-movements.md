@@ -6,7 +6,7 @@ objects:
   - movement
   - activity
   - participant
-required_options:
+required_options: MOVEMENT
 tags:
   - movement
   - search
@@ -78,7 +78,7 @@ The results of the search are paginated, refer to the [pagination](/functional/f
 | Eligible for search | participant type |
 
 ::: info Type
-Type is about `GUEST` or `REGISTERED` movement.
+Type filters on the participant type of the movement: `GUEST` or `REGISTERED`.
 :::
 
 #### Current

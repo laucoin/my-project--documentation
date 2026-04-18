@@ -7,11 +7,9 @@ objects:
   - alert
   - movement
 required_options:
-  - COMMUNICATION
 tags:
   - communication
   - creation
-  - options
 outline: deep
 created: 2026-04-13
 last_update: 2026-04-13
@@ -20,7 +18,7 @@ last_update: 2026-04-13
 # Create Communication
 
 ::: info Option required
-Requires the **COMMUNICATION** option to be enabled on the project.
+The parent container must be available on the project: an alert thread requires the **ALERT** option, a movement thread requires the **MOVEMENT** option.
 :::
 
 ## Objects used
@@ -47,7 +45,7 @@ Requires the **COMMUNICATION** option to be enabled on the project.
 - Creator is automatically set to the logged-in user
 
 ::: info UI/UX
-Communication creation should be facilitated for movements linked to an activity. A counter showing the last communication with that activity should be displayed.
+Communication creation should be facilitated for movements linked to an activity. A counter showing the number of communications linked to the activity should be displayed.
 :::
 
 ## Workflow

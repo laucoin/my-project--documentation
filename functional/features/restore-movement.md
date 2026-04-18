@@ -4,7 +4,7 @@ modules:
   - operations
 objects:
   - movement
-required_options:
+required_options: MOVEMENT
 tags:
   - movement
   - enable-back
@@ -40,7 +40,7 @@ sequenceDiagram
     actor John DOE
     John DOE ->> BFF: Restore movement for project X
     BFF ->> Operations: Pass request
-    Operations ->> Operations: Set movement status = ACTIVE
+    Operations ->> Operations: Set movement status = VISIBLE
     Operations -->> BFF: Updated movement
     BFF -->> John DOE: Updated movement
 ```

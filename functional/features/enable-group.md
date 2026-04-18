@@ -46,7 +46,7 @@ sequenceDiagram
     actor John DOE
     John DOE ->> BFF: Enable group for project X
     BFF ->> Core: Pass request
-    Core ->> Core: Set group status = ACTIVE
+    Core ->> Core: Set group availability = AVAILABLE
     Core -->> BFF: Updated group
     BFF -->> John DOE: Updated group
 ```

@@ -92,3 +92,14 @@ Main idea about the 3 roles (check objects' actions for details):
 The project role is only scoped to a specific project (via a profile). This means that a `PROJECT_ADMIN` role is
 limited to one project (not all of them).
 :::
+
+### Asymmetric enable / disable
+
+For core entities that support enable / disable (**activity**, **group**, **participant**, **vehicle**):
+
+| Action       | Allowed roles                            |
+|--------------|------------------------------------------|
+| `disable-*`  | `PROJECT_ADMIN`, `PROJECT_MANAGER`       |
+| `enable-*`   | `PROJECT_ADMIN` only                     |
+
+This asymmetry is intentional: soft-deleting an item is a routine operational action, whereas re-activating a previously disabled item can restore references that were intentionally excluded and therefore requires admin review.

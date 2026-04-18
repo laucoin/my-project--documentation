@@ -18,7 +18,11 @@ last_update: 2026-04-13
 # Edit Alert
 
 ::: info Option required
-Requires the **ALERT** option (and **COMMUNICATION**) to be enabled on the project.
+Requires the **ALERT** option to be enabled on the project.
+:::
+
+::: info In-place edit
+Alert supports a true in-place edit. Only Movement is immutable in Operations — see the [Editability policy](/functional/business-objects/operations/#editability-of-operations-entities).
 :::
 
 ## Objects used
@@ -33,8 +37,8 @@ Requires the **ALERT** option (and **COMMUNICATION**) to be enabled on the proje
 
 ## Constraints
 
-- Title, description and status are editable
-- Status can be updated to `RESOLVED` or `CANCELED`
+- `title`, `description`, and `status` are editable in place.
+- `status` transitions follow the state machine defined in [Alert — Transitions](/functional/business-objects/operations/alert#transitions).
 
 ## Workflow
 

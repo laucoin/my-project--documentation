@@ -13,7 +13,7 @@ created: 2026-04-13
 last_update: 2026-04-13
 ---
 
-# Answer Profile Invitation
+# Answer Project Invitation
 
 ## Objects used
 

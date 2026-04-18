@@ -6,13 +6,14 @@ scope:
   - movement
   - alert
 object_name: communication
+required_options:
 tags:
   - communication
   - operations
   - options
 outline: deep
 created: 2026-04-12
-last_update: 2026-04-12
+last_update: 2026-04-18
 ---
 
 # Communication
@@ -38,6 +39,10 @@ Project
 
 ::: warning Movement scope
 A Communication can only be linked to an **in-progress `OUT` Movement of `REGISTERED` participants that includes an Activity**. Movements without an Activity, `IN` movements, `GUEST` movements, and closed movements cannot have Communications attached.
+:::
+
+::: info Editability
+A Communication supports in-place editing of its `message` via [Edit communication](/functional/features/edit-communication). See the [Editability policy](/functional/business-objects/operations/#editability-of-operations-entities).
 :::
 
 ## Main attributes

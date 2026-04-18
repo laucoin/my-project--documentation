@@ -40,15 +40,15 @@ This section documents the available actions across all business objects. Each f
 
 ## Profile
 
-| Feature                                                                     | Description                            |
-|-----------------------------------------------------------------------------|----------------------------------------|
-| [Search profiles](/functional/features/search-profiles)                       | List and filter profiles                              |
-| [Invite user to project](/functional/features/invite-user-to-project)         | Create a profile invitation for a user                |
-| [Edit profile](/functional/features/edit-profile)                             | Update a profile                                      |
-| [Answer project invitation](/functional/features/answer-project-invitation)   | Accept or reject a profile invitation                 |
-| [Block profile](/functional/features/block-profile)                           | Soft-delete a profile                                 |
-| [Unblock profile](/functional/features/unblock-profile)                       | Re-enable a blocked profile                           |
-| [Create support profile](/functional/features/create-support-profile)         | Grant temporary admin access to a project (1h)        |
+| Feature                                                                     | Description                                    |
+|-----------------------------------------------------------------------------|------------------------------------------------|
+| [Search profiles](/functional/features/search-profiles)                     | List and filter profiles                       |
+| [Invite user to project](/functional/features/invite-user-to-project)       | Create a profile invitation for a user         |
+| [Edit profile](/functional/features/edit-profile)                           | Update a profile                               |
+| [Answer project invitation](/functional/features/answer-project-invitation) | Accept or reject a profile invitation          |
+| [Block profile](/functional/features/block-profile)                         | Soft-delete a profile                          |
+| [Unblock profile](/functional/features/unblock-profile)                     | Re-enable a blocked profile                    |
+| [Create support profile](/functional/features/create-support-profile)       | Grant temporary admin access to a project (1h) |
 
 ## Group *(requires `GROUP` option)*
 
@@ -95,15 +95,14 @@ This section documents the available actions across all business objects. Each f
 | [Enable vehicle](/functional/features/enable-vehicle)   | Re-enable a disabled vehicle |
 | [Delete vehicle](/functional/features/delete-vehicle)   | Permanently remove a vehicle |
 
-## Movement
+## Movement *(requires `MOVEMENT` option)*
 
-| Feature                                                   | Description                                 |
-|-----------------------------------------------------------|---------------------------------------------|
-| [Search movements](/functional/features/search-movements) | List and filter movements                   |
-| [Create movement](/functional/features/create-movement)   | Record a new IN or OUT movement             |
-| [Edit movement](/functional/features/edit-movement)       | Correct a movement (soft-delete + recreate) |
-| [Hide movement](/functional/features/hide-movement)       | Soft-delete a movement                      |
-| [Restore movement](/functional/features/restore-movement) | Re-enable a hidden movement                 |
+| Feature                                                   | Description                     |
+|-----------------------------------------------------------|---------------------------------|
+| [Search movements](/functional/features/search-movements) | List and filter movements       |
+| [Create movement](/functional/features/create-movement)   | Record a new IN or OUT movement |
+| [Hide movement](/functional/features/hide-movement)       | Soft-delete a movement          |
+| [Restore movement](/functional/features/restore-movement) | Re-enable a hidden movement     |
 
 ## Alert *(requires `ALERT` option)*
 
@@ -113,19 +112,48 @@ This section documents the available actions across all business objects. Each f
 | [Create alert](/functional/features/create-alert)   | Create a new alert                        |
 | [Edit alert](/functional/features/edit-alert)       | Update alert title, description or status |
 
-## Communication *(requires `COMMUNICATION` option)*
+## Communication
+
+Communications are available whenever their parent container is (an alert thread requires the
+`ALERT` option; a movement thread requires the `MOVEMENT` option).
 
 | Feature                                                             | Description                                      |
 |---------------------------------------------------------------------|--------------------------------------------------|
 | [Create communication](/functional/features/create-communication)   | Post a message in an alert or movement thread    |
-| [Edit communication](/functional/features/edit-communication)       | Correct a communication (soft-delete + recreate) |
+| [Edit communication](/functional/features/edit-communication)       | Update the message of a communication (in-place) |
 | [Hide communication](/functional/features/hide-communication)       | Soft-delete a communication                      |
 | [Restore communication](/functional/features/restore-communication) | Re-enable a hidden communication                 |
 
+## Comment *(requires `COMMENT` option)*
+
+| Feature                                               | Description                                   |
+|-------------------------------------------------------|-----------------------------------------------|
+| [Create comment](/functional/features/create-comment) | Post a comment on a participant               |
+| [Edit comment](/functional/features/edit-comment)     | Update message or tags of a comment           |
+| [Delete comment](/functional/features/delete-comment) | Soft-delete a comment (`HIDDEN`)              |
+| [Manage tags](/functional/features/manage-tags)       | Create, rename, or delete project-scoped tags |
+
+## Completion Notice *(requires `COMPLETION_NOTICE` option)*
+
+| Feature                                                                     | Description                                                    |
+|-----------------------------------------------------------------------------|----------------------------------------------------------------|
+| [Create completion notice](/functional/features/create-completion-notice)   | Create a notice in `DRAFT` status                              |
+| [Edit completion notice](/functional/features/edit-completion-notice)       | Update a notice while in `DRAFT`                               |
+| [Publish completion notice](/functional/features/publish-completion-notice) | Transition a notice from `DRAFT` to `PUBLISHED` (irreversible) |
+
+## Document
+
+| Feature                                                     | Description                             |
+|-------------------------------------------------------------|-----------------------------------------|
+| [List documents](/functional/features/list-documents)       | List documents attached to an object    |
+| [Upload document](/functional/features/upload-document)     | Attach a new document to an object      |
+| [Download document](/functional/features/download-document) | Download an attached document           |
+| [Delete document](/functional/features/delete-document)     | Permanently remove an attached document |
+
 ## Maintenance *(requires `SUPER_ADMIN` role)*
 
-| Feature                                                                         | Description                                          |
-|---------------------------------------------------------------------------------|------------------------------------------------------|
-| [Purge orphans — Core](/functional/features/purge-orphan-core)                  | Delete core objects no longer linked to a parent     |
-| [Purge orphans — Operations](/functional/features/purge-orphan-operations)      | Delete operations objects no longer linked to a project |
-| [Purge orphans — Registration](/functional/features/purge-orphan-registration)  | Delete registration objects no longer linked to a project |
+| Feature                                                                        | Description                                               |
+|--------------------------------------------------------------------------------|-----------------------------------------------------------|
+| [Purge orphans — Core](/functional/features/purge-orphan-core)                 | Delete core objects no longer linked to a parent          |
+| [Purge orphans — Operations](/functional/features/purge-orphan-operations)     | Delete operations objects no longer linked to a project   |
+| [Purge orphans — Registration](/functional/features/purge-orphan-registration) | Delete registration objects no longer linked to a project |

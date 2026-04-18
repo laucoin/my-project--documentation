@@ -65,8 +65,7 @@ sequenceDiagram
 
 ## Light user purge
 
-A **light user
-** is a user record created in the database when an invitation is sent to an email address that has no existing OIDC account. No OIDC account is created — the record is a placeholder waiting to be claimed on first login.
+A **light user** is a user record created in the database when an invitation is sent to an email address that has no existing OIDC account. No OIDC account is created — the record is a placeholder waiting to be claimed on first login.
 
 See [Invite User to Project](/functional/features/invite-user-to-project) for the creation context.
 
