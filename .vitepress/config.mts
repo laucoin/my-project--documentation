@@ -75,6 +75,7 @@ export default defineConfig({
 											link: '/functional/business-objects/operations/communication',
 										},
 										{ text: 'Comment', link: '/functional/business-objects/operations/comment' },
+										{ text: 'Tag', link: '/functional/business-objects/operations/tag' },
 										{
 											text: 'Completion Notice',
 											link: '/functional/business-objects/operations/completion-notice',
@@ -96,6 +97,7 @@ export default defineConfig({
 										{ text: 'Menu', link: '/functional/business-objects/preparation/menu' },
 										{ text: 'Budget', link: '/functional/business-objects/preparation/budget' },
 										{ text: 'Comment', link: '/functional/business-objects/preparation/comment' },
+										{ text: 'Tag', link: '/functional/business-objects/preparation/tag' },
 									],
 								},
 								{
@@ -261,7 +263,6 @@ export default defineConfig({
 									items    : [
 										{ text: 'Search', link: '/functional/features/search-movements' },
 										{ text: 'Create', link: '/functional/features/create-movement' },
-										{ text: 'Edit', link: '/functional/features/edit-movement' },
 										{ text: 'Hide', link: '/functional/features/hide-movement' },
 										{ text: 'Restore', link: '/functional/features/restore-movement' },
 									],
@@ -283,6 +284,25 @@ export default defineConfig({
 										{ text: 'Edit', link: '/functional/features/edit-communication' },
 										{ text: 'Hide', link: '/functional/features/hide-communication' },
 										{ text: 'Restore', link: '/functional/features/restore-communication' },
+									],
+								},
+								{
+									text     : 'Comment',
+									collapsed: true,
+									items    : [
+										{ text: 'Create', link: '/functional/features/create-comment' },
+										{ text: 'Edit', link: '/functional/features/edit-comment' },
+										{ text: 'Delete', link: '/functional/features/delete-comment' },
+										{ text: 'Manage tags', link: '/functional/features/manage-tags' },
+									],
+								},
+								{
+									text     : 'Completion Notice',
+									collapsed: true,
+									items    : [
+										{ text: 'Create', link: '/functional/features/create-completion-notice' },
+										{ text: 'Edit', link: '/functional/features/edit-completion-notice' },
+										{ text: 'Publish', link: '/functional/features/publish-completion-notice' },
 									],
 								},
 								{

@@ -42,7 +42,7 @@ last_update: 2026-04-14
 
 ### Purge condition
 
-All project without a defined organization (previously deleted).
+All projects without a defined organization (previously deleted).
 
 ### Constraints
 
@@ -70,7 +70,7 @@ sequenceDiagram
 
 ### Purge condition
 
-All object without a defined project (previously deleted).
+All objects without a defined project (previously deleted).
 
 ### Constraints
 

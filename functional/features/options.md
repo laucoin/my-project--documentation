@@ -133,7 +133,7 @@ triggered by toggling an option.
 - External users can browse the project in the list of open projects and submit registration requests (individual or
   group).
 
-→ See TODO: add reference to the registration documentation once available.
+→ See [Registration](/functional/business-objects/registration/) for the full registration reference.
 
 ::: info
 Special note: if the organization does not allow `REGISTRATION`, external users cannot view projects open for

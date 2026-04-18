@@ -30,6 +30,10 @@ Project
 └── Alert
 ```
 
+::: info Editability
+Alert supports in-place editing of `title`, `description`, and `status` via [Edit alert](/functional/features/edit-alert). See the [Editability policy](/functional/business-objects/operations/#editability-of-operations-entities).
+:::
+
 ## Main attributes
 
 | Attribute      | Description            |

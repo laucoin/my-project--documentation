@@ -5,11 +5,9 @@ modules:
 objects:
   - communication
 required_options:
-  - COMMUNICATION
 tags:
   - communication
   - edition
-  - options
 outline: deep
 created: 2026-04-13
 last_update: 2026-04-13
@@ -17,12 +15,8 @@ last_update: 2026-04-13
 
 # Edit Communication
 
-::: warning Not a real edit
-Editing a communication soft-deletes the existing one and creates a new one pre-filled with the original data. The form is pre-filled with the original data.
-:::
-
-::: info Option required
-Requires the **COMMUNICATION** option to be enabled on the project.
+::: info In-place edit
+Editing a communication updates its `message` in place. The original record is preserved — no soft-delete, no recreation.
 :::
 
 ## Objects used
@@ -33,11 +27,12 @@ Requires the **COMMUNICATION** option to be enabled on the project.
 
 - `PROJECT_ADMIN`
 - `PROJECT_MANAGER`
-- `PROJECT_USER`
+- `PROJECT_USER` — only on communications they authored themselves
 
 ## Constraints
 
-- Only the message is editable
+- Only `message` is editable. The parent (alert or movement), the sender, the creator, and the creation timestamp are immutable.
+- A `HIDDEN` (soft-deleted) communication cannot be edited.
 
 ## Workflow
 
@@ -49,10 +44,10 @@ Access to the project scope is automatically gated by the [authentication profil
 sequenceDiagram
     autonumber
     actor John DOE
-    John DOE ->> BFF: Edit communication for project X<br/>(updated message)
+    John DOE ->> BFF: Edit communication for project X<br/>(communication reference, new message)
     BFF ->> Operations: Pass request
-    Operations ->> Operations: Soft-delete original communication
-    Operations ->> Operations: Create new communication
-    Operations -->> BFF: New communication
-    BFF -->> John DOE: New communication
+    Operations ->> Operations: Check author / role
+    Operations ->> Operations: Update message in place
+    Operations -->> BFF: Updated communication
+    BFF -->> John DOE: Updated communication
 ```

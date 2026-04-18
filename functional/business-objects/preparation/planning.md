@@ -54,6 +54,10 @@ Each day in the planning is either:
 
 These two modes are mutually exclusive per day: partial overrides (inheriting some slots and overriding others) are not supported.
 
+::: info Override scope
+Switching a day to **Custom** overrides that specific day **permanently** (as long as the custom definition is kept). It does not alter the typical day itself, and it does not affect the structure of any other day. Reverting the day to **Inherited** restores the typical day pattern for that day.
+:::
+
 ### External sync
 
 The planning can be synchronized with external calendar systems:

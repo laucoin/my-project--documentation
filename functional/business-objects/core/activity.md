@@ -42,14 +42,14 @@ Organization
 
 ### Status
 
-An activity does not have an explicit status field. Its state is derived from:
+An activity does not have an explicit status field. Its availability state is derived from:
 
-| Situation                                            | Implied state       |
-|------------------------------------------------------|---------------------|
-| Has been soft deleted                                | `DISABLED`          |
-| No dates set OR today is between start and end dates | `ACTIVE`            |
-| Start date is in the future                          | `NOT_AVAILABLE_YET` |
-| End date is in the past                              | `NO_MORE_AVAILABLE` |
+| Situation                                            | Implied availability state |
+|------------------------------------------------------|----------------------------|
+| Has been soft deleted                                | `DISABLED`                 |
+| No dates set OR today is between start and end dates | `AVAILABLE`                |
+| Start date is in the future                          | `NOT_AVAILABLE_YET`        |
+| End date is in the past                              | `NO_MORE_AVAILABLE`        |
 
 ### Availability dates
 

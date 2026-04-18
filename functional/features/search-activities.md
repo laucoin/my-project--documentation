@@ -52,7 +52,7 @@ The results of the search are paginated, refer to the [pagination](/functional/f
 
 | Property            | Value                              |
 |---------------------|------------------------------------|
-| Type                | number                             |
+| Type                | number range                       |
 | Strictness          | N/A                                |
 | Required            | no                                 |
 | Eligible for search | ``capacity_min``, ``capacity_max`` |

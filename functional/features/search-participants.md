@@ -49,7 +49,7 @@ The results of the search are paginated, refer to the [pagination](/functional/f
 | Type                | boolean                 |
 | Strictness          | N/A                     |
 | Required            | no                      |
-| Eligible for search | ``birthday` (computed)` |
+| Eligible for search | `birthday` (computed)   |
 
 #### Types
 

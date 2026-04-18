@@ -5,21 +5,15 @@ modules:
 objects:
   - communication
 required_options:
-  - COMMUNICATION
 tags:
   - communication
   - soft-delete
-  - options
 outline: deep
 created: 2026-04-13
 last_update: 2026-04-13
 ---
 
 # Hide Communication
-
-::: info Option required
-Requires the **COMMUNICATION** option to be enabled on the project.
-:::
 
 ## Objects used
 

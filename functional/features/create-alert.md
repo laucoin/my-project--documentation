@@ -18,7 +18,7 @@ last_update: 2026-04-13
 # Create Alert
 
 ::: info Option required
-Requires the **ALERT** option (and **COMMUNICATION**) to be enabled on the project.
+Requires the **ALERT** option to be enabled on the project.
 :::
 
 ## Objects used

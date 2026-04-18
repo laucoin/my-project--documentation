@@ -41,14 +41,14 @@ Organization
 
 ### Status
 
-A vehicle does not have an explicit status field. Its state is derived from:
+A vehicle does not have an explicit status field. Its availability state is derived from:
 
-| Situation                                            | Implied state       |
-|------------------------------------------------------|---------------------|
-| Has been soft deleted                                | `DISABLED`          |
-| Arrival date is in the future                        | `NOT_AVAILABLE_YET` |
-| End date is in the past                              | `NO_MORE_AVAILABLE` |
-| No dates set OR today is between start and end dates | `ACTIVE`            |
+| Situation                                            | Implied availability state |
+|------------------------------------------------------|----------------------------|
+| Has been soft deleted                                | `DISABLED`                 |
+| Arrival date is in the future                        | `NOT_AVAILABLE_YET`        |
+| End date is in the past                              | `NO_MORE_AVAILABLE`        |
+| No dates set OR today is between start and end dates | `AVAILABLE`                |
 
 For the runtime **presence** status (derived from movement history: `IN`, `OUT`), see [Movement — Vehicle presence status](/functional/business-objects/operations/movement#vehicle-presence-status). The two statuses are independent: the table above is computed from the vehicle's availability dates, while the presence status is computed from its movement history.
 

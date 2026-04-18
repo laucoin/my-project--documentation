@@ -3,6 +3,8 @@ type: feature
 modules:
   - core
   - operations
+  - registration
+  - preparation
 objects:
   - project
 required_options:
@@ -35,7 +37,7 @@ Delete is a permanent removal from the database.
 - The deletion cannot be rolled back
 
 ::: info Asynchronous cleanup
-Deleting a project only removes the project record itself. All foreign keys in dependent records are set to null. This choice prevent overloading database I/O, and give a quick response to the user, without wait for deletion or launching async job without success status.
+Deleting a project only removes the project record itself. All foreign keys in dependent records are set to null. This choice prevents overloading database I/O and gives a quick response to the user, without waiting for the full deletion or launching an async job without a success status.
 
 Three dedicated purge jobs then clean up orphaned data in each module independently:
 

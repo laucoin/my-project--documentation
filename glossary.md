@@ -80,7 +80,7 @@ An optional grouping mechanism for participants within a project. Groups are not
 ### Movement
 
 A record of an entry (`IN`) or exit (
-`OUT`) at the project site at a given timestamp. A movement includes one or more participants and is immutable once created — editing a movement soft-deletes the original and creates a corrected replacement.
+`OUT`) at the project site at a given timestamp. A movement includes one or more participants and is **immutable** once created: there is no edit feature. Movement is the only immutable entity in Operations; to correct one, soft-delete it (`hide-movement`) and record a new one.
 
 ### Alert
 
@@ -103,7 +103,12 @@ Both are distinct from [Communication](#communication) in scope and implementati
 
 ### Tag
 
-A project-scoped label that can be attached to a [comment](#comment) to categorize it. Tags are defined per project. The count of comments sharing a given tag is tracked and can be incremented without writing a full comment.
+A project-scoped label that can be attached to a [comment](#comment) to categorize it. Tags are defined per project. The count of comments sharing a given tag is tracked and can be incremented without writing a full comment. Two distinct Tag catalogs exist, mirroring the Comment split:
+
+- **Tag (Operations)** — labels for participant comments. See [Tag (Operations)](/functional/business-objects/operations/tag).
+- **Tag (Preparation)** — labels for preparation comments. See [Tag (Preparation)](/functional/business-objects/preparation/tag).
+
+The two catalogs are independent: a tag created in one module does not exist in the other. Management is restricted to `PROJECT_ADMIN` and `PROJECT_MANAGER` via [Manage tags](/functional/features/manage-tags).
 
 ### Preparation
 

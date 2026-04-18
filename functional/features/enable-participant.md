@@ -39,7 +39,7 @@ sequenceDiagram
     actor John DOE
     John DOE ->> BFF: Enable participant for project X
     BFF ->> Core: Pass request
-    Core ->> Core: Set participant status = ACTIVE
+    Core ->> Core: Set participant availability = AVAILABLE
     Core -->> BFF: Updated participant
     BFF -->> John DOE: Updated participant
 ```

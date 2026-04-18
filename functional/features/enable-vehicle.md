@@ -45,7 +45,7 @@ sequenceDiagram
     actor John DOE
     John DOE ->> BFF: Enable vehicle for project X
     BFF ->> Core: Pass request
-    Core ->> Core: Set vehicle status = ACTIVE
+    Core ->> Core: Set vehicle availability = AVAILABLE
     Core -->> BFF: Updated vehicle
     BFF -->> John DOE: Updated vehicle
 ```

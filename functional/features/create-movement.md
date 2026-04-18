@@ -10,7 +10,7 @@ objects:
   - vehicle
   - group
   - project
-required_options:
+required_options: MOVEMENT
 tags:
   - movement
   - creation
@@ -48,6 +48,10 @@ last_update: 2026-04-13
 
 ::: warning Mixed participant types
 A single movement cannot contain both `REGISTERED` and `GUEST` participants.
+:::
+
+::: warning Guest movement limit
+A `GUEST` participant is limited to exactly two movements for the whole lifetime of the project: one `IN` and the matching `OUT`. No further movement can be created for a guest once these two exist.
 :::
 
 ## Adding participants via group

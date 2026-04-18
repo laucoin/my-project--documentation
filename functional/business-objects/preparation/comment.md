@@ -57,12 +57,12 @@ Project
 
 ### Tags
 
-Tags are project-scoped labels that can be attached to a comment to categorize it.
+A comment can carry zero or more [Tags](/functional/business-objects/preparation/tag). Tags are project-scoped labels created once per project and reused across every preparation comment. The full definition (attributes, count semantics, lifecycle) is documented on the [Tag](/functional/business-objects/preparation/tag) business object page.
 
-- Tags are created and managed at the **project** level.
-- A comment can carry zero or more tags.
-- The count of comments sharing a given tag is tracked and can be incremented without adding a full comment (quick
-  count increment).
+::: info Tag moderation
+Tag management (create, rename, delete) is restricted to `PROJECT_ADMIN` and
+`PROJECT_MANAGER`. Other roles can attach existing tags to their comments but cannot modify the project tag catalog.
+:::
 
 ### Status
 
